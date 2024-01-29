@@ -1,13 +1,19 @@
 <script setup lang='ts'>
     import { defineProps } from 'vue';
+    import router from '@/router';
 
-    const props = defineProps(['navList']);
+    const props = defineProps(['navList', 'baseUrl']);
+
+    const handleNavSelect = (key, keyPath) => {
+      router.push(`/${props.baseUrl}/${props.navList[key].path}`);
+    }
 </script>
 
 <template>
   <el-menu
     active-text-color="#41B58E"
     default-active="0"
+    @select="handleNavSelect"
   >
     <el-menu-item 
       v-for="(item, index) in navList" 

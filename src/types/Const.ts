@@ -6,80 +6,80 @@ export const ROLE = {
 export const BUSINESS_NAV_LIST = [
   {
     name: '素材管理',
-    alias: 'material',
+    path: 'material',
     icon: 'Picture',
   },
   {
     name: '商品管理',
-    alias: 'product',
+    path: 'product',
     icon: 'Goods',
   },
   {
     name: '订单管理',
-    alias: 'order',
+    path: 'order',
     icon: 'Tickets',
   },
   {
     name: '数据看板',
-    alias: 'dashboard',
+    path: 'dashboard',
     icon: 'DataLine',
   },
   {
     name: '评价管理',
-    alias: 'comment',
+    path: 'comment',
     icon: 'ChatLineSquare',
   },
   {
     name: '商品推广',
-    alias: 'promotion',
+    path: 'promotion',
     icon: 'Location',
   }
 ];
 
 export const ADMIN_NAV_LIST = [
   {
+    name: 'CDP数据',
+    path: 'cdp',
+    icon: 'DataLine',
+  },
+  {
     name: '素材管理',
-    alias: 'material',
+    path: 'material',
     icon: 'Picture',
   },
   {
     name: '内容管理',
-    alias: 'content',
+    path: 'content',
     icon: 'Document',
   },
   {
     name: '供应商管理',
-    alias: 'supplier',
+    path: 'supplier',
     icon: 'User',
   },
   {
-    name: '商品类目',
-    alias: 'category',
+    name: '类目管理',
+    path: 'category',
     icon: 'Operation',
   },
   {
     name: '商品池',
-    alias: 'delivery',
+    path: 'commodity',
     icon: 'ShoppingCartFull',
   },
   {
-    name: 'CDP数据',
-    alias: 'cdp',
-    icon: 'DataLine',
-  },
-  {
     name: '营销管理',
-    alias: 'marketing',
+    path: 'marketing',
     icon: 'Coin',
   },
   {
     name: 'AI模型管理',
-    alias: 'model',
+    path: 'model',
     icon: 'SetUp',
   },
   {
     name: '资源管理',
-    alias: 'resource',
+    path: 'resource',
     icon: 'Monitor',
   }
 ];

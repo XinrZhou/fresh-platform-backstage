@@ -1,8 +1,14 @@
 <script setup lang='ts'>
   import { ref } from 'vue';
   import { User } from '@/types/type'
+  import { useUserStore } from '@/store/user/user'
 
+  const userStore = useUserStore();
   const user = ref<User> ({});
+  
+  const goLogin  = () => {
+    userStore.goLogin(user.value);
+  }
 
 </script>
 <template>
@@ -35,7 +41,7 @@
           忘记密码
         </el-button>
       </el-form>
-      <el-button class="login-button">
+      <el-button class="login-button" @click="goLogin">
         登录
       </el-button>
     </el-card>

@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-  import LeftNav from '@/components/LeftNav.vue';
+  import BaseNav from '@/components/BaseNav.vue'
   import Header from '@/components/Header.vue';
   import { ADMIN_NAV_LIST } from '@/types/Const';
 
@@ -9,7 +9,7 @@
   <div class="common-layout">
     <el-container>
       <el-aside width="200px">
-        <LeftNav :navList="ADMIN_NAV_LIST"/>
+        <BaseNav :navList="ADMIN_NAV_LIST" baseUrl="admin"/>
       </el-aside>
       <el-container>
         <el-header>Header</el-header>

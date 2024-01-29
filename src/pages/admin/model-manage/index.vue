@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <h3>商家模块</h3>
+  <h3>模型管理</h3>
 </template>
 
 <style scoped>

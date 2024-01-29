@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+import admin from './routes/admin';
+import business from './routes/business';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -10,18 +12,10 @@ const router = createRouter({
     },
     {
       path: '/',
-      component: () => import('@/pages/Main.vue'),
+      component: () => import('@/pages/index.vue'),
       children: [
-        {
-          name: 'admin',
-          path: '/admin',
-          component: () => import('@/pages/admin/Admin.vue'),
-        },
-        {
-          name: 'business',
-          path: '/business',
-          component: () => import('@/pages/business/Business.vue'),
-        }
+        ...admin,
+        ...business,
       ]
     }
   ]
