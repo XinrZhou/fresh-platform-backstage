@@ -13,4 +13,8 @@ Object.keys(Icons).forEach(key => {
   app.component(key, Icons[key as keyof typeof Icons])
 });
 
-app.use(router).use(state).use(ElementPlus).mount('#app');
+app.use(router);
+app.use(state);
+app.use(ElementPlus)
+
+app.mount('#app');

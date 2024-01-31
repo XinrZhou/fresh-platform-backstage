@@ -17,8 +17,27 @@ const router = createRouter({
         ...admin,
         ...business,
       ]
-    }
+    },
+    {
+      path: '/:pathMatch(.*)',
+      redirect: '/login',
+  }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if (!to.meta.role) {
+    next();
+    return;
+  };
+
+  if (to.meta.role === sessionStorage.getItem('ROLE')) {
+    next();
+    return;
+  } else {
+    sessionStorage.clear();
+    router.push('/login');
+  };
 })
 
 export default router;

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ElMessage } from 'element-plus';
 
 export const request = (options: any) => {
   return new Promise((resolve, reject) => {
@@ -24,10 +25,11 @@ export const request = (options: any) => {
       if (response.data.code === 200) {
         return response;
       } else {
+        ElMessage.error(response.data.message);
         return Promise.reject(new Error(response.data.message));
       }
     }, error => {
-      Promise.reject(error);
+      return Promise.reject(error);
     });
 
     // request handler

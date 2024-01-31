@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import router from '@/router';
 import { User } from '@/types/type';
-import { goLogin } from "@/api/user";
+import { ROLE } from "@/types/Const";
+import { reqLogin } from "@/api/user";
 
 export const useUserStore = defineStore('user', {
   state: () => {
@@ -11,10 +12,15 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
     async goLogin(user: User) {
-      const res = await goLogin(user);
-      // console.log('use====', user)
+      const res = await reqLogin(user);
 
-      // console.log("登录=====》", res)
+      sessionStorage.setItem('TOKEN', res.headers.token);
+      sessionStorage.setItem('ROLE', res.headers.role);
+      if (res.headers.role === ROLE.ADMIN) {
+        router.push('/admin');
+      } else {
+        router.push('/business');
+      }
     }
   }
 })

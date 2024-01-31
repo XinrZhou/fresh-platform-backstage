@@ -8,9 +8,11 @@
   
   const goLogin  = () => {
     userStore.goLogin(user.value);
+    user.value.phoneNumber = '';
+    user.value.password = '';
   }
-
 </script>
+
 <template>
   <div class="login-container">
     <text class="login-title">用心做生鲜</text>

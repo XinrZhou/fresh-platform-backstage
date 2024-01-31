@@ -1,9 +1,13 @@
 import { createRouter } from "vue-router";
+import { ROLE } from "@/types/Const";
 
 export default [{
   name: 'admin',
   path: 'admin',
   component: () => import('@/pages/admin/index.vue'),
+  meta: {
+    role: ROLE.ADMIN,
+  },
   children: [
     {
       name: 'cdpManage',
