@@ -1,10 +1,13 @@
 <script setup lang='ts'>
   import { ref } from 'vue';
-  import { User } from '@/types/type'
-  import { useUserStore } from '@/store/user/user'
+  import { User } from '@/types/type';
+  import { useUserStore } from '@/store/user/user';
 
   const userStore = useUserStore();
-  const user = ref<User> ({});
+  const user = ref<User> ({
+    phoneNumber: '18312345678',
+    password: '20021228'
+  });
   
   const goLogin  = () => {
     userStore.goLogin(user.value);

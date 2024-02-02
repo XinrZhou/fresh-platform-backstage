@@ -1,35 +1,81 @@
 <script setup lang='ts'>
-  import { ref } from 'vue';
+  import { ref, computed, watchEffect } from 'vue';
+  import { ElMessage, ElMessageBox } from 'element-plus'
   import { Category } from '@/types/type';
-  import CardHeader from './CardHeader.vue';
+  import { useCategoryStore } from '@/store/admin/category';
+  import CategoryTable from './CategoryTable.vue';
   import OperationDialog from './OperationDialog.vue';
 
-  const dialogVisible = ref<Boolean>(false);
+  const categoryStore = useCategoryStore();
+  categoryStore.getCategories();
+
+  const categoryList = computed(() => categoryStore.categoryList);
+
+  let dialogVisibleR = ref<Boolean>(false);
+  
   const categoryData = ref<Category>({});
 
+  const handleEdit = (data: Category) => {
+    dialogVisibleR.value = true;
+    categoryData.value = data;
+  }
+
+  const handleDelete = (cid: string) => {
+    ElMessageBox.confirm('是否确认删除？', 'Tips', {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    })
+    .then(() => {
+      categoryStore.deleteCategory(cid);
+    });
+  }
 </script>
 
 <template>
   <div>
-    <el-button
-      type="text" 
-      primary
-      @click="dialogVisible = true"
-    >
-      添加
-    </el-button>
     <el-row gutter="24">
-      <el-col :span="12">
+      <el-col :span="24">
         <el-card>
-          <el-table :data="tableData" border style="width: 100%">
-            <el-table-column prop="date" label="类目名称" width="100" />
+          <el-link
+            type="primary"
+            :underline="false"
+            @click="dialogVisibleR = true"
+          >
+            添加
+          </el-link>
+          <el-table :data="categoryList" style="width: 100%" stripe border max-height="600">
+            <el-table-column prop="id" label="类目id"/>
+            <el-table-column label="类目层级">
+              <template #default="scope">
+                <span>
+                  {{ scope.row.parentName ? "二级" : "一级" }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column label="类目名称">
+              <template #default="scope">
+                <span>
+                  {{ 
+                    scope.row.parentName ? 
+                      `${scope.row.parentName} > ${scope.row.categoryName}` : 
+                      scope.row.categoryName
+                   }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="类目图片" width="200">
+              <template #default="scope">
+                <el-image :src="scope.row.imageUrl" :fit="fit" />
+              </template>
+            </el-table-column>
             <el-table-column prop="updateTime" label="修改时间" />
-            <el-table-column fixed="right" label="Operations" width="120">
-              <template #default>
-                <el-button link type="primary" size="small">
+            <el-table-column fixed="right" label="操作" width="120">
+              <template #default="scope">
+                <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
                   编辑
                 </el-button>
-                <el-button link type="primary" size="small">
+                <el-button link type="primary" size="small" @click="handleDelete(scope.row.id)">
                   删除
                 </el-button>
               </template>
@@ -37,39 +83,26 @@
           </el-table>
         </el-card>
       </el-col>
-      <el-col :span="12">
-        <el-card>
-          <h3>二级类目</h3>
-          <el-table :data="tableData" border style="width: 100%">
-            <el-table-column prop="date" label="Date" width="180" />
-            <el-table-column prop="name" label="Name" width="180" />
-            <el-table-column prop="address" label="Address" />
-          </el-table>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row gutter="24">
-      <el-col :span="24">
-        <el-card>
-          三级类目
-          <el-table :data="tableData" border style="width: 100%">
-            <el-table-column prop="date" label="Date" width="180" />
-            <el-table-column prop="name" label="Name" width="180" />
-            <el-table-column prop="address" label="Address" />
-          </el-table>
-        </el-card>
-        
-      </el-col>
     </el-row>
     <OperationDialog 
-      :dialogVisible="dialogVisible" 
+      :dialogVisible="dialogVisibleR" 
       :categoryData="categoryData"
+      @closeDialog="dialogVisibleR = false"
     />
   </div>
 </template>
 
 <style scoped>
+  .el-link {
+    float: right;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
   .el-row {
     width: 100%;
+  }
+  .el-image {
+    width: 100px;
+    height: 100px;
   }
 </style>

@@ -5,6 +5,11 @@ export const ROLE = {
 
 export const BUSINESS_NAV_LIST = [
   {
+    name: '数据看板',
+    path: '',
+    icon: 'DataLine',
+  },
+  {
     name: '素材管理',
     path: 'material',
     icon: 'Picture',
@@ -18,11 +23,6 @@ export const BUSINESS_NAV_LIST = [
     name: '订单管理',
     path: 'order',
     icon: 'Tickets',
-  },
-  {
-    name: '数据看板',
-    path: 'dashboard',
-    icon: 'DataLine',
   },
   {
     name: '评价管理',
@@ -39,7 +39,7 @@ export const BUSINESS_NAV_LIST = [
 export const ADMIN_NAV_LIST = [
   {
     name: 'CDP数据',
-    path: 'cdp',
+    path: '',
     icon: 'DataLine',
   },
   {

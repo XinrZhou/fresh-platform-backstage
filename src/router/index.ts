@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import admin from './routes/admin';
 import business from './routes/business';
+import { ROLE } from '@/types/Const';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -13,6 +14,9 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@/pages/index.vue'),
+      meta: {
+        role: ROLE.ADMIN,
+      },
       children: [
         ...admin,
         ...business,
@@ -21,7 +25,7 @@ const router = createRouter({
     {
       path: '/:pathMatch(.*)',
       redirect: '/login',
-  }
+    }
   ]
 })
 

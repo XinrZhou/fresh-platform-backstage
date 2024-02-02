@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus';
 
 export const request = (options: any) => {
   return new Promise((resolve, reject) => {
-    axios.defaults.baseURL = '/';
+    axios.defaults.baseURL = '/api';
 
     const service = axios.create({
       timeout: 20000
