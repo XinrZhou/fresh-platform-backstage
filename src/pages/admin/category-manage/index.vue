@@ -2,6 +2,7 @@
   import { ref, computed, watchEffect } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { Category } from '@/types/type';
+  import { DIALOG_TYPE } from '@/types/Const';
   import { useCategoryStore } from '@/store/admin/category';
   import CategoryTable from './CategoryTable.vue';
   import OperationDialog from './OperationDialog.vue';
@@ -12,12 +13,23 @@
   const categoryList = computed(() => categoryStore.categoryList);
 
   let dialogVisibleR = ref<Boolean>(false);
-  
-  const categoryData = ref<Category>({});
+  let dialogTypeR = ref<string>('');
+  const categoryDataR = ref<Category>({});
+
+  const onDialogClose = () => {
+    categoryDataR.value = {};
+    dialogVisibleR.value = false;
+  }
+
+  const handleAdd = () => {
+    dialogVisibleR.value = true;
+    dialogTypeR.value = DIALOG_TYPE.ADD;
+  }
 
   const handleEdit = (data: Category) => {
     dialogVisibleR.value = true;
-    categoryData.value = data;
+    dialogTypeR.value = DIALOG_TYPE.EDIT;
+    categoryDataR.value = data;
   }
 
   const handleDelete = (cid: string) => {
@@ -40,7 +52,7 @@
           <el-link
             type="primary"
             :underline="false"
-            @click="dialogVisibleR = true"
+            @click="handleAdd"
           >
             添加
           </el-link>
@@ -84,10 +96,11 @@
         </el-card>
       </el-col>
     </el-row>
-    <OperationDialog 
+    <OperationDialog
+      :dialogType="dialogTypeR" 
       :dialogVisible="dialogVisibleR" 
-      :categoryData="categoryData"
-      @closeDialog="dialogVisibleR = false"
+      :categoryData="categoryDataR"
+      @closeDialog="onDialogClose"
     />
   </div>
 </template>

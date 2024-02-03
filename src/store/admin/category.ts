@@ -26,7 +26,7 @@ export const useCategoryStore = defineStore('category', {
   },
   actions: {
     async addCategory(category: Category) {
-      const res = await addCategory();
+      const res = await addCategory(category);
       this.getCategories();
       ElMessage.success("添加成功！");
       return res;

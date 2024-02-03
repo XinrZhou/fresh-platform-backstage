@@ -1,28 +1,30 @@
 <script setup lang='ts'>
-  import { defineProps, computed, ref, defineEmits, watch } from 'vue';
+  import { defineProps, computed,toRaw, ref, defineEmits, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
   import BaseUpload from '@/components/BaseUpload.vue';
+  import { DIALOG_TYPE } from '@/types/Const';
 
   const categoryStore = useCategoryStore();
 
   const parentCategoryListC = computed(() => categoryStore.parentCategoryList);
-  const props = defineProps(['dialogVisible', 'categoryData']);
+  const props = defineProps([
+    'dialogVisible', 'categoryData', 'dialogType'
+  ]);
   const emits = defineEmits(['closeDialog',]);
 
   let categoryR = ref<Category>({});
 
   watch(() => categoryStore.imageUrl, () => {
-    categoryR.value.imageUrl = categoryStore.imageUrl;
+    categoryR.value.imageUrl = toRaw(categoryStore.imageUrl);
   })
 
   watch(() => props.categoryData, () => {
     categoryR.value = props.categoryData;
-    categoryR.value.updateTime = '';
   })
 
   const onCancel = () => {
-    categoryR.value = {};
     emits('closeDialog');
+    categoryR.value = {};
   }
 
   const onImageUpload = (file) => {
@@ -34,7 +36,7 @@
   }
 
   const addCategory = () => {
-    categoryStore.addCategory(categoryR.value).then(() => onCancel())
+    categoryStore.addCategory(categoryR.value).then(() =>emits('closeDialog'));
   }
 
   const onDialogOpen = () => {
@@ -46,7 +48,7 @@
 <template>
   <el-dialog 
     :model-value="props.dialogVisible"
-    title="添加类目"
+    :title=props.dialogType.title
     width="500"
     @close="onCancel"
     @open="onDialogOpen"
@@ -57,12 +59,13 @@
           v-model="categoryR.isParent"
           :active-value="1"
           :inactive-value="0"
+          :disabled="props.dialogType.name === DIALOG_TYPE.EDIT.name"
         />
       </el-form-item>
-      <el-form-item label="上级类目">
+      <el-form-item label="上级类目" v-show="!categoryR.isParent">
         <el-select
           v-model="categoryR.parentId"
-          :disabled="categoryR.isParent"
+          placeholder="请选择类目"
           clearable 
         >
           <el-option 
@@ -84,7 +87,7 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addCategory">添加</el-button>
+        <el-button type="primary" @click="addCategory">确定</el-button>
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>

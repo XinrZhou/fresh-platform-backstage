@@ -83,3 +83,14 @@ export const ADMIN_NAV_LIST = [
     icon: 'Monitor',
   }
 ];
+
+export const DIALOG_TYPE = {
+  EDIT: {
+    name: 'edit',
+    title: '编辑',
+  },
+  ADD: {
+    name: 'add',
+    title: '新增',
+  },
+};
