@@ -1,14 +1,14 @@
 <script setup lang='ts'>
   import { defineProps, computed,toRaw, ref, defineEmits, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
+  import { OPERATION_TYPE } from '@/constant/enums';
   import BaseUpload from '@/components/BaseUpload.vue';
-  import { DIALOG_TYPE } from '@/types/Const';
 
   const categoryStore = useCategoryStore();
 
   const parentCategoryListC = computed(() => categoryStore.parentCategoryList);
   const props = defineProps([
-    'dialogVisible', 'categoryData', 'dialogType'
+    'dialogVisible', 'categoryData', 'operationType'
   ]);
   const emits = defineEmits(['closeDialog',]);
 
@@ -48,7 +48,7 @@
 <template>
   <el-dialog 
     :model-value="props.dialogVisible"
-    :title=props.dialogType.title
+    :title=props.operationType.title
     width="500"
     @close="onCancel"
     @open="onDialogOpen"
@@ -59,7 +59,7 @@
           v-model="categoryR.isParent"
           :active-value="1"
           :inactive-value="0"
-          :disabled="props.dialogType.name === DIALOG_TYPE.EDIT.name"
+          :disabled="props.operationType.name === OPERATION_TYPE.EDIT.name"
         />
       </el-form-item>
       <el-form-item label="上级类目" v-show="!categoryR.isParent">

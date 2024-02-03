@@ -1,7 +1,15 @@
 <script setup lang='ts'>
-  import BaseNav from '@/components/BaseNav.vue'
-  import Header from '@/components/Header.vue';
-  import { ADMIN_NAV_LIST } from '@/types/Const';
+  import { ref, computed, watchEffect } from 'vue';
+  import { User } from '@/types/type';
+  import { useUserStore } from '@/store/user/user';
+  import { ADMIN_SIDEBAR_LIST } from '@/constant/sidebar';
+  import TheSidebar from '@/components/TheSidebar.vue';
+  import TheHeader from '@/components/TheHeader.vue';
+
+  const userStore = useUserStore();
+  const userInfoC = computed(() => userStore.userInfo);
+  
+  const logout = () => userStore.logout();
 
 </script>
 
@@ -9,10 +17,12 @@
   <div class="common-layout">
     <el-container>
       <el-aside width="200px">
-        <BaseNav :navList="ADMIN_NAV_LIST" baseUrl="admin"/>
+        <TheSidebar :navList="ADMIN_SIDEBAR_LIST" baseUrl="admin"/>
       </el-aside>
       <el-container>
-        <el-header>Header</el-header>
+        <el-header>
+          <TheHeader :userInfo="userInfoC" @logout="logout"/>
+        </el-header>
         <el-main>
           <router-view></router-view>
         </el-main>

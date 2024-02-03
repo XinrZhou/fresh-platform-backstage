@@ -1,5 +1,5 @@
 import { createRouter } from "vue-router";
-import { ROLE } from "@/types/Const";
+import { ROLE } from "@/constant/enums";
 
 export default [{
   name: 'business',

@@ -1,9 +1,4 @@
-export const ROLE = {
-  ADMIN: 'Vo10t',
-  BUSINESS: 'cA1KL'
-};
-
-export const BUSINESS_NAV_LIST = [
+export const BUSINESS_SIDEBAR_LIST = [
   {
     name: '数据看板',
     path: '',
@@ -36,9 +31,9 @@ export const BUSINESS_NAV_LIST = [
   }
 ];
 
-export const ADMIN_NAV_LIST = [
+export const ADMIN_SIDEBAR_LIST = [
   {
-    name: 'CDP数据',
+    name: 'CDP数据管理',
     path: '',
     icon: 'DataLine',
   },
@@ -64,7 +59,7 @@ export const ADMIN_NAV_LIST = [
   },
   {
     name: '商品池',
-    path: 'commodity',
+    path: 'product',
     icon: 'ShoppingCartFull',
   },
   {
@@ -83,14 +78,3 @@ export const ADMIN_NAV_LIST = [
     icon: 'Monitor',
   }
 ];
-
-export const DIALOG_TYPE = {
-  EDIT: {
-    name: 'edit',
-    title: '编辑',
-  },
-  ADD: {
-    name: 'add',
-    title: '新增',
-  },
-};

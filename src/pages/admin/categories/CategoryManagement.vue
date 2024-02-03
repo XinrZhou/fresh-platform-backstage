@@ -2,10 +2,9 @@
   import { ref, computed, watchEffect } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { Category } from '@/types/type';
-  import { DIALOG_TYPE } from '@/types/Const';
+  import { OPERATION_TYPE } from '@/constant/enums';
   import { useCategoryStore } from '@/store/admin/category';
-  import CategoryTable from './CategoryTable.vue';
-  import OperationDialog from './OperationDialog.vue';
+  import OperationDialog from './components/OperationDialog.vue';
 
   const categoryStore = useCategoryStore();
   categoryStore.getCategories();
@@ -13,7 +12,7 @@
   const categoryList = computed(() => categoryStore.categoryList);
 
   let dialogVisibleR = ref<Boolean>(false);
-  let dialogTypeR = ref<string>('');
+  let operationTypeR = ref<string>('');
   const categoryDataR = ref<Category>({});
 
   const onDialogClose = () => {
@@ -23,12 +22,12 @@
 
   const handleAdd = () => {
     dialogVisibleR.value = true;
-    dialogTypeR.value = DIALOG_TYPE.ADD;
+    operationTypeR.value = OPERATION_TYPE.ADD;
   }
 
   const handleEdit = (data: Category) => {
     dialogVisibleR.value = true;
-    dialogTypeR.value = DIALOG_TYPE.EDIT;
+    operationTypeR.value = OPERATION_TYPE.EDIT;
     categoryDataR.value = data;
   }
 
@@ -97,7 +96,7 @@
       </el-col>
     </el-row>
     <OperationDialog
-      :dialogType="dialogTypeR" 
+      :operationType="operationTypeR" 
       :dialogVisible="dialogVisibleR" 
       :categoryData="categoryDataR"
       @closeDialog="onDialogClose"

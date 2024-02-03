@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import admin from './routes/admin';
 import business from './routes/business';
-import { ROLE } from '@/types/Const';
+import { ROLE } from "@/constant/enums";
 
 const router = createRouter({
   history: createWebHashHistory(),

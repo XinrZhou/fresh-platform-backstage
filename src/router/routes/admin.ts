@@ -1,8 +1,7 @@
 import { createRouter } from "vue-router";
-import { ROLE } from "@/types/Const";
+import { ROLE } from "@/constant/enums";
 
 export default [{
-  name: 'admin',
   path: 'admin',
   component: () => import('@/pages/admin/index.vue'),
   meta: {
@@ -10,49 +9,40 @@ export default [{
   },
   children: [
     {
-      name: 'cdpManage',
       path: '',
-      component: () => import('@/pages/admin/cdp-manage/index.vue'),
+      component: () => import('@/pages/admin/cdp-data/CdpDataManagement.vue'),
     },
     {
-      name: 'material',
       path: 'material',
-      component: () => import('@/pages/admin/material-manage/index.vue'),
+      component: () => import('@/pages/admin/materials/MaterialManagement.vue'),
     },
     {
-      name: 'contentManage',
       path: 'content',
-      component: () => import('@/pages/admin/content-manage/index.vue'),
+      component: () => import('@/pages/admin/content/ContentManagement.vue'),
     },
     {
-      name: 'supplierManage',
       path: 'supplier',
-      component: () => import('@/pages/admin/supplier-manage/index.vue'),
+      component: () => import('@/pages/admin/supplier/SupplierManagement.vue'),
     },
     {
-      name: 'categoryManage',
       path: 'category',
-      component: () => import('@/pages/admin/category-manage/index.vue'),
+      component: () => import('@/pages/admin/categories/CategoryManagement.vue'),
     },
     {
-      name: 'commodityManage',
-      path: 'commodity',
-      component: () => import('@/pages/admin/commodity-manage/index.vue'),
+      path: 'product',
+      component: () => import('@/pages/admin/products/ProductManagement.vue'),
     },
     {
-      name: 'marketingManage',
       path: 'marketing',
-      component: () => import('@/pages/admin/marketing-manage/index.vue'),
+      component: () => import('@/pages/admin/marketing/MarketingManagement.vue'),
     },
     {
-      name: 'modelManage',
       path: 'model',
-      component: () => import('@/pages/admin/model-manage/index.vue'),
+      component: () => import('@/pages/admin/ai-models/AIModelManagement.vue'),
     },
     {
-      name: 'resourceManage',
       path: 'resource',
-      component: () => import('@/pages/admin/resource-manage/index.vue'),
+      component: () => import('@/pages/admin/resources/ResourceManagement.vue'),
     },
   ]
 }]
