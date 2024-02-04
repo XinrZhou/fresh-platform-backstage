@@ -5,13 +5,13 @@
 
   const userStore = useUserStore();
   const user = ref<User> ({
-    phoneNumber: '18312345678',
-    password: '20021228'
+    number: '18312345678',
+    password: '18312345678'
   });
   
   const goLogin  = () => {
     userStore.goLogin(user.value);
-    user.value.phoneNumber = '';
+    user.value.number = '';
     user.value.password = '';
   }
 </script>
@@ -28,7 +28,7 @@
       >
         <el-form-item>
           <el-input 
-            v-model="user.phoneNumber"  
+            v-model="user.number"  
             placeholder="手机号"
             clearable
           />

@@ -58,7 +58,12 @@ export const ADMIN_SIDEBAR_LIST = [
     icon: 'Operation',
   },
   {
-    name: '商品池',
+    name: 'RDC管理',
+    path: 'rdc',
+    icon: 'Operation',
+  },
+  {
+    name: '商品管理',
     path: 'product',
     icon: 'ShoppingCartFull',
   },

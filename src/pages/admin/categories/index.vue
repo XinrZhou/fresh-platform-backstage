@@ -4,6 +4,7 @@
   import { Category } from '@/types/type';
   import { OPERATION_TYPE } from '@/constant/enums';
   import { useCategoryStore } from '@/store/admin/category';
+  import BaseDialog from '@/components/BaseDialog.vue';
   import OperationDialog from './components/OperationDialog.vue';
 
   const categoryStore = useCategoryStore();
@@ -101,6 +102,12 @@
       :categoryData="categoryDataR"
       @closeDialog="onDialogClose"
     />
+    <!-- <BaseDialog 
+      :operationType="operationTypeR" 
+      :dialogVisible="dialogVisibleR" 
+      :formData="categoryDataR"
+      @closeDialog="onDialogClose"
+    /> -->
   </div>
 </template>
 

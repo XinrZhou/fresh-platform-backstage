@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { request } from '@/api/http';
-import { Category } from '@/types/type';
+import { Category, Rdc } from '@/types/type';
 
-
+// 类目管理
 export function addCategory(data: Category) {
   return request({
     url: '/category/category',
@@ -40,3 +40,19 @@ export function deleteCategory(cid: string) {
   })
 }
 
+// 供应商管理
+export function getSuppliers() {
+  return request({
+    url: '/supplier/suppliers',
+    method: 'get',
+  })
+}
+
+// RDC管理
+export function addRdc(data: Rdc) {
+  return request({
+    url: '/rdc/rdcs',
+    data,
+    method: 'post',
+  })
+}

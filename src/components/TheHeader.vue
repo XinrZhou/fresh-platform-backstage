@@ -20,7 +20,7 @@
         />
         <el-dropdown>
           <span class="el-dropdown-link">
-            {{ userInfo.userName }}
+            {{ userInfo.name }}
             <el-icon class="el-icon--right">
               <arrow-down />
             </el-icon>

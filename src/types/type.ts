@@ -1,10 +1,11 @@
 export interface User {
   id?: string
-  userName?: string
+  name?: string
+  number?: string
   password?: string
-  status?: number
+  suppiler?: string
+  consumer?: string
   avatar?: string
-  phoneNumber?: string
   insertTime?: string
   selectTime?: string
 };
@@ -17,4 +18,16 @@ export interface Category {
   insertTime?: string
   selectTime?: string
 };
+
+export interface Rdc {
+  id?: string,
+  name?: string,
+  province?: string,
+  city?: string,
+  district?: string,
+  address?: string[],
+  detail?: string,
+  insertTime?: string
+  selectTime?: string
+}
 
