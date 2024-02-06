@@ -6,24 +6,28 @@
   import { Rdc } from "@/types/type";
   import BaseDialog from '@/components/BaseDialog.vue';
 
+  const rdcStore = useRdcStore();
+  rdcStore.getRdcs();
+
+  const rdcList = computed(() => rdcStore.rdcList);
   let dialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<string>('');
-  const rdcDataR = ref({});
+  let rdcDataR = ref({});
 
-  const onDialogClose = () => {
+  const handleClose = () => {
     rdcDataR.value = {};
     dialogVisibleR.value = false;
-  }
-
-  const handleAdd = () => {
-    dialogVisibleR.value = true;
-    operationTypeR.value = OPERATION_TYPE.ADD;
   }
 
   const handleEdit = (data: Rdc) => {
     dialogVisibleR.value = true;
     operationTypeR.value = OPERATION_TYPE.EDIT;
     rdcDataR.value = data;
+  }
+
+  const handleAdd = () => {
+    dialogVisibleR.value = true;
+    operationTypeR.value = OPERATION_TYPE.ADD;
   }
 
   const handleDelete = (rid: string) => {
@@ -34,6 +38,10 @@
     })
     .then(() => {
     });
+  }
+
+  const handleSubmit = (rdcData: Rdc) => {
+    rdcStore.addRdc(rdcData).then(() => handleClose());
   }
 </script>
 
@@ -49,32 +57,14 @@
         >
           添加
         </el-button>
-        <el-table :data="categoryList" style="width: 100%" stripe border max-height="600">
-          <el-table-column prop="id" label="类目id"/>
-          <el-table-column label="类目层级">
-            <template #default="scope">
-              <span>
-                {{ scope.row.parentName ? "二级" : "一级" }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column label="类目名称">
-            <template #default="scope">
-              <span>
-                {{ 
-                  scope.row.parentName ? 
-                    `${scope.row.parentName} > ${scope.row.categoryName}` : 
-                    scope.row.categoryName
-                 }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column fixed="right" label="类目图片" width="200">
-            <template #default="scope">
-              <el-image :src="scope.row.imageUrl" :fit="fit" />
-            </template>
-          </el-table-column>
-          <el-table-column prop="updateTime" label="修改时间" />
+        <el-table :data="rdcList" style="width: 100%" stripe border max-height="600">
+          <el-table-column prop="id" label="id" width="200"/>
+          <el-table-column prop="name" label="RDC名称" width="150"/>
+          <el-table-column prop="province" label="省份" width="100"/>
+          <el-table-column prop="city" label="城市" width="100"/>
+          <el-table-column prop="district" label="区" width="100"/>
+          <el-table-column prop="detail" label="详细地址"/>
+          <el-table-column prop="updateTime" label="修改时间" width="180" />
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
               <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
@@ -92,10 +82,11 @@
   <BaseDialog
     :schema='RDC_SCHEMA'
     :ui-schema="RDC_UI_SCHEMA"
-    :operationType="operationTypeR" 
-    :dialogVisible="dialogVisibleR" 
-    :formData="categoryDataR"
-    @closeDialog="onDialogClose"
+    :operation-type="operationTypeR" 
+    :dialog-visible="dialogVisibleR" 
+    :form-data="rdcDataR"
+    @on-data-submit="handleSubmit"
+    @on-dialog-close="handleClose"
   />
 </template>
 

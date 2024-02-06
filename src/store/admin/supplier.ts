@@ -1,7 +1,11 @@
 import { defineStore } from "pinia";
 import { User } from "@/types/type";
 import { ElMessage } from 'element-plus'
-import { getSuppliers } from "@/api/admin";
+import { 
+  getSuppliers, 
+  addSupplier,
+  deleteSupplier
+} from "@/api/admin";
 
 
 interface State {
@@ -13,9 +17,18 @@ export const useSupplierStore = defineStore('supplier', {
     return {
       async getSuppliers() {
         const res = await getSuppliers();
-        console.log('res===', res)
-        this.supplierList = res.data.data.supplierList;
+        this.supplierList = res.data.data.suppliers;
       },
+
+      async addSupplier(user: User) {
+        const res = await addSupplier(user);
+        this.getSuppliers();
+      },
+
+      async deleteSuppiler(sid: string) {
+        const res = await deleteSupplier(sid);
+        this.getSuppliers();
+      }
     }
   },
   actions: {

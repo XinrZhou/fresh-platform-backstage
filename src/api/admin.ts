@@ -43,8 +43,23 @@ export function deleteCategory(cid: string) {
 // 供应商管理
 export function getSuppliers() {
   return request({
-    url: '/supplier/suppliers',
+    url: '/admin/suppliers',
     method: 'get',
+  })
+}
+
+export function addSupplier(data: User) {
+  return request({
+    url: '/admin/suppliers',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteSupplier(sid: string) {
+  return request({
+    url: `/admin/suppliers/${sid}`,
+    method: 'delete',
   })
 }
 
@@ -54,5 +69,12 @@ export function addRdc(data: Rdc) {
     url: '/rdc/rdcs',
     data,
     method: 'post',
+  })
+}
+
+export function getRdcs() {
+  return request({
+    url: 'rdc/rdcs',
+    method: 'get'
   })
 }

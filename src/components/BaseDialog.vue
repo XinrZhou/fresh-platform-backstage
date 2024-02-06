@@ -1,27 +1,33 @@
 <script setup lang='ts'>
-  import { ref, defineEmits, defineProps, watch } from 'vue';
+  import { ref, defineEmits, defineProps, watch, toRaw } from 'vue';
   import VueForm from '@lljj/vue3-form-element';
 
   const formProps = {
     labelWidth: '100px',
     labelPosition: 'right'
   }
-
   const formFooter = {
     okBtn: '确定'
   }
 
-
   const props = defineProps([
     'schema', 'uiSchema', 'dialogVisible', 'formData', 'operationType'
   ])
-  const emits = defineEmits(['submit']);
-
+  const emits = defineEmits(['onDataSubmit', 'onDialogClose']);
   let formDataR = ref<Object>({});
 
   watch(() => props.formData, () => {
     formDataR.value = props.formData;
   })
+
+  const handleDataSubmit = () => {
+    emits('onDataSubmit', toRaw(formDataR.value));
+  }
+
+  const handleDialogClose = () => {
+    emits('onDialogClose');
+    formDataR.value = {};
+  }
 </script>
 
 <template>
@@ -29,15 +35,15 @@
     v-model="props.dialogVisible"
     :title=props.operationType?.title
     width="500px"
-    @close="onCancel"
-    @open="onDialogOpen"
   >
     <VueForm
+      v-model="formDataR"
       :formProps="formProps"
       :formFooter="formFooter"
-      v-model="formDataR"
       :schema="props.schema"
       :ui-schema="props.uiSchema"
+      @cancel="handleDialogClose"
+      @submit="handleDataSubmit"
     />
   </el-dialog>
 </template>

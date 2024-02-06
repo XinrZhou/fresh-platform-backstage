@@ -9,7 +9,7 @@
   const userStore = useUserStore();
   const userInfoC = computed(() => userStore.userInfo);
   
-  const logout = () => userStore.logout();
+  const logout = () => userStore.goLogout();
 
 </script>
 
