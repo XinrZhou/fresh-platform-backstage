@@ -12,7 +12,7 @@ export interface User {
 
 export interface Category {
   id?: string,
-  categoryName?: string,
+  name?: string,
   parentId?: string,
   isParent?: number,
   insertTime?: string

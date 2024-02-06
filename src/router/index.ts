@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import admin from './routes/admin';
-import business from './routes/business';
+import supplier from './routes/supplier';
 import { ROLE } from "@/constant/enums";
 
 const router = createRouter({
@@ -19,7 +19,7 @@ const router = createRouter({
       },
       children: [
         ...admin,
-        ...business,
+        ...supplier,
       ]
     },
     {

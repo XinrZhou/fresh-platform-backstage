@@ -1,6 +1,7 @@
 <script setup lang='ts'>
   import { ref, computed } from 'vue';
   import { RDC_SCHEMA, RDC_UI_SCHEMA } from './schema';
+  import { ElMessage, ElMessageBox } from 'element-plus'
   import { OPERATION_TYPE } from '@/constant/enums';
   import { useRdcStore } from '@/store/admin/rdc';
   import { Rdc } from "@/types/type";
@@ -37,11 +38,19 @@
       type: 'warning',
     })
     .then(() => {
+      rdcStore.deleteRdc(rid);
+    })
+    .then(() => {
+      handleClose();
+      ElMessage.success('删除成功！');
     });
   }
 
   const handleSubmit = (rdcData: Rdc) => {
-    rdcStore.addRdc(rdcData).then(() => handleClose());
+    rdcStore.addRdc(rdcData).then(() => {
+      ElMessage.success(`${operationTypeR.value.title}成功！`);
+      handleClose();
+    });
   }
 </script>
 

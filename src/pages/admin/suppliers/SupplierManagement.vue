@@ -1,6 +1,6 @@
 <script setup lang='ts'>
   import { ref, computed, toRaw } from 'vue';
-  import { ElMessage, ElMessageBox } from 'element-plus'
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import { User } from '@/types/type';
   import { OPERATION_TYPE, SHOP_STATUS } from '@/constant/enums';
   import { useSupplierStore } from '@/store/admin/supplier';

@@ -4,7 +4,6 @@
   import { Category } from '@/types/type';
   import { OPERATION_TYPE } from '@/constant/enums';
   import { useCategoryStore } from '@/store/admin/category';
-  import BaseDialog from '@/components/BaseDialog.vue';
   import OperationDialog from './components/OperationDialog.vue';
 
   const categoryStore = useCategoryStore();
@@ -16,7 +15,7 @@
   let operationTypeR = ref<string>('');
   const categoryDataR = ref<Category>({});
 
-  const onDialogClose = () => {
+  const handleClose = () => {
     categoryDataR.value = {};
     dialogVisibleR.value = false;
   }
@@ -70,8 +69,8 @@
                 <span>
                   {{ 
                     scope.row.parentName ? 
-                      `${scope.row.parentName} > ${scope.row.categoryName}` : 
-                      scope.row.categoryName
+                      `${scope.row.parentName} > ${scope.row.name}` : 
+                      scope.row.name
                    }}
                 </span>
               </template>
@@ -100,14 +99,8 @@
       :operationType="operationTypeR" 
       :dialogVisible="dialogVisibleR" 
       :categoryData="categoryDataR"
-      @closeDialog="onDialogClose"
+      @on-dialog-close="handleClose"
     />
-    <!-- <BaseDialog 
-      :operationType="operationTypeR" 
-      :dialogVisible="dialogVisibleR" 
-      :formData="categoryDataR"
-      @closeDialog="onDialogClose"
-    /> -->
   </div>
 </template>
 

@@ -3,7 +3,8 @@ import { Rdc } from "@/types/type";
 import { ElMessage } from 'element-plus';
 import { 
   getRdcs,
-  addRdc
+  addRdc,
+  deleteRdc,
 } from "@/api/admin";
 import { transformAddressFormat, transformToOptionsFormat } from "@/utils";
 
@@ -31,5 +32,10 @@ export const useRdcStore = defineStore('rdc', {
       const res = await addRdc(newRdcObj);
       this.getRdcs();
     },
+
+    async deleteRdc(rid: string) {
+      const res = await deleteRdc(rid);
+      this.getRdcs();
+    }
   }
 })

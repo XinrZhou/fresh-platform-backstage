@@ -42,9 +42,9 @@ export const SUPPLIER_UI_SCHEMA = {
     shopStatus: {
         'ui:widget': 'SelectWidget',
         'ui:enumOptions': [
-            {value: '0',  label: '审核中'}, 
-            {value: '1',  label: '营业中'}, 
-            {value: '2',  label: '已关闭'}
-        ]
+            {value: 0,  label: '审核中'}, 
+            {value: 1,  label: '营业中'}, 
+            {value: 2,  label: '已关闭'}
+        ],
     }
 };

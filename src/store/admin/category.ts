@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { Category } from "@/types/type";
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
+import { transformToOptionsFormat } from "@/utils";
 import { 
   addCategory, 
   getParentCategories, 
@@ -13,6 +14,7 @@ import {
 interface State {
   categoryList: Category[];
   parentCategoryList: Category[];
+  parentCategoryListM: Category[];
   categoryImageUrl: string;
 }
 
@@ -34,6 +36,7 @@ export const useCategoryStore = defineStore('category', {
     async getParentCategories() {
       const res = await getParentCategories();
       this.parentCategoryList = res.data.data.categories;
+      this.parentCategoryListM = transformToOptionsFormat(res.data.data.categories);
     },
 
     async getCategories() {

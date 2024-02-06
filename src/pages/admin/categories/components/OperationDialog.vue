@@ -10,7 +10,7 @@
   const props = defineProps([
     'dialogVisible', 'categoryData', 'operationType'
   ]);
-  const emits = defineEmits(['closeDialog',]);
+  const emits = defineEmits(['onDialogClose',]);
 
   let categoryR = ref<Category>({});
 
@@ -23,20 +23,20 @@
   })
 
   const onCancel = () => {
-    emits('closeDialog');
+    emits('onDialogClose');
     categoryR.value = {};
   }
 
-  const onImageUpload = (file) => {
+  const handleImageUpload = (file) => {
     categoryStore.uoloadImage(file);
   }
 
-  const onImageRemove = () => {
+  const handleImageRemove = () => {
     categoryR.value.imageUrl = '';
   }
 
   const addCategory = () => {
-    categoryStore.addCategory(categoryR.value).then(() =>emits('closeDialog'));
+    categoryStore.addCategory(categoryR.value).then(() =>emits('onDialogClose'));
   }
 
   const onDialogOpen = () => {
@@ -71,19 +71,19 @@
           <el-option 
             v-for="item in parentCategoryListC" 
             :key="item.id"
-            :label="item.categoryName"
+            :label="item.name"
             :value="item.id"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="类目名称" label-width="100px">
-        <el-input v-model="categoryR.categoryName" />
+        <el-input v-model="categoryR.name" />
       </el-form-item>
       <el-form-item label="类目图片">
         <BaseUpload 
-          :imageUrl="categoryR.imageUrl" 
-          @onUpload="onImageUpload"
-          @onRemove="onImageRemove"
+          :image-url="categoryR.imageUrl" 
+          @on-upload="handleImageUpload"
+          @on-remove="handleImageRemove"
         />
       </el-form-item>
       <el-form-item>

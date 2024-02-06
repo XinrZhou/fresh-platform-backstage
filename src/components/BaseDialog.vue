@@ -35,6 +35,7 @@
     v-model="props.dialogVisible"
     :title=props.operationType?.title
     width="500px"
+    @close="handleDialogClose"
   >
     <VueForm
       v-model="formDataR"

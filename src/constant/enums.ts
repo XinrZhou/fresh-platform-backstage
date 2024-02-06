@@ -1,6 +1,6 @@
 export const ROLE = {
   ADMIN: 'Vo10t',
-  BUSINESS: 'cA1KL'
+  SUPPILER: 'cA1KL'
 };
 
 export const OPERATION_TYPE = {
@@ -10,7 +10,7 @@ export const OPERATION_TYPE = {
   },
   ADD: {
     name: 'add',
-    title: '新增',
+    title: '添加',
   },
 };
 

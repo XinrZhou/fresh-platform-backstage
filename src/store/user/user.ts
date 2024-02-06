@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', {
       if (res.headers.role === ROLE.ADMIN) {
         router.push('/admin');
       } else {
-        router.push('/business');
+        router.push('/supplier');
       }
     },
 

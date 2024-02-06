@@ -1,4 +1,4 @@
-export const BUSINESS_SIDEBAR_LIST = [
+export const SUPPLIER_SIDEBAR_LIST = [
   {
     name: '数据看板',
     path: '',
