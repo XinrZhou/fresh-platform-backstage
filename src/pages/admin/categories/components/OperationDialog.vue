@@ -1,6 +1,7 @@
 <script setup lang='ts'>
   import { defineProps, computed,toRaw, ref, defineEmits, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import { OPERATION_TYPE } from '@/constant/enums';
   import BaseUpload from '@/components/BaseUpload.vue';
 
@@ -35,8 +36,13 @@
     categoryR.value.imageUrl = '';
   }
 
+
+
   const addCategory = () => {
-    categoryStore.addCategory(categoryR.value).then(() =>emits('onDialogClose'));
+    categoryStore.addCategory(categoryR.value).then(() => {
+      ElMessage.success('添加成功');
+      emits('onDialogClose');
+    });
   }
 
   const onDialogOpen = () => {

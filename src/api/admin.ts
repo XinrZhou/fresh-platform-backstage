@@ -5,7 +5,7 @@ import { Category, Rdc } from '@/types/type';
 // 类目管理
 export function addCategory(data: Category) {
   return request({
-    url: '/category/category',
+    url: '/category/categories',
     method: 'post',
     data
   })
@@ -13,14 +13,14 @@ export function addCategory(data: Category) {
 
 export function getParentCategories() {
   return request({
-    url: `/category/categories/1`,
+    url: `/category/categories`,
     method: 'get',
   })
 }
 
 export function getCategories() {
   return request({
-    url: '/category/categories',
+    url: '/category/categories/tree',
     method: 'get',
   })
 }

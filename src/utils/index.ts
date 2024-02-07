@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { update } from 'lodash';
 
 /**
  * 省市区数据格式转换
@@ -43,3 +43,26 @@ export const formatSupplierData = (userObject) =>  {
   return _.merge(baseProps, {supplier: JSON.stringify(supplierProps)});
 }
 
+/**
+ * 后台类目树格式转换
+ * @param categories 
+ * @param level 
+ * @param parentName 
+ * @returns 
+ */
+export const transformCategories = (categories, level = 1, parentName = null) => {
+  return _.flatMapDeep(categories, category => {
+    const transformedCategory = {
+      id: category.id,
+      level: `${level}级类目`,
+      name: category.name,
+      parentId: category.parentId || null,
+      parentName: parentName || null,
+      imageUrl: category.imageUrl,
+      updateTime: category.updateTime
+    };
+
+    const children = category.children ? transformCategories(category.children, level + 1, category.name) : [];
+    return [transformedCategory, ...children];
+  });
+}

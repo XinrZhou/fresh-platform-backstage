@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { Category } from "@/types/type";
 import { ElMessage } from 'element-plus';
-import { transformToOptionsFormat } from "@/utils";
+import { transformToOptionsFormat, transformCategories } from "@/utils";
 import { 
   addCategory, 
   getParentCategories, 
@@ -15,7 +15,7 @@ interface State {
   categoryList: Category[];
   parentCategoryList: Category[];
   parentCategoryListM: Category[];
-  categoryImageUrl: string;
+  imageUrl: string;
 }
 
 export const useCategoryStore = defineStore('category', {
@@ -23,6 +23,7 @@ export const useCategoryStore = defineStore('category', {
     return {
       categoryList: [],
       parentCategoryList: [],
+      parentCategoryListM: [],
       imageUrl: '',
     }
   },
@@ -41,7 +42,8 @@ export const useCategoryStore = defineStore('category', {
 
     async getCategories() {
       const res = await getCategories();
-      this.categoryList = res.data.data.categories;
+      const categories = res.data.data.categories;
+      this.categoryList = transformCategories(categories);
     },
 
     async uoloadImage(file: File) {

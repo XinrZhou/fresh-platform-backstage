@@ -31,3 +31,18 @@ export const SHOP_STATUS = [
     renderType: 'danger',
   }
 ]
+
+export const CATEGORY_LEVEL = [
+  {
+    label: '一级类目',
+    value: 1,
+  }, 
+  {
+    label: '二级类目',
+    value: 2,
+  }, 
+  {
+    label: '三级类目',
+    value: 3
+  }
+]

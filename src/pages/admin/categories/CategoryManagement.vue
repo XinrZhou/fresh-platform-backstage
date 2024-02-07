@@ -1,6 +1,6 @@
 <script setup lang='ts'>
   import { ref, computed, watchEffect } from 'vue';
-  import { ElMessage, ElMessageBox } from 'element-plus'
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import { Category } from '@/types/type';
   import { OPERATION_TYPE } from '@/constant/enums';
   import { useCategoryStore } from '@/store/admin/category';
@@ -56,31 +56,22 @@
             添加
           </el-link>
           <el-table :data="categoryList" style="width: 100%" stripe border max-height="600">
-            <el-table-column prop="id" label="类目id"/>
-            <el-table-column label="类目层级">
+            <el-table-column prop="id" label="类目id" width="200"/>
+            <el-table-column prop="level" label="类目层级" />
+            <el-table-column label="上级类目" >
               <template #default="scope">
                 <span>
-                  {{ scope.row.parentName ? "二级" : "一级" }}
+                  {{ scope.row.parentName ? scope.row.parentName : "--"}}
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="类目名称">
-              <template #default="scope">
-                <span>
-                  {{ 
-                    scope.row.parentName ? 
-                      `${scope.row.parentName} > ${scope.row.name}` : 
-                      scope.row.name
-                   }}
-                </span>
-              </template>
-            </el-table-column>
+            <el-table-column prop="name" label="类目名称" />
             <el-table-column fixed="right" label="类目图片" width="200">
               <template #default="scope">
                 <el-image :src="scope.row.imageUrl" :fit="fit" />
               </template>
             </el-table-column>
-            <el-table-column prop="updateTime" label="修改时间" />
+            <el-table-column prop="updateTime" label="修改时间" width="180" />
             <el-table-column fixed="right" label="操作" width="120">
               <template #default="scope">
                 <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
