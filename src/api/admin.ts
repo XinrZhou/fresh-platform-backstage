@@ -11,17 +11,24 @@ export function addCategory(data: Category) {
   })
 }
 
-export function getParentCategories() {
+export function getCategories() {
   return request({
-    url: `/category/categories`,
+    url: '/category/categories',
     method: 'get',
   })
 }
 
-export function getCategories() {
+export function getCategoriesByParentId(pid: string) {
   return request({
-    url: '/category/categories/tree',
+    url: `/category/category/${pid}`,
     method: 'get',
+  })
+}
+
+export function getParentLevelOptions(level: number) {
+  return request({
+    url: `/category/categories/${level}`,
+    method: 'get'
   })
 }
 
@@ -35,7 +42,7 @@ export function uploadImage(data: FormData) {
 
 export function deleteCategory(cid: string) {
   return request({
-    url: `/category/category/${cid}`,
+    url: `/category/categories/${cid}`,
     method: 'delete',
   })
 }

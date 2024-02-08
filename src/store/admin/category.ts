@@ -1,10 +1,15 @@
 import { defineStore } from "pinia";
 import { Category } from "@/types/type";
+import { CATEGORY_LEVEL } from "@/constant/enums";
 import { ElMessage } from 'element-plus';
-import { transformToOptionsFormat, transformCategories } from "@/utils";
+import { 
+  flatMapCategories, 
+  formatToAddRoot,
+} from "@/utils";
 import { 
   addCategory, 
-  getParentCategories, 
+  getCategoriesByParentId,
+  getParentLevelOptions,
   getCategories,
   uploadImage, 
   deleteCategory,
@@ -14,7 +19,6 @@ import {
 interface State {
   categoryList: Category[];
   parentCategoryList: Category[];
-  parentCategoryListM: Category[];
   imageUrl: string;
 }
 
@@ -22,30 +26,48 @@ export const useCategoryStore = defineStore('category', {
   state: (): State => {
     return {
       categoryList: [],
+      categoryTreeList: [],
       parentCategoryList: [],
-      parentCategoryListM: [],
+      parentLevelOptions: [],
       imageUrl: '',
     }
   },
   actions: {
+    // 添加类目
     async addCategory(category: Category) {
       const res = await addCategory(category);
       this.getCategories();
       return res;
     },
 
-    async getParentCategories() {
-      const res = await getParentCategories();
-      this.parentCategoryList = res.data.data.categories;
-      this.parentCategoryListM = transformToOptionsFormat(res.data.data.categories);
-    },
-
+    // 获取所有类目
     async getCategories() {
       const res = await getCategories();
       const categories = res.data.data.categories;
-      this.categoryList = transformCategories(categories);
+      this.categoryTreeList = formatToAddRoot(categories);
+      this.categoryList = flatMapCategories(categories);
     },
 
+    // 根据父类目id获取子类目
+    async getCategoriesByParentId(pid: string) {
+      const res = await getCategoriesByParentId(pid);
+      this.categoryList = res.data.data.categories;
+    },
+
+    // 获取n级类目列表
+    async getParentLevelOptions(level: number) {
+      const res = await getParentLevelOptions(level);
+      this.parentLevelOptions = res.data.data.categories;
+    },
+
+    // 删除类目
+    async deleteCategory(cid: string) {
+      const res = await deleteCategory(cid);
+      this.getCategories();
+      ElMessage.success("删除成功！");
+    },
+
+    // 上传图片
     async uoloadImage(file: File) {
       const data = new FormData();
       data.append('file', file);
@@ -53,11 +75,5 @@ export const useCategoryStore = defineStore('category', {
 
       this.imageUrl = res.data.data.url;
     },
-
-    async deleteCategory(cid: string) {
-      const res = await deleteCategory(cid);
-      this.getCategories();
-      ElMessage.success("删除成功！");
-    }
   }
 })

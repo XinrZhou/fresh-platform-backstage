@@ -32,7 +32,13 @@ export const SHOP_STATUS = [
   }
 ]
 
-export const CATEGORY_LEVEL = [
+export const CATEGORY_LEVEL = {
+  FIRST: 1,
+  SECOND: 2,
+  THIRD: 3,
+}
+
+export const CATEGORY_OPTIONS = [
   {
     label: '一级类目',
     value: 1,

@@ -14,7 +14,8 @@ export interface Category {
   id?: string,
   name?: string,
   parentId?: string,
-  isParent?: number,
+  level?: number,
+  status?: number,
   insertTime?: string
   selectTime?: string
 };

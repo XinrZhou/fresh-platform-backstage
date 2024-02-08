@@ -10,7 +10,6 @@
   const userInfoC = computed(() => userStore.userInfo);
   
   const logout = () => userStore.goLogout();
-
 </script>
 
 <template>
@@ -35,7 +34,13 @@
   .el-container {
     height: 100vh;
   }
-
+  .el-header {
+    border: 1px solid var(--el-card-border-color);
+    box-shadow: var(--el-box-shadow-light);
+  }
+  .el-main {
+    background-color: #F6F8F9;
+  }
   .el-menu {
     height: 100%;
   }

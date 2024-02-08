@@ -44,25 +44,32 @@ export const formatSupplierData = (userObject) =>  {
 }
 
 /**
- * 后台类目树格式转换
+ * 类目树扁平化
  * @param categories 
- * @param level 
- * @param parentName 
  * @returns 
  */
-export const transformCategories = (categories, level = 1, parentName = null) => {
+export const flatMapCategories = (categories) => {
   return _.flatMapDeep(categories, category => {
     const transformedCategory = {
-      id: category.id,
-      level: `${level}级类目`,
-      name: category.name,
-      parentId: category.parentId || null,
-      parentName: parentName || null,
-      imageUrl: category.imageUrl,
-      updateTime: category.updateTime
+      ...category,  
     };
 
-    const children = category.children ? transformCategories(category.children, level + 1, category.name) : [];
+    const children = category.children ? flatMapCategories(category.children) : [];
     return [transformedCategory, ...children];
   });
+}
+
+/**
+ * 类目树添加祖先节点
+ * @param categories 
+ * @returns 
+ */
+export const formatToAddRoot = (categories) => {
+  return [
+    {
+      level: 0,
+      name: '全部',
+      children: categories
+    }
+  ]
 }

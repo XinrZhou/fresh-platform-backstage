@@ -2,18 +2,18 @@
   import { defineProps, computed,toRaw, ref, defineEmits, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { OPERATION_TYPE } from '@/constant/enums';
+  import { OPERATION_TYPE, CATEGORY_OPTIONS, CATEGORY_LEVEL } from '@/constant/enums';
   import BaseUpload from '@/components/BaseUpload.vue';
 
   const categoryStore = useCategoryStore();
 
-  const parentCategoryListC = computed(() => categoryStore.parentCategoryList);
   const props = defineProps([
     'dialogVisible', 'categoryData', 'operationType'
   ]);
   const emits = defineEmits(['onDialogClose',]);
 
-  let categoryR = ref<Category>({});
+  const parentLevelOptionsC = computed(() => categoryStore.parentLevelOptions);
+  let categoryR = ref<Category>({status: 1});
 
   watch(() => categoryStore.imageUrl, () => {
     categoryR.value.imageUrl = toRaw(categoryStore.imageUrl);
@@ -21,7 +21,12 @@
 
   watch(() => props.categoryData, () => {
     categoryR.value = props.categoryData;
+    categoryR.value.parentId && handleLevelChange(categoryR.value.level)
   })
+
+  const handleLevelChange = (level) => {
+    categoryStore.getParentLevelOptions(level - 1);
+  }
 
   const onCancel = () => {
     emits('onDialogClose');
@@ -36,18 +41,13 @@
     categoryR.value.imageUrl = '';
   }
 
-
-
   const addCategory = () => {
     categoryStore.addCategory(categoryR.value).then(() => {
-      ElMessage.success('添加成功');
+      ElMessage.success(`${props.operationType.title}成功！`);
       emits('onDialogClose');
     });
   }
 
-  const onDialogOpen = () => {
-    categoryStore.getParentCategories();
-  }
 
 </script>
 
@@ -60,22 +60,39 @@
     @open="onDialogOpen"
   >
     <el-form label-width="100">
-      <el-form-item label="根类目">
+      <el-form-item label="是否使用">
         <el-switch 
-          v-model="categoryR.isParent"
+          v-model="categoryR.status"
           :active-value="1"
           :inactive-value="0"
-          :disabled="props.operationType.name === OPERATION_TYPE.EDIT.name"
         />
       </el-form-item>
-      <el-form-item label="上级类目" v-show="!categoryR.isParent">
+      <el-form-item label="类目层级">
+        <el-select
+          v-model="categoryR.level"
+          placeholder="Select"
+          :disabled="props.operationType.name === OPERATION_TYPE.EDIT.name"
+          @change="handleLevelChange"
+        >
+          <el-option
+            v-for="item in CATEGORY_OPTIONS"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item 
+        label="上级类目" 
+        v-show="categoryR.level &&categoryR.level !== CATEGORY_LEVEL.FIRST"
+      >
         <el-select
           v-model="categoryR.parentId"
           placeholder="请选择类目"
           clearable 
         >
           <el-option 
-            v-for="item in parentCategoryListC" 
+            v-for="item in parentLevelOptionsC" 
             :key="item.id"
             :label="item.name"
             :value="item.id"

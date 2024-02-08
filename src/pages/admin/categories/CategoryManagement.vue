@@ -1,8 +1,8 @@
 <script setup lang='ts'>
-  import { ref, computed, watchEffect } from 'vue';
+  import { ref, computed } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { Category } from '@/types/type';
-  import { OPERATION_TYPE } from '@/constant/enums';
+  import { OPERATION_TYPE, CATEGORY_LEVEL } from '@/constant/enums';
   import { useCategoryStore } from '@/store/admin/category';
   import OperationDialog from './components/OperationDialog.vue';
 
@@ -10,10 +10,11 @@
   categoryStore.getCategories();
 
   const categoryList = computed(() => categoryStore.categoryList);
+  const categoryTreeList = computed(() => categoryStore.categoryTreeList);
 
   let dialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<string>('');
-  const categoryDataR = ref<Category>({});
+  let categoryDataR = ref<Category>({status: 1});
 
   const handleClose = () => {
     categoryDataR.value = {};
@@ -23,6 +24,7 @@
   const handleAdd = () => {
     dialogVisibleR.value = true;
     operationTypeR.value = OPERATION_TYPE.ADD;
+    categoryDataR.value = {level: currentNodeR.value.level};
   }
 
   const handleEdit = (data: Category) => {
@@ -41,34 +43,58 @@
       categoryStore.deleteCategory(cid);
     });
   }
+
+  const handleNodeClick = (data: Category) => {
+    categoryDataR.value = data;
+    if (data.level) {
+      if (data.level !== CATEGORY_LEVEL.THIRD) {
+        categoryStore.getCategoriesByParentId(data.id);
+      } else {
+        ElMessage.success('三级类目无子类目！')
+      }
+    } else {
+      categoryStore.getCategories();
+    }
+  }
 </script>
 
 <template>
   <div>
-    <el-row gutter="24">
-      <el-col :span="24">
+    <el-row justify="space-around">
+      <el-col :span="4">
         <el-card>
-          <el-link
-            type="primary"
-            :underline="false"
-            @click="handleAdd"
-          >
-            添加
-          </el-link>
-          <el-table :data="categoryList" style="width: 100%" stripe border max-height="600">
+          <el-tree
+            :data="categoryTreeList"
+            :props="{ children: 'children', label: 'name'}"
+            :expand-on-click-node="false"
+            accordion
+            highlight-current
+            default-expand-all
+            @node-click="handleNodeClick"
+          />
+        </el-card>
+      </el-col>
+      <el-col :span="19">
+        <el-card>
+          <div class="btn-wrapper">
+            <el-button 
+              type="primary" 
+              @click="handleEdit(categoryDataR)" 
+              :disabled="!categoryDataR.id"
+            >
+              编辑
+            </el-button>
+            <el-button type="primary" @click="handleAdd">
+              新增
+            </el-button>
+          </div>
+          <el-table :data="categoryList" style="width: 100%" stripe border max-height="800">
             <el-table-column prop="id" label="类目id" width="200"/>
             <el-table-column prop="level" label="类目层级" />
-            <el-table-column label="上级类目" >
-              <template #default="scope">
-                <span>
-                  {{ scope.row.parentName ? scope.row.parentName : "--"}}
-                </span>
-              </template>
-            </el-table-column>
             <el-table-column prop="name" label="类目名称" />
-            <el-table-column fixed="right" label="类目图片" width="200">
+            <el-table-column fixed="right" label="类目图片" width="130">
               <template #default="scope">
-                <el-image :src="scope.row.imageUrl" :fit="fit" />
+                <el-image :src="scope.row.imageUrl"/>
               </template>
             </el-table-column>
             <el-table-column prop="updateTime" label="修改时间" width="180" />
@@ -96,10 +122,8 @@
 </template>
 
 <style scoped>
-  .el-link {
-    float: right;
+  .btn-wrapper {
     margin-bottom: 10px;
-    margin-right: 10px;
   }
   .el-row {
     width: 100%;
