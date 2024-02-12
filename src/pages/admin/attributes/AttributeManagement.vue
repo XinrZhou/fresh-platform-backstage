@@ -1,29 +1,28 @@
 <script setup lang='ts'>
   import { ref, computed } from 'vue';
-  import { RDC_SCHEMA, RDC_UI_SCHEMA } from './schema';
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { OPERATION_TYPE } from '@/constant/enums';
-  import { useRdcStore } from '@/store/admin/rdc';
-  import { Rdc } from "@/types/type";
-  import BaseDialog from '@/components/BaseDialog.vue';
+  import { useAttributeStore } from '@/store/admin/attribute';
+  import { Attribute } from "@/types/type";
+  import OperationDialog from './components/OperationDialog.vue';
 
-  const rdcStore = useRdcStore();
-  rdcStore.getRdcs();
+  const attributeStore = useAttributeStore();
+  attributeStore.getAttributeList();
 
-  const rdcList = computed(() => rdcStore.rdcList);
+  const attributeListC = computed(() => attributeStore.attributeList);
   let dialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<string>('');
-  let rdcDataR = ref({});
+  let attributeDataR = ref({});
 
   const handleClose = () => {
-    rdcDataR.value = {};
+    attributeDataR.value = {};
     dialogVisibleR.value = false;
   }
 
   const handleEdit = (data: Rdc) => {
     dialogVisibleR.value = true;
     operationTypeR.value = OPERATION_TYPE.EDIT;
-    rdcDataR.value = data;
+    attributeDataR.value = data;
   }
 
   const handleAdd = () => {
@@ -31,14 +30,14 @@
     operationTypeR.value = OPERATION_TYPE.ADD;
   }
 
-  const handleDelete = (rdc: Rdc) => {
-    ElMessageBox.confirm(`是否确认删除${rdc.name}？`, 'Tips', {
+  const handleDelete = (attibute: Attribute) => {
+    ElMessageBox.confirm(`是否确认删除${attibute.name}？`, 'Tips', {
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancel',
       type: 'warning',
     })
     .then(() => {
-      rdcStore.deleteRdc(rdc.id);
+      attributeStore.deleteAttribute(attribute.id);
     })
     .then(() => {
       handleClose();
@@ -46,8 +45,8 @@
     });
   }
 
-  const handleSubmit = (rdcData: Rdc) => {
-    rdcStore.addRdc(rdcData).then(() => {
+  const handleSubmit = (attributeData: Attribute) => {
+    attributeStore.addAttribute(attributeData).then(() => {
       ElMessage.success(`${operationTypeR.value.title}成功！`);
       handleClose();
     });
@@ -66,14 +65,10 @@
         >
           添加
         </el-button>
-        <el-table :data="rdcList" style="width: 100%" stripe border max-height="600">
-          <el-table-column prop="id" label="id" width="200"/>
-          <el-table-column prop="name" label="RDC名称" width="150"/>
-          <el-table-column prop="province" label="省份" width="100"/>
-          <el-table-column prop="city" label="城市" width="100"/>
-          <el-table-column prop="district" label="区" width="100"/>
-          <el-table-column prop="detail" label="详细地址"/>
-          <el-table-column prop="updateTime" label="修改时间" width="180" />
+        <el-table :data="attributeListC" style="width: 100%" stripe border max-height="600">
+          <el-table-column prop="id" label="id" />
+          <el-table-column prop="name" label="属性名称" />
+          <el-table-column prop="categoryName" label="关联类目"/>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
               <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
@@ -88,13 +83,10 @@
       </el-card>
     </el-col>
   </el-row>
-  <BaseDialog
-    :schema='RDC_SCHEMA'
-    :ui-schema="RDC_UI_SCHEMA"
-    :operation-type="operationTypeR" 
-    :dialog-visible="dialogVisibleR" 
-    :form-data="rdcDataR"
-    @on-data-submit="handleSubmit"
+  <OperationDialog
+    :operationType="operationTypeR" 
+    :dialogVisible="dialogVisibleR" 
+    :attributeData="attributeDataR"
     @on-dialog-close="handleClose"
   />
 </template>

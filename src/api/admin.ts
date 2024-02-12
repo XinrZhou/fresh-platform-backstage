@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { request } from '@/api/http';
-import { Category, Rdc } from '@/types/type';
+import { Attribute, Category, Rdc } from '@/types/type';
 
 // 类目管理
 export function addCategory(data: Category) {
@@ -44,6 +44,22 @@ export function deleteCategory(cid: string) {
   return request({
     url: `/category/categories/${cid}`,
     method: 'delete',
+  })
+}
+
+// 属性管理
+export function addAttribute(data: Attribute) {
+  return request({
+    url: '/attribute/attributes',
+    method: 'post',
+    data
+  })
+}
+
+export function getAttributeList() {
+  return request({
+    url: '/attribute/attributes',
+    method: 'get',
   })
 }
 

@@ -17,9 +17,9 @@ import {
 
 
 interface State {
-  categoryList: Category[];
-  parentCategoryList: Category[];
-  imageUrl: string;
+  categoryList: Category[],
+  parentCategoryList: Category[],
+  imageUrl: string,
 }
 
 export const useCategoryStore = defineStore('category', {
@@ -27,6 +27,7 @@ export const useCategoryStore = defineStore('category', {
     return {
       categoryList: [],
       categoryTreeList: [],
+      categoryTreeOptions: [],
       parentCategoryList: [],
       parentLevelOptions: [],
       imageUrl: '',
@@ -44,6 +45,7 @@ export const useCategoryStore = defineStore('category', {
     async getCategories() {
       const res = await getCategories();
       const categories = res.data.data.categories;
+      this.categoryTreeOptions = categories;
       this.categoryTreeList = formatToAddRoot(categories);
       this.categoryList = flatMapCategories(categories);
     },

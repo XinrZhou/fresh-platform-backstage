@@ -2,6 +2,7 @@
   import { defineProps, computed,toRaw, ref, defineEmits, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
   import { ElMessage, ElMessageBox } from 'element-plus';
+  import { Category } from '@/types/type';
   import { OPERATION_TYPE, CATEGORY_OPTIONS, CATEGORY_LEVEL } from '@/constant/enums';
   import BaseUpload from '@/components/BaseUpload.vue';
 

@@ -29,6 +29,10 @@ export default [{
       component: () => import('@/pages/admin/categories/CategoryManagement.vue'),
     },
     {
+      path: 'attribute',
+      component: () => import('@/pages/admin/attributes/AttributeManagement.vue'),
+    },
+    {
       path: 'rdc',
       component: () => import('@/pages/admin/rdcs/RdcManagement.vue'),
     },

@@ -58,6 +58,11 @@ export const ADMIN_SIDEBAR_LIST = [
     icon: 'Operation',
   },
   {
+    name: '属性管理',
+    path: 'attribute',
+    icon: 'Operation',
+  },
+  {
     name: 'RDC管理',
     path: 'rdc',
     icon: 'Operation',
