@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Attribute, AttributeParam } from "@/types/type";
+import { Attribute } from "@/types/type";
 import { ElMessage } from 'element-plus';
 import { 
   addAttribute,
@@ -30,7 +30,7 @@ export const useAttributeStore = defineStore('attribute', {
         categoryId: attribute.categoryId[len - 1]
       }
       const res = await addAttribute(attributeData);
-      this.getAttributeList();
+      this.getAttributes();
     },
     // 获取属性列表
     async getAttributes() {

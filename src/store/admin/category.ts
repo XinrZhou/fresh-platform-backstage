@@ -69,7 +69,7 @@ export const useCategoryStore = defineStore('category', {
     },
 
     // 上传图片
-    async uoloadImage(file: File) {
+    async uploadImage(file: File) {
       const data = new FormData();
       data.append('file', file);
       const res = await uploadImage(data);

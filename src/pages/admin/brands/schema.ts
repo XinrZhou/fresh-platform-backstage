@@ -6,7 +6,7 @@ categoryStore.getCategories();
 const categoryTreeOptionsC = computed(() => categoryStore.categoryTreeOptions);
 
 watch(() => categoryStore.categoryTreeOptions, () => {
-    Object.assign(ATTRIBUTE_UI_SCHEMA.categoryId, {
+    Object.assign(BRAND_UI_SCHEMA.categoryId, {
         'ui:options': {
             props: {
                 label: 'name',
@@ -18,12 +18,12 @@ watch(() => categoryStore.categoryTreeOptions, () => {
     });
 })
 
-export const ATTRIBUTE_SCHEMA = {
+export const BRAND_SCHEMA = {
     type: 'object',
-    required: ['name', 'categoryId', 'isNumeric', 'isGeneric'],
+    required: ['name', 'categoryId'],
     properties: {
         name: {
-            title: '名称',
+            title: '品牌名称',
             type: 'string',
         },
         categoryId: {
@@ -33,41 +33,14 @@ export const ATTRIBUTE_SCHEMA = {
                 type: 'string'
             }
         },
-        isNumeric: {
-            title: '数字类型',
-            type: 'number'
-        },
-        unit: {
-            title: '单位',
-            type: 'string',
-        },
-        isGeneric: {
-            title: '通用属性',
-            type: 'number'
-        }
     }
 };
 
-export const ATTRIBUTE_UI_SCHEMA = {
+export const BRAND_UI_SCHEMA = {
     categoryId: {
         'ui:widget': 'el-cascader',
         'ui:options': {
             options: [],
         }
     },
-    isNumeric: {
-        'ui:widget': 'el-switch',
-        'ui:options': {
-            activeValue: 1,
-            inactiveValue: 0
-        }
-    },
-    isGeneric: {
-        'ui:widget': 'el-switch',
-        'ui:options': {
-            activeValue: 1,
-            inactiveValue: 0
-        }
-    },
-
 };

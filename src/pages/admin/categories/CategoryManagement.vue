@@ -14,7 +14,7 @@
 
   let dialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<string>('');
-  let categoryDataR = ref<Category>({status: 1});
+  let categoryDataR = ref<Category>({level: 0, status: 1});
 
   const handleClose = () => {
     categoryDataR.value = {};
@@ -22,9 +22,13 @@
   }
 
   const handleAdd = () => {
-    dialogVisibleR.value = true;
+    categoryDataR.value = {
+      status: 1,
+      level: categoryDataR.value.level + 1,
+      parentId: categoryDataR.value.id
+    };
     operationTypeR.value = OPERATION_TYPE.ADD;
-    categoryDataR.value = {level: currentNodeR.value.level};
+    dialogVisibleR.value = true;
   }
 
   const handleEdit = (data: Category) => {
@@ -33,14 +37,19 @@
     categoryDataR.value = data;
   }
 
-  const handleDelete = (cid: string) => {
-    ElMessageBox.confirm('是否确认删除？', 'Tips', {
-      confirmButtonText: 'OK',
-      cancelButtonText: 'Cancel',
-      type: 'warning',
-    })
+  const handleDelete = (category: Category) => {
+    ElMessageBox.confirm(
+      `是否确认删除<span style="color:red">${category.name}</span>类目？`, 
+      'Tips', 
+      {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }
+    )
     .then(() => {
-      categoryStore.deleteCategory(cid);
+      categoryStore.deleteCategory(category.id);
       ElMessage.success('删除成功！');
     });
   }
@@ -103,7 +112,7 @@
                 <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
                   编辑
                 </el-button>
-                <el-button link type="primary" size="small" @click="handleDelete(scope.row.id)">
+                <el-button link type="primary" size="small" @click="handleDelete(scope.row)">
                   删除
                 </el-button>
               </template>

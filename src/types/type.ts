@@ -7,7 +7,7 @@ export interface User {
   consumer?: string
   avatar?: string
   insertTime?: string
-  selectTime?: string
+  updateTime?: string
 };
 
 export interface Category {
@@ -17,7 +17,7 @@ export interface Category {
   level?: number
   status?: number
   insertTime?: string
-  selectTime?: string
+  updateTime?: string
 };
 
 export interface Rdc {
@@ -29,7 +29,7 @@ export interface Rdc {
   address?: string[]
   detail?: string
   insertTime?: string
-  selectTime?: string
+  updateTime?: string
 };
 
 export interface Attribute {
@@ -40,6 +40,43 @@ export interface Attribute {
   unit?: string
   isGeneric?: number
   insertTime?: string
-  selectTime?: string
+  updateTime?: string
+};
+
+export interface Brand {
+  id?: string
+  name?: string
+  categoryId?: string
+  imageUrl?: string
+  insertTime?: string
+  updateTime?: string
+};
+
+export interface Spu {
+  id?: string
+  name?: string
+  title?: string
+  categoryId?: string
+  brandId?: string
+  imageUrl?: string
+  saleStatus?: number
+  description?: string
+  insertTime?: string
+  updateTime?: string
+};
+
+export interface Sku {
+  id?: string
+  name?: string
+  spuId?: string
+  imageUrl?: string
+  stock?: number
+  originPrice?: number
+  discountPrice?: number
+  enable?: number
+  genericSpec?: string
+  specialSpec?: string
+  insertTime?: string
+  updateTime?: string
 };
 

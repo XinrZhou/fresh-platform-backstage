@@ -32,11 +32,16 @@
   }
 
   const handleDelete = (rdc: Rdc) => {
-    ElMessageBox.confirm(`是否确认删除${rdc.name}？`, 'Tips', {
-      confirmButtonText: 'OK',
-      cancelButtonText: 'Cancel',
-      type: 'warning',
-    })
+    ElMessageBox.confirm(
+      `是否确认删除<span style="color:red">${rdc.name}</span>RDC？`, 
+      'Tips', 
+      {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }
+    )
     .then(() => {
       rdcStore.deleteRdc(rdc.id);
     })

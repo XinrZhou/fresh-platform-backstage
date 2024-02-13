@@ -35,7 +35,7 @@
   }
 
   const handleImageUpload = (file) => {
-    categoryStore.uoloadImage(file);
+    categoryStore.uploadImage(file);
   }
 
   const handleImageRemove = () => {
@@ -48,8 +48,6 @@
       emits('onDialogClose');
     });
   }
-
-
 </script>
 
 <template>
@@ -100,7 +98,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="类目名称" label-width="100px">
+      <el-form-item label="类目名称">
         <el-input v-model="categoryR.name" />
       </el-form-item>
       <el-form-item label="类目图片">

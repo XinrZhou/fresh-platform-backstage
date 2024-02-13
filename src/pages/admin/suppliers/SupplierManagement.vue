@@ -38,14 +38,19 @@
     operationTypeR.value = OPERATION_TYPE.ADD;
   }
 
-  const handleDelete = (sid: string) => {
-    ElMessageBox.confirm('是否确认删除？', 'Tips', {
-      confirmButtonText: 'OK',
-      cancelButtonText: 'Cancel',
-      type: 'warning',
-    })
+  const handleDelete = (supplier: User) => {
+    ElMessageBox.confirm(
+      `是否确认删除<span style="color:red">${supplier.name}</span>商家？`, 
+      'Tips', 
+      {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }
+    )
     .then(() => {
-      supplierStore.deleteSuppiler(sid);
+      supplierStore.deleteSuppiler(supplier.id);
     })
     .then(() => {
       handleClose();
@@ -97,7 +102,7 @@
                 <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
                   编辑
                 </el-button>
-                <el-button link type="primary" size="small" @click="handleDelete(scope.row.id)">
+                <el-button link type="primary" size="small" @click="handleDelete(scope.row)">
                   删除
                 </el-button>
               </template>

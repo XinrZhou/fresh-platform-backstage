@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { request } from '@/api/http';
-import { Attribute, Category, Rdc } from '@/types/type';
+import { Attribute, Brand, Category, Rdc, Spu } from '@/types/type';
 
 // 类目管理
 export function addCategory(data: Category) {
@@ -66,6 +66,59 @@ export function getAttributeList() {
 export function deleteAttribute(aid: string) {
   return request({
     url: `/attribute/attributes/${aid}`,
+    method: 'delete',
+  })
+}
+
+// 品牌管理
+export function addBrand(data: Brand) {
+  return request({
+    url: '/brand/brands',
+    method: 'post',
+    data
+  })
+}
+
+export function getBrandList() {
+  return request({
+    url: '/brand/brands',
+    method: 'get',
+  })
+}
+
+export function getBrandListByCategoryId(cid: string) {
+  return request({
+    url: `/brand/brands/${cid}`,
+    method: 'get',
+  })
+}
+
+export function deleteBrand(bid: string) {
+  return request({
+    url: `/brand/brands/${bid}`,
+    method: 'delete',
+  })
+}
+
+// SPU管理
+export function addSpu(data: Spu) {
+  return request({
+    url: '/spu/spus',
+    method: 'post',
+    data
+  })
+}
+
+export function getSpuList() {
+  return request({
+    url: '/spu/spus',
+    method: 'get',
+  })
+}
+
+export function deleteSpu(sid: string) {
+  return request({
+    url: `/spu/spus/${sid}`,
     method: 'delete',
   })
 }

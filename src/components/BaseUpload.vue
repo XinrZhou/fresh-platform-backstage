@@ -1,6 +1,6 @@
 <script setup lang='ts'>
-  import { ref, watch, defineEmits, toRaw, defineProps } from 'vue';
-  import { ElInput, ElMessage } from 'element-plus';
+  import { defineEmits, defineProps } from 'vue';
+  import { ElMessage } from 'element-plus';
 
   const props = defineProps(['imageUrl'])
   const emits = defineEmits(['onUpload', 'onRemove'])
