@@ -63,6 +63,13 @@ export function getAttributeList() {
   })
 }
 
+export function deleteAttribute(aid: string) {
+  return request({
+    url: `/attribute/attributes/${aid}`,
+    method: 'delete',
+  })
+}
+
 // 供应商管理
 export function getSuppliers() {
   return request({

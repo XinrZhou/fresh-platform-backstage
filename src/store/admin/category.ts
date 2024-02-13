@@ -66,7 +66,6 @@ export const useCategoryStore = defineStore('category', {
     async deleteCategory(cid: string) {
       const res = await deleteCategory(cid);
       this.getCategories();
-      ElMessage.success("删除成功！");
     },
 
     // 上传图片

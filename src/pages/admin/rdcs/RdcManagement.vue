@@ -73,7 +73,6 @@
           <el-table-column prop="city" label="城市" width="100"/>
           <el-table-column prop="district" label="区" width="100"/>
           <el-table-column prop="detail" label="详细地址"/>
-          <el-table-column prop="updateTime" label="修改时间" width="180" />
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
               <el-button link type="primary" size="small" @click="handleEdit(scope.row)">

@@ -3,7 +3,6 @@ import { useRdcStore } from "@/store/admin/rdc";
 
 const rdcStore = useRdcStore();
 rdcStore.getRdcs();
-const rdcListC = computed(() => rdcStore.rdcListM);
 
 watch(() => rdcStore.rdcList, () => {
     Object.assign(SUPPLIER_UI_SCHEMA.rdcId, {

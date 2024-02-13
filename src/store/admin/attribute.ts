@@ -4,6 +4,7 @@ import { ElMessage } from 'element-plus';
 import { 
   addAttribute,
   getAttributeList, 
+  deleteAttribute,
 } from "@/api/admin";
 
 interface State {
@@ -21,6 +22,7 @@ export const useAttributeStore = defineStore('attribute', {
     async addAttribute(attribute: Attribute) {
       const len = attribute.categoryId.length;
       const attributeData = {
+        id: attribute.id,
         name: attribute.name,
         isNumeric: attribute.isNumeric,
         unit: attribute.unit,
@@ -31,9 +33,14 @@ export const useAttributeStore = defineStore('attribute', {
       this.getAttributeList();
     },
     // 获取属性列表
-    async getAttributeList() {
+    async getAttributes() {
       const res = await getAttributeList();
       this.attributeList = res.data.data.attributes;
+    },
+    // 删除属性
+    async deleteAttribute(aid: string) {
+      const res = await deleteAttribute(aid);
+      this.getAttributes();
     }
   }
 })

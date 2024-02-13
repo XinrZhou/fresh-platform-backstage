@@ -4,10 +4,11 @@
   import { OPERATION_TYPE } from '@/constant/enums';
   import { useAttributeStore } from '@/store/admin/attribute';
   import { Attribute } from "@/types/type";
-  import OperationDialog from './components/OperationDialog.vue';
+  import { ATTRIBUTE_SCHEMA, ATTRIBUTE_UI_SCHEMA } from './schema';
+  import BaseDialog from '@/components/BaseDialog.vue';
 
   const attributeStore = useAttributeStore();
-  attributeStore.getAttributeList();
+  attributeStore.getAttributes();
 
   const attributeListC = computed(() => attributeStore.attributeList);
   let dialogVisibleR = ref<Boolean>(false);
@@ -19,7 +20,7 @@
     dialogVisibleR.value = false;
   }
 
-  const handleEdit = (data: Rdc) => {
+  const handleEdit = (data: Attribute) => {
     dialogVisibleR.value = true;
     operationTypeR.value = OPERATION_TYPE.EDIT;
     attributeDataR.value = data;
@@ -30,8 +31,8 @@
     operationTypeR.value = OPERATION_TYPE.ADD;
   }
 
-  const handleDelete = (attibute: Attribute) => {
-    ElMessageBox.confirm(`是否确认删除${attibute.name}？`, 'Tips', {
+  const handleDelete = (attribute: Attribute) => {
+    ElMessageBox.confirm(`是否确认删除${attribute.name}属性？`, 'Tips', {
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancel',
       type: 'warning',
@@ -66,9 +67,30 @@
           添加
         </el-button>
         <el-table :data="attributeListC" style="width: 100%" stripe border max-height="600">
-          <el-table-column prop="id" label="id" />
+          <el-table-column prop="id" label="id" width="200"/>
           <el-table-column prop="name" label="属性名称" />
           <el-table-column prop="categoryName" label="关联类目"/>
+          <el-table-column label="是否数字类型">
+            <template #default="scope">
+              <span>
+                {{ scope.row.isNumeric ? '是' : '否' }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="单位">
+            <template #default="scope">
+              <span>
+                {{ scope.row.unit || '---' }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="是否通用属性">
+            <template #default="scope">
+              <span>
+                {{ scope.row.isGeneric? '是' : '否' }}
+              </span>
+            </template>
+          </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
               <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
@@ -83,10 +105,13 @@
       </el-card>
     </el-col>
   </el-row>
-  <OperationDialog
-    :operationType="operationTypeR" 
-    :dialogVisible="dialogVisibleR" 
-    :attributeData="attributeDataR"
+  <BaseDialog
+    :schema='ATTRIBUTE_SCHEMA'
+    :ui-schema="ATTRIBUTE_UI_SCHEMA"
+    :operation-type="operationTypeR" 
+    :dialog-visible="dialogVisibleR" 
+    :form-data="attributeDataR"
+    @on-data-submit="handleSubmit"
     @on-dialog-close="handleClose"
   />
 </template>

@@ -33,6 +33,18 @@ export default [{
       component: () => import('@/pages/admin/attributes/AttributeManagement.vue'),
     },
     {
+      path: 'brand',
+      component: () => import('@/pages/admin/brands/BrandManagement.vue'),
+    },
+    {
+      path: 'spu',
+      component: () => import('@/pages/admin/spu/SpuManagement.vue'),
+    },
+    {
+      path: 'sku',
+      component: () => import('@/pages/admin/sku/SkuManagement.vue'),
+    },
+    {
       path: 'rdc',
       component: () => import('@/pages/admin/rdcs/RdcManagement.vue'),
     },

@@ -60,12 +60,27 @@ export const ADMIN_SIDEBAR_LIST = [
   {
     name: '属性管理',
     path: 'attribute',
-    icon: 'Operation',
+    icon: 'CollectionTag',
+  },
+  {
+    name: '品牌管理',
+    path: 'brand',
+    icon: 'Postcard',
+  },
+  {
+    name: 'SPU管理',
+    path: 'spu',
+    icon: 'Goods',
+  },
+  {
+    name: 'SKU管理',
+    path: 'sku',
+    icon: 'PriceTag',
   },
   {
     name: 'RDC管理',
     path: 'rdc',
-    icon: 'Operation',
+    icon: 'Location',
   },
   {
     name: '商品管理',
