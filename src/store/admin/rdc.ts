@@ -1,11 +1,7 @@
 import { defineStore } from "pinia";
 import { Rdc } from "@/types/type";
 import { ElMessage } from 'element-plus';
-import { 
-  getRdcs,
-  addRdc,
-  deleteRdc,
-} from "@/api/admin";
+import { getRdcs, addRdc, deleteRdc } from "@/api/admin";
 import { transformAddressFormat, transformToOptionsFormat } from "@/utils";
 
 interface State {

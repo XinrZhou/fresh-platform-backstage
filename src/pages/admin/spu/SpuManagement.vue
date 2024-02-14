@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-  import { ref, computed } from 'vue';
+  import { ref, computed, toRaw } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { OPERATION_TYPE } from '@/constant/enums';
   import { useSpuStore } from '@/store/admin/spu';
@@ -50,13 +50,6 @@
       ElMessage.success('删除成功！');
     });
   }
-
-  const handleSubmit = (spuData: spu) => {
-    spuStore.addSpu(spuData).then(() => {
-      ElMessage.success(`${operationTypeR.value.title}成功！`);
-      handleClose();
-    });
-  }
 </script>
 
 <template>
@@ -73,8 +66,15 @@
         </el-button>
         <el-table :data="spuListC" style="width: 100%" stripe border max-height="600">
           <el-table-column prop="id" label="id"/>
-          <el-table-column prop="name" label="属性名称" />
+          <el-table-column prop="name" label="商品名称" />
+          <el-table-column prop="name" label="商品标题" />
           <el-table-column prop="categoryName" label="关联类目"/>
+          <el-table-column prop="brandName" label="关联品牌"/>
+          <el-table-column label="商品图片" width="130">
+            <template #default="scope">
+              <el-image :src="scope.row.imageUrl"/>
+            </template>
+          </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
               <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
@@ -92,7 +92,7 @@
   <OperationDialog
     :operationType="operationTypeR" 
     :dialogVisible="dialogVisibleR" 
-    :categoryData="categoryDataR"
+    :spuData="spuDataR"
     @on-dialog-close="handleClose"
   />
 </template>

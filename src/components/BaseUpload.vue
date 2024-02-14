@@ -19,11 +19,11 @@
 
 <template>
   <el-upload
-      class="avatar-uploader" 
-      action=""
-      :show-file-list="false"
-      :http-request="handleRequest" 
-      :on-remove="handleRemove"
+    class="avatar-uploader" 
+    action=""
+    :show-file-list="false"
+    :http-request="handleRequest" 
+    :on-remove="handleRemove"
   >
     <img v-if="props.imageUrl" :src="props.imageUrl" class="avatar" />
     <component v-else is="Plus" class="icon-wrapper" />

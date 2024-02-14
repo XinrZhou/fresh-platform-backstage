@@ -1,12 +1,14 @@
 <script setup lang='ts'>
   import { defineProps, computed,toRaw, ref, defineEmits, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
+  import { useOssStore } from '@/store/user/oss';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { Category } from '@/types/type';
   import { OPERATION_TYPE, CATEGORY_OPTIONS, CATEGORY_LEVEL } from '@/constant/enums';
   import BaseUpload from '@/components/BaseUpload.vue';
 
   const categoryStore = useCategoryStore();
+  const ossStore = useOssStore();
 
   const props = defineProps([
     'dialogVisible', 'categoryData', 'operationType'
@@ -16,8 +18,8 @@
   const parentLevelOptionsC = computed(() => categoryStore.parentLevelOptions);
   let categoryR = ref<Category>({status: 1});
 
-  watch(() => categoryStore.imageUrl, () => {
-    categoryR.value.imageUrl = toRaw(categoryStore.imageUrl);
+  watch(() => ossStore.imageUrl, () => {
+    categoryR.value.imageUrl = toRaw(ossStore.imageUrl);
   })
 
   watch(() => props.categoryData, () => {
@@ -35,7 +37,7 @@
   }
 
   const handleImageUpload = (file) => {
-    categoryStore.uploadImage(file);
+    ossStore.uploadImage(file);
   }
 
   const handleImageRemove = () => {

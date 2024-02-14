@@ -1,7 +1,8 @@
 <script setup lang='ts'>
-  import { defineProps, computed,toRaw, ref, defineEmits, watch } from 'vue';
+  import { defineProps, computed, toRaw, ref, defineEmits, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
   import { useBrandStore } from '@/store/admin/brand';
+  import { useOssStore } from '@/store/user/oss';
   import { useSpuStore } from '@/store/admin/spu';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { Spu } from '@/types/type';
@@ -9,7 +10,7 @@
   import BaseUpload from '@/components/BaseUpload.vue';
 
   const props = defineProps([
-    'dialogVisible', 'categoryData', 'operationType'
+    'dialogVisible', 'spuData', 'operationType'
   ]);
   const emits = defineEmits(['onDialogClose',]);
 
@@ -20,6 +21,9 @@
   const brandStore = useBrandStore();
   const brandListOptionsC = computed(() => brandStore.brandListOptions);
 
+  const ossStore = useOssStore();
+  const spuStore = useSpuStore();
+
   let spuR = ref<Spu>({saleStatus: 1});
 
   const cascaderProps = {
@@ -27,12 +31,12 @@
     value: 'id',
   }
 
-  watch(() => categoryStore.imageUrl, () => {
-    spuR.value.imageUrl = toRaw(categoryStore.imageUrl);
+  watch(() => ossStore.imageUrl, () => {
+    spuR.value.imageUrl = toRaw(ossStore.imageUrl);
   })
 
-  watch(() => props.categoryData, () => {
-    spuR.value = props.categoryData;
+  watch(() => props.spuData, () => {
+    spuR.value = props.spuData;
   })
 
   const handleCascaderChange = (cids: string[]) => {
@@ -45,15 +49,15 @@
   }
 
   const handleImageUpload = (file) => {
-    categoryStore.uploadImage(file);
+    ossStore.uploadImage(file);
   }
 
   const handleImageRemove = () => {
     spuR.value.imageUrl = '';
   }
 
-  const addCategory = () => {
-    categoryStore.addCategory(spuR.value).then(() => {
+  const addSpu = () => {
+    spuStore.addSpu(toRaw(spuR.value)).then(() => {
       ElMessage.success(`${props.operationType.title}成功！`);
       emits('onDialogClose');
     });
@@ -80,6 +84,7 @@
       </el-form-item>
       <el-form-item label="关联类目" required >
         <el-cascader
+          v-model="spuR.categoryId"
           :options="categoryTreeOptionsC"
           :props="cascaderProps"
           @change="handleCascaderChange"
@@ -107,11 +112,18 @@
       <el-form-item label="商品描述" >
         <el-input
           type="textarea" 
-          v-model="spuR.title" 
+          v-model="spuR.descrription" 
+        />
+      </el-form-item>
+      <el-form-item label="商品图片" required>
+        <BaseUpload 
+          :image-url="spuR.imageUrl" 
+          @on-upload="handleImageUpload"
+          @on-remove="handleImageRemove"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addCategory">确定</el-button>
+        <el-button type="primary" @click="addSpu">确定</el-button>
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
