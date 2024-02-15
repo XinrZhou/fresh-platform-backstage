@@ -1,20 +1,23 @@
 import { defineStore } from "pinia";
-import { Attribute } from "@/types/type";
+import { Attribute, AttributeValue } from "@/types/type";
 import { ElMessage } from 'element-plus';
 import { 
   addAttribute,
-  getAttributeList, 
+  getAttributeList,
+  getAttributeListBySpuId, 
   deleteAttribute,
 } from "@/api/admin";
 
 interface State {
   attributeList: Attribute[],
+  attributeFormItemList: Attribute[],
 }
 
 export const useAttributeStore = defineStore('attribute', {
   state: (): State => {
     return {
       attributeList: [],
+      attributeFormItemList: [],
     }
   },
   actions: {
@@ -22,12 +25,9 @@ export const useAttributeStore = defineStore('attribute', {
     async addAttribute(attribute: Attribute) {
       const len = attribute.categoryId.length;
       const attributeData = {
-        id: attribute.id,
-        name: attribute.name,
-        isNumeric: attribute.isNumeric,
-        unit: attribute.unit,
-        isGeneric: attribute.isGeneric,
-        categoryId: attribute.categoryId[len - 1]
+        ...attribute,
+        categoryId: attribute.categoryId[len - 1],
+        value: JSON.stringify(attribute.value),
       }
       const res = await addAttribute(attributeData);
       this.getAttributes();
@@ -35,7 +35,18 @@ export const useAttributeStore = defineStore('attribute', {
     // 获取属性列表
     async getAttributes() {
       const res = await getAttributeList();
-      this.attributeList = res.data.data.attributes;
+      const attributes = res.data.data.attributes;
+      this.attributeList = attributes.map((item: Attribute) => {
+        return {
+          ...item,
+          value: item.value && JSON.parse(item.value) || null
+        }
+      })
+    },
+    // 根据SPU获取属性列表
+    async getAttributeListBySpuId(sid: string) {
+      const res = await getAttributeListBySpuId(sid);
+      this.attributeFormItemList = res.data.data.attributes;
     },
     // 删除属性
     async deleteAttribute(aid: string) {

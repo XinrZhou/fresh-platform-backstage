@@ -1,5 +1,6 @@
 import { computed, watch } from "vue";
 import { useCategoryStore } from "@/store/admin/category";
+import TheDynamicTag from "@/components/TheDynamicTag.vue";
 
 const categoryStore = useCategoryStore();
 categoryStore.getCategories();
@@ -44,6 +45,13 @@ export const ATTRIBUTE_SCHEMA = {
         isGeneric: {
             title: '通用属性',
             type: 'number'
+        },
+        value: {
+            title: '属性值',
+            type: 'array',
+            items: {
+                type: 'string'
+            }
         }
     }
 };
@@ -69,5 +77,7 @@ export const ATTRIBUTE_UI_SCHEMA = {
             inactiveValue: 0
         }
     },
-
+    value: {
+        'ui:widget': TheDynamicTag,
+    }
 };

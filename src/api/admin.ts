@@ -63,6 +63,13 @@ export function getAttributeList() {
   })
 }
 
+export function getAttributeListBySpuId(sid: string) {
+  return request({
+    url: `/attribute/attributes/${sid}`,
+    method: 'get',
+  })
+}
+
 export function deleteAttribute(aid: string) {
   return request({
     url: `/attribute/attributes/${aid}`,

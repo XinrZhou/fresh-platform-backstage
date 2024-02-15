@@ -39,6 +39,7 @@ export interface Attribute {
   isNumeric?: number
   unit?: string
   isGeneric?: number
+  value?: string
   insertTime?: string
   updateTime?: string
 };

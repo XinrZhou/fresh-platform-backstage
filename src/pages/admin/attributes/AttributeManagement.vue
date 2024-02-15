@@ -68,27 +68,39 @@
         </el-button>
         <el-table :data="attributeListC" style="width: 100%" stripe border max-height="600">
           <el-table-column prop="id" label="id" width="200"/>
-          <el-table-column prop="name" label="属性名称" />
-          <el-table-column prop="categoryName" label="关联类目"/>
-          <el-table-column label="是否数字类型">
+          <el-table-column prop="name" label="属性名称" width="120"/>
+          <el-table-column prop="categoryName" label="关联类目" width="120"/>
+          <el-table-column label="是否数字类型" width="120">
             <template #default="scope">
               <span>
                 {{ scope.row.isNumeric ? '是' : '否' }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column label="单位">
+          <el-table-column label="单位" width="60">
             <template #default="scope">
               <span>
                 {{ scope.row.unit || '---' }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column label="是否通用属性">
+          <el-table-column label="是否通用属性" width="120">
             <template #default="scope">
               <span>
                 {{ scope.row.isGeneric? '是' : '否' }}
               </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="属性值">
+            <template #default="scope">
+              <el-tag
+                v-if="scope.row.value" 
+                v-for="(item, index) in scope.row.value" 
+                :key="index"
+              >
+                {{ item }}
+              </el-tag> 
+              <span v-else>---</span>
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">
@@ -121,5 +133,9 @@
     float: right;
     margin-bottom: 10px;
     margin-right: 10px;
+  }
+  .el-tag {
+    margin-bottom: 6px;
+    margin-right: 6px;
   }
 </style>

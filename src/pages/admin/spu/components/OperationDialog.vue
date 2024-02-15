@@ -112,7 +112,7 @@
       <el-form-item label="商品描述" >
         <el-input
           type="textarea" 
-          v-model="spuR.descrription" 
+          v-model="spuR.description" 
         />
       </el-form-item>
       <el-form-item label="商品图片" required>
