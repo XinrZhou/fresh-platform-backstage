@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { request } from '@/api/http';
-import { Attribute, Brand, Category, Rdc, Spu } from '@/types/type';
+import { Attribute, Brand, Category, Rdc, Sku, Spu } from '@/types/type';
 
 // 类目管理
 export function addCategory(data: Category) {
@@ -126,6 +126,29 @@ export function getSpuList() {
 export function deleteSpu(sid: string) {
   return request({
     url: `/spu/spus/${sid}`,
+    method: 'delete',
+  })
+}
+
+// SKU管理
+export function addSku(data: Sku) {
+  return request({
+    url: '/sku/skus',
+    method: 'post',
+    data
+  })
+}
+
+export function getSkuList() {
+  return request({
+    url: '/sku/skus',
+    method: 'get',
+  })
+}
+
+export function deleteSku(sid: string) {
+  return request({
+    url: `/sku/skus/${sid}`,
     method: 'delete',
   })
 }

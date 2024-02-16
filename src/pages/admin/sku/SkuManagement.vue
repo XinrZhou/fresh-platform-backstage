@@ -2,28 +2,27 @@
   import { ref, computed, toRaw } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { OPERATION_TYPE } from '@/constant/enums';
-  import { useSpuStore } from '@/store/admin/spu';
-  import { Spu } from "@/types/type";
-  import { SPU_SCHEMA, SPU_UI_SCHEMA } from './schema';
+  import { useSkuStore } from '@/store/admin/sku';
+  import { Sku } from "@/types/type";
   import OperationDialog from './components/OperationDialog.vue';
 
-  const spuStore = useSpuStore();
-  spuStore.getSpuList();
+  const skuStore = useSkuStore();
+  skuStore.getSkuList();
 
-  const spuListC = computed(() => spuStore.spuList);
+  const skuListC = computed(() => skuStore.skuList);
   let dialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<string>('');
-  let spuDataR = ref({});
+  let skuDataR = ref({});
 
   const handleClose = () => {
-    spuDataR.value = {};
+    skuDataR.value = {};
     dialogVisibleR.value = false;
   }
 
   const handleEdit = (data: spu) => {
     dialogVisibleR.value = true;
     operationTypeR.value = OPERATION_TYPE.EDIT;
-    spuDataR.value = data;
+    skuDataR.value = data;
   }
 
   const handleAdd = () => {
@@ -31,9 +30,9 @@
     operationTypeR.value = OPERATION_TYPE.ADD;
   }
 
-  const handleDelete = (spu: Spu) => {
+  const handleDelete = (sku: Sku) => {
     ElMessageBox.confirm(
-      `是否确认删除<span style="color:red">${spu.name}</span>SPU？`, 
+      `是否确认删除<span style="color:red">${sku.name}</span>SKU？`, 
       'Tips', 
       {
         confirmButtonText: 'OK',
@@ -43,7 +42,7 @@
       }
     )
     .then(() => {
-      spuStore.deleteSpu(spu.id);
+      skuStore.deleteSku(sku.id);
     })
     .then(() => {
       handleClose();
@@ -64,15 +63,26 @@
         >
           添加
         </el-button>
-        <el-table :data="spuListC" style="width: 100%" stripe border max-height="600">
-          <el-table-column prop="id" label="id"/>
-          <el-table-column prop="name" label="商品名称" />
-          <el-table-column prop="name" label="商品标题" />
-          <el-table-column prop="categoryName" label="关联类目"/>
-          <el-table-column prop="brandName" label="关联品牌"/>
+        <el-table :data="skuListC" style="width: 100%" stripe border max-height="600">
+          <el-table-column prop="id" label="id" width="200" />
+          <el-table-column prop="name" label="sku名称" width="100"/>
+          <el-table-column prop="spuName" label="关联spu" width="120"/>
+          <el-table-column prop="stock" label="库存" width="100"/>
+          <el-table-column prop="originPrice" label="原价" width="100"/>
+          <el-table-column prop="discountPrice" label="折扣价" width="100"/>
+          <el-table-column prop="genericSpec" label="通用属性" width="200"/>
+          <el-table-column prop="specialSpec" label="特殊属性" width="200"/>
+          <el-table-column label="是否有效" width="100">
+            <template #default="scope">
+              <el-tag :type="scope.row.enable === 1 ? 'success' : 'danger'">
+                {{ scope.row.enable === 1 ? '有效' : '无效' }}
+              </el-tag>
+            </template>
+          </el-table-column>
           <el-table-column label="商品图片" width="130">
             <template #default="scope">
-              <el-image :src="scope.row.imageUrl"/>
+              <span v-if="!scope.row.imageUrl">---</span>
+              <el-image v-else :src="scope.row.imageUrl"/>
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">
@@ -92,7 +102,7 @@
   <OperationDialog
     :operationType="operationTypeR" 
     :dialogVisible="dialogVisibleR" 
-    :spuData="spuDataR"
+    :skuData="skuDataR"
     @on-dialog-close="handleClose"
   />
 </template>

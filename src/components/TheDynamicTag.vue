@@ -10,7 +10,6 @@ const inputVisible = ref(false);
 const InputRef = ref<InstanceType<typeof ElInput>>();
 
 watch(() => props.modelValue, () => {
-  console.log('test===', props.modelValue)
   dynamicTags.value = props.modelValue;
 })
 

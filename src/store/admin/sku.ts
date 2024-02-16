@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { Sku } from "@/types/type";
 import { ElMessage } from 'element-plus';
-import { addSpu, getSpuList, deleteSpu } from "@/api/admin";
+import { addSku, getSkuList, deleteSku } from "@/api/admin";
 
 interface State {
   skuList: object[],
@@ -15,11 +15,15 @@ export const useSkuStore = defineStore('sku', {
   },
   actions: {
     // 添加Sku
-    async addSku(sku: Sku) {
-      const len = sku.categoryId?.length;
+    async addSku(sku, genericSpecObj, specialSpecList) {
+      const specialSpecObj = {};
+      specialSpecList.forEach(item => {
+        specialSpecObj[item.name] = item.value.split(',');
+      })
       const skuData = {
-        ...sku, 
-        categoryId: sku.categoryId[len - 1]
+        ...sku,
+        genericSpec: JSON.stringify(genericSpecObj),
+        specialSpec: JSON.stringify(specialSpecObj),
       }
       const res = await addSku(skuData);
       this.getSkuList();
