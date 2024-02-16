@@ -73,3 +73,17 @@ export const formatToAddRoot = (categories) => {
     }
   ]
 }
+
+/**
+ * 属性值json string -> array
+ * @param attributes 
+ * @returns 
+ */
+export const parseAttributeValues = (attributes) => {
+  return attributes.map(item => {
+    return {
+      ...item,
+      value: item.value && JSON.parse(item.value) || null
+    }
+  })
+}

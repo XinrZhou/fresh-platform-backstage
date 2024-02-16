@@ -46,7 +46,13 @@ export const useAttributeStore = defineStore('attribute', {
     // 根据SPU获取属性列表
     async getAttributeListBySpuId(sid: string) {
       const res = await getAttributeListBySpuId(sid);
-      this.attributeFormItemList = res.data.data.attributes;
+      const attributes = res.data.data.attributes;
+      this.attributeFormItemList = attributes.map((item: Attribute) => {
+        return {
+          ...item,
+          value: item.value && JSON.parse(item.value) || null
+        }
+      })
     },
     // 删除属性
     async deleteAttribute(aid: string) {

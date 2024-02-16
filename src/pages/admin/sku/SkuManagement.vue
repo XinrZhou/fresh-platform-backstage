@@ -53,7 +53,7 @@
 </script>
 
 <template>
-  <!-- <el-row gutter="24">
+  <el-row gutter="24">
     <el-col :span="24">
       <el-card>
         <el-button
@@ -94,8 +94,7 @@
     :dialogVisible="dialogVisibleR" 
     :spuData="spuDataR"
     @on-dialog-close="handleClose"
-  /> -->
-  sku管理
+  />
 </template>
 
 <style scoped>
