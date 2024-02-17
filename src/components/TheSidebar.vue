@@ -1,11 +1,8 @@
 <script setup lang='ts'>
     import { defineProps } from 'vue';
     import router from '@/router';
-    import { useRoute } from 'vue-router';
 
     const props = defineProps(['navList', 'baseUrl']);
-    const route = useRoute();
-    console.log(route)
 
     const handleNavSelect = (key, keyPath) => {
       router.push(`/${props.baseUrl}/${props.navList[key].path}`);

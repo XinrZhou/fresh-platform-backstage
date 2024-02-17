@@ -51,6 +51,16 @@ export default [{
     {
       path: 'product',
       component: () => import('@/pages/admin/products/ProductManagement.vue'),
+      children: [
+        {
+          path: '',
+          component: () => import('@/pages/admin/products/pages/ProductPoolTable.vue'),
+        },
+        {
+          path: 'detail',
+          component: () => import('@/pages/admin/products/pages/ProductPoolDetail.vue'),
+        }
+      ]
     },
     {
       path: 'marketing',

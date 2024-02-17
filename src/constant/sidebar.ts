@@ -83,7 +83,7 @@ export const ADMIN_SIDEBAR_LIST = [
     icon: 'Location',
   },
   {
-    name: '商品管理',
+    name: '商品池',
     path: 'product',
     icon: 'ShoppingCartFull',
   },
