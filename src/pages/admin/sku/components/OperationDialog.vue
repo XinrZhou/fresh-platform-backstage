@@ -30,7 +30,9 @@
   const genericSpecList = ref([])
   watch(() => props.skuData, () => {
     skuR.value = props.skuData;
-    handleSelectSpu(props.skuData.spuId);
+    if (Object.keys(skuR.value).length) {
+      handleSelectSpu(props.skuData.spuId);
+    }
   })
 
   const spuStore = useSpuStore();
@@ -82,7 +84,7 @@
   const handeleDeleteAttributeItem = (index) => {
     specialSpecList.value.splice(index, 1);
   }
-  const handleCancel = () => {
+  const onCancel = () => {
     emits('onDialogClose');
     skuR.value = {};
   }
@@ -90,8 +92,8 @@
     skuStore.addSku(
       toRaw(skuR.value), genericSpecObj, toRaw(specialSpecList.value)
     ).then(() => {
-      ElMessage.success(`${props.operationType.value.title}成功！`);
-      emits('onDialogClose');
+     ElMessage.success(`${props.operationType.title}成功！`);
+      emits('onDialogClose'); 
     });
   }
 </script>
@@ -141,7 +143,7 @@
             v-model="skuR.originPrice" 
             :precision="2" 
             :step="0.1" 
-            :max="10" 
+            :max="999999" 
           />
         </el-form-item>
         <el-form-item label="折扣价格" prop="discountPrice" required >
@@ -232,7 +234,7 @@
         >
           提交
         </el-button>
-        <el-button @click="handleCancel">取消</el-button>
+        <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
