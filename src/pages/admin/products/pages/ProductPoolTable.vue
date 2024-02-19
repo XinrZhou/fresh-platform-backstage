@@ -2,7 +2,6 @@
   import { ref, computed } from 'vue';
   import { useRdcStore } from '@/store/admin/rdc';
   import { Rdc } from "@/types/type";
-  import BaseDialog from '@/components/BaseDialog.vue';
   import router from '@/router';
 
   const rdcStore = useRdcStore();
@@ -13,7 +12,7 @@
   const goDeatilPage = (rowData) => {
     router.push({
       path: '/admin/product/detail',
-      query: { id: rowData.id }
+      query: { rdcId: rowData.id }
     })
   } 
 </script>

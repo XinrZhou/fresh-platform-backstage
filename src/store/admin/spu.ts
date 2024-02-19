@@ -1,7 +1,12 @@
 import { defineStore } from "pinia";
 import { Spu } from "@/types/type";
 import { ElMessage } from 'element-plus';
-import { addSpu, getSpuList, deleteSpu } from "@/api/admin";
+import { 
+  addSpu, 
+  getSpuList, 
+  getSpuListByCategoryId, 
+  deleteSpu 
+} from "@/api/admin";
 
 interface State {
   spuList: object[],
@@ -11,6 +16,7 @@ export const useSpuStore = defineStore('spu', {
   state: (): State => {
     return {
       spuList: [],
+      spuOptionsList: [],
     }
   },
   actions: {
@@ -28,6 +34,11 @@ export const useSpuStore = defineStore('spu', {
     async getSpuList() {
       const res = await getSpuList();
       this.spuList = res.data.data.spus;
+    },
+    // 获取当前类目及子类目SPU列表
+    async getSpuListByCategoryId(categoryId: string) {
+      const res = await getSpuListByCategoryId(categoryId);
+      this.spuOptionsList = res.data.data.spus;
     },
     // 删除SPU
     async deleteSpu(sid: string) {
