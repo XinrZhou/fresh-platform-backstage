@@ -5,19 +5,32 @@
   import { OPERATION_TYPE, CATEGORY_LEVEL } from '@/constant/enums';
   import { useCategoryStore } from '@/store/admin/category';
   import OperationDialog from './components/OperationDialog.vue';
+  import BasePagination from '@/components/BasePagination.vue';
+
+  const defaultCheckedKeys = ["0"];
+  const defaultExpandedKeys = ["0"];
+  const defaultPage = 1;
+  const defaultPageSize = 20;
 
   const categoryStore = useCategoryStore();
-  categoryStore.getCategories();
+  categoryStore.getCategoriesTree();
+  categoryStore.getCategories(defaultPage, defaultPageSize);
 
-  const categoryList = computed(() => categoryStore.categoryList);
-  const categoryTreeList = computed(() => categoryStore.categoryTreeList);
+  const totalC = computed(() => categoryStore.total);
+  const categoryListC = computed(() => categoryStore.categoryList);
+  const categoryTreeListC = computed(() => categoryStore.categoryTreeList);
 
-  let dialogVisibleR = ref<Boolean>(false);
-  let operationTypeR = ref<string>('');
-  let categoryDataR = ref<Category>({level: 0, status: 1});
+  const dialogVisibleR = ref<boolean>(false);
+  const operationTypeR = ref<string>('');
+  const categoryDataR = ref<Category>({
+    id: '0',
+    level: 0, 
+    status: 1,
+    name: ''
+  });
 
   const handleClose = () => {
-    categoryDataR.value = {};
+    resetCategoryData();
     dialogVisibleR.value = false;
   }
 
@@ -38,33 +51,49 @@
   }
 
   const handleDelete = (category: Category) => {
-    ElMessageBox.confirm(
-      `是否确认删除<span style="color:red">${category.name}</span>类目？`, 
-      'Tips', 
-      {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning',
-        dangerouslyUseHTMLString: true
-      }
-    )
-    .then(() => {
-      categoryStore.deleteCategory(category.id);
+    const confirmMessage = `是否确认删除<span style="color:red">${category.name}</span>类目？`;
+    ElMessageBox.confirm(confirmMessage, 'Tips', {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+      dangerouslyUseHTMLString: true
+    }).then(() => {
+      categoryStore.deleteCategory(category.id, category.parentId);
       ElMessage.success('删除成功！');
     });
   }
 
   const handleNodeClick = (data: Category) => {
-    categoryDataR.value = data;
-    if (data.level) {
-      if (data.level !== CATEGORY_LEVEL.THIRD) {
-        categoryStore.getCategoriesByParentId(data.id);
-      } else {
-        ElMessage.success('三级类目无子类目！')
+    if (categoryDataR.value.id !== data.id) {
+      categoryDataR.value = data;
+      if (data.level && data.level !== CATEGORY_LEVEL.THIRD) {
+        categoryStore.getCategoriesByParentId(data.id, defaultPage, defaultPageSize);
+      } else if (data.level === CATEGORY_LEVEL.THIRD) {
+        ElMessage.success('三级类目无子类目！');
       }
-    } else {
-      categoryStore.getCategories();
     }
+  }
+
+  const handleChangeExpandedKeys = (pid) => {
+    defaultExpandedKeys.value = ["0", pid];
+  }
+
+  const handlePageChange = (page, pageSize) => {
+    if (categoryDataR.value.level) {
+        categoryStore.getCategoriesByParentId(categoryDataR.value.id, page, pageSize);
+    } else {
+      categoryStore.getCategories(page, pageSize);
+    }
+    
+  }
+
+  const resetCategoryData = () => {
+    categoryDataR.value = {
+      id: '0',
+      level: 0, 
+      status: 1, 
+      name: '',
+    };
   }
 </script>
 
@@ -74,12 +103,14 @@
       <el-col :span="4">
         <el-card>
           <el-tree
-            :data="categoryTreeList"
+            node-key="id"
+            :data="categoryTreeListC"
             :props="{ children: 'children', label: 'name'}"
             :expand-on-click-node="false"
+            :default-expanded-keys="defaultExpandedKeys"
+            :default-checked-keys="defaultCheckedKeys"
             accordion
             highlight-current
-            default-expand-all
             @node-click="handleNodeClick"
           />
         </el-card>
@@ -97,14 +128,22 @@
             <el-button type="primary" @click="handleAdd">
               新增
             </el-button>
+            <el-button 
+              type="danger" 
+              @click="handleDelete(categoryDataR)" 
+              :disabled="!categoryDataR.id"
+            >
+              删除
+            </el-button>
           </div>
-          <el-table :data="categoryList" style="width: 100%" stripe border max-height="800">
+          <el-table :data="categoryListC" style="width: 100%" stripe border max-height="800">
             <el-table-column prop="id" label="类目id" width="200"/>
             <el-table-column prop="level" label="类目层级" />
             <el-table-column prop="name" label="类目名称" />
             <el-table-column fixed="right" label="类目图片" width="130">
               <template #default="scope">
-                <el-image :src="scope.row.imageUrl"/>
+                <el-image v-if="scope.row.imageUrl" :src="scope.row.imageUrl" />
+                <span v-else>---</span>
               </template>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="120">
@@ -118,6 +157,10 @@
               </template>
             </el-table-column>
           </el-table>
+          <BasePagination
+            :total="totalC"
+            @onPageChange="handlePageChange"
+          />
         </el-card>
       </el-col>
     </el-row>
@@ -126,6 +169,7 @@
       :dialogVisible="dialogVisibleR" 
       :categoryData="categoryDataR"
       @on-dialog-close="handleClose"
+      @change-expanded-keys="handleChangeExpandedKeys"
     />
   </div>
 </template>

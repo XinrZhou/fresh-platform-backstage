@@ -2,15 +2,13 @@ import { defineStore } from "pinia";
 import { Category } from "@/types/type";
 import { CATEGORY_LEVEL } from "@/constant/enums";
 import { ElMessage } from 'element-plus';
-import { 
-  flatMapCategories, 
-  formatToAddRoot,
-} from "@/utils";
+import { flatMapCategories, formatToAddRoot } from "@/utils";
 import { 
   addCategory, 
   getCategoriesByParentId,
   getParentLevelOptions,
   getCategories,
+  getCategoriesTree,
   uploadImage, 
   deleteCategory,
 } from "@/api/admin";
@@ -25,6 +23,7 @@ interface State {
 export const useCategoryStore = defineStore('category', {
   state: (): State => {
     return {
+      total: 100,
       categoryList: [],
       categoryTreeList: [],
       categoryTreeOptions: [],
@@ -38,21 +37,28 @@ export const useCategoryStore = defineStore('category', {
     async addCategory(category: Category) {
       const res = await addCategory(category);
       this.getCategories();
-      return res;
     },
 
     // 获取所有类目
-    async getCategories() {
-      const res = await getCategories();
+    async getCategories(page: number, pageSize: number) {
+      const res = await getCategories(page, pageSize);
       const categories = res.data.data.categories;
+      this.total = res.data.data.total;
       this.categoryTreeOptions = categories;
-      this.categoryTreeList = formatToAddRoot(categories);
       this.categoryList = flatMapCategories(categories);
     },
 
+    // 获取类目树
+    async getCategoriesTree() {
+      const res = await getCategoriesTree();
+      const categories = res.data.data.categories;
+      this.categoryTreeList = formatToAddRoot(categories);
+    },
+
     // 根据父类目id获取子类目
-    async getCategoriesByParentId(pid: string) {
-      const res = await getCategoriesByParentId(pid);
+    async getCategoriesByParentId(pid: string, page: numer, pageSize: number) {
+      const res = await getCategoriesByParentId(pid, page, pageSize);
+      this.total = res.data.data.total;
       this.categoryList = res.data.data.categories;
     },
 

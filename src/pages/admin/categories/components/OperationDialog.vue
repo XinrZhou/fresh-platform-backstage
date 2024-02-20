@@ -1,74 +1,83 @@
 <script setup lang='ts'>
-  import { defineProps, computed,toRaw, ref, defineEmits, watch } from 'vue';
+  import { defineProps, computed, ref, defineEmits, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
   import { useOssStore } from '@/store/user/oss';
-  import { ElMessage, ElMessageBox } from 'element-plus';
+  import { ElMessage } from 'element-plus';
+  import type { FormInstance } from 'element-plus';
   import { Category } from '@/types/type';
-  import { OPERATION_TYPE, CATEGORY_OPTIONS, CATEGORY_LEVEL } from '@/constant/enums';
+  import { OPERATION_TYPE, CATEGORY_LEVEL, CATEGORY_OPTIONS } from '@/constant/enums';
   import BaseUpload from '@/components/BaseUpload.vue';
-
+  
   const categoryStore = useCategoryStore();
-  const ossStore = useOssStore();
-
-  const props = defineProps([
-    'dialogVisible', 'categoryData', 'operationType'
-  ]);
-  const emits = defineEmits(['onDialogClose',]);
-
   const parentLevelOptionsC = computed(() => categoryStore.parentLevelOptions);
-  let categoryR = ref<Category>({status: 1});
-
+  const ossStore = useOssStore();
+  
+  const props = defineProps(['dialogVisible', 'categoryData', 'operationType']);
+  const emits = defineEmits(['onDialogClose', 'changeExpandedKeys']);
+  
+  const ruleFormRef = ref<FormInstance>(null);
+  const categoryR = ref<Category>({});
+  
   watch(() => ossStore.imageUrl, () => {
-    categoryR.value.imageUrl = toRaw(ossStore.imageUrl);
-  })
-
+    categoryR.value.imageUrl = ossStore.imageUrl;
+  });
+  
   watch(() => props.categoryData, () => {
     categoryR.value = props.categoryData;
-    categoryR.value.parentId && handleLevelChange(categoryR.value.level)
-  })
-
-  const handleLevelChange = (level) => {
+    if (categoryR.value.parentId && categoryR.value.level) {
+      handleLevelChange(categoryR.value.level);
+    }
+  });
+  
+  const handleLevelChange = (level: number) => {
     categoryStore.getParentLevelOptions(level - 1);
-  }
-
+  };
+  
   const onCancel = () => {
     emits('onDialogClose');
     categoryR.value = {};
-  }
-
-  const handleImageUpload = (file) => {
+  };
+  
+  const handleImageUpload = (file: File) => {
     ossStore.uploadImage(file);
-  }
-
+  };
+  
   const handleImageRemove = () => {
     categoryR.value.imageUrl = '';
-  }
-
+  };
+  
   const addCategory = () => {
-    categoryStore.addCategory(categoryR.value).then(() => {
-      ElMessage.success(`${props.operationType.title}成功！`);
-      emits('onDialogClose');
+    ruleFormRef.value?.validate((valid, fields) => {
+      if (valid) {
+        categoryStore.addCategory(categoryR.value).then(() => {
+          emits('changeExpandedKeys', categoryR.value.parentId);
+          emits('onDialogClose');
+          ElMessage.success(`${props.operationType.title}成功！`);
+        });
+      } else {
+        ElMessage.error('请填写必要表单项！');
+      }
     });
-  }
+  };
 </script>
-
+  
 <template>
   <el-dialog 
     :model-value="props.dialogVisible"
-    :title=props.operationType.title
+    :title="props.operationType.title"
     width="500"
     @close="onCancel"
     @open="onDialogOpen"
   >
-    <el-form label-width="100">
-      <el-form-item label="是否使用">
+    <el-form label-width="100" ref="ruleFormRef" :model="categoryR">
+      <el-form-item label="是否使用" prop="status" required>
         <el-switch 
           v-model="categoryR.status"
           :active-value="1"
           :inactive-value="0"
         />
       </el-form-item>
-      <el-form-item label="类目层级">
+      <el-form-item label="类目层级" prop="level" required>
         <el-select
           v-model="categoryR.level"
           placeholder="Select"
@@ -83,9 +92,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item 
+      <el-form-item
+        prop="parentId" 
         label="上级类目" 
-        v-show="categoryR.level &&categoryR.level !== CATEGORY_LEVEL.FIRST"
+        v-show="categoryR.level && categoryR.level !== CATEGORY_LEVEL.FIRST"
       >
         <el-select
           v-model="categoryR.parentId"
@@ -100,10 +110,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="类目名称">
+      <el-form-item label="类目名称" prop="name" required>
         <el-input v-model="categoryR.name" />
       </el-form-item>
-      <el-form-item label="类目图片">
+      <el-form-item label="类目图片" prop="imageUrl">
         <BaseUpload 
           :image-url="categoryR.imageUrl" 
           @on-upload="handleImageUpload"
@@ -121,3 +131,4 @@
 <style scoped>
 
 </style>
+  

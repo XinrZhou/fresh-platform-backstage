@@ -11,16 +11,23 @@ export function addCategory(data: Category) {
   })
 }
 
-export function getCategories() {
+export function getCategories(page: number, pageSize: number) {
   return request({
-    url: '/category/categories',
+    url: `/category/categories/${page}/${pageSize}`,
     method: 'get',
   })
 }
 
-export function getCategoriesByParentId(pid: string) {
+export function getCategoriesTree() {
   return request({
-    url: `/category/category/${pid}`,
+    url: '/category/categories/tree',
+    method: 'get',
+  })
+}
+
+export function getCategoriesByParentId(pid: string, page: number, pageSize: number) {
+  return request({
+    url: `/category/categories/${pid}/${page}/${pageSize}`,
     method: 'get',
   })
 }

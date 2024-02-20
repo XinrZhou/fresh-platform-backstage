@@ -67,6 +67,7 @@ export const flatMapCategories = (categories) => {
 export const formatToAddRoot = (categories) => {
   return [
     {
+      id: '0',
       level: 0,
       name: '全部',
       children: categories
