@@ -12,7 +12,10 @@
   const goDeatilPage = (rowData) => {
     router.push({
       path: '/admin/product/detail',
-      query: { rdcId: rowData.id }
+      query: { 
+        rdcId: rowData.id,
+        rdcName: rowData.name 
+      },
     })
   } 
 </script>

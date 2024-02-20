@@ -52,7 +52,6 @@
   }
 
   watch(() => formDataR.value.spuIds, (newVal) => {
-    console.log('hhhhh')
     selectCheckedR.value = newVal.length === spuOptionsListC.value.length;
   })
 

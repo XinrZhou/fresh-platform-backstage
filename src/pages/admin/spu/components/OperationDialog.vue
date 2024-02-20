@@ -43,6 +43,12 @@
     brandStore.getBrandsByCategoryId(cids[cids.length - 1]);
   }
 
+  const onDialogOpen = () => {
+    if (props.operationType.name === OPERATION_TYPE.EDIT.name) {
+      brandStore.getBrandsByCategoryId(props.spuData.categoryId);
+    }
+  }
+
   const onCancel = () => {
     emits('onDialogClose');
     spuR.value = {};

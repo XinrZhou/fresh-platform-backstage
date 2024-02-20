@@ -23,9 +23,11 @@ export const useSpuStore = defineStore('spu', {
     // 添加SPU
     async addSpu(spu: Spu) {
       const len = spu.categoryId?.length;
+      const categoryId = Array.isArray(spu.categoryId) ? spu.categoryId[len - 1] : spu.categoryId;
+        
       const spuData = {
         ...spu, 
-        categoryId: spu.categoryId[len - 1]
+        categoryId,
       }
       const res = await addSpu(spuData);
       this.getSpuList();

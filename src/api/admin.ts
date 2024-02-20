@@ -163,7 +163,7 @@ export function deleteSku(sid: string) {
 // Rdc-Spu关联
 export function addRdcSpus(data:  RdcSpu[]) {
   return request({
-    url: '/product/products',
+    url: '/rdc_spu/rdc_spus',
     method: 'post',
     data
   })
@@ -171,14 +171,14 @@ export function addRdcSpus(data:  RdcSpu[]) {
 
 export function getRdcSpuList() {
   return request({
-    url: '/product/products',
+    url: '/rdc_spu/rdc_spus',
     method: 'get',
   })
 }
 
 export function deleteRdcSpu(rid: string) {
   return request({
-    url: `/product/products/${rid}`,
+    url: `/rdc_spu/rdc_spus/${rid}`,
     method: 'delete',
   })
 }

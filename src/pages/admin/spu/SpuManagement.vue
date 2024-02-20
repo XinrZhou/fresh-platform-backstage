@@ -4,6 +4,7 @@
   import { OPERATION_TYPE } from '@/constant/enums';
   import { useSpuStore } from '@/store/admin/spu';
   import { Spu } from "@/types/type";
+  import { mapStatus } from '@/utils';
   import { SPU_SCHEMA, SPU_UI_SCHEMA } from './schema';
   import OperationDialog from './components/OperationDialog.vue';
 
@@ -65,7 +66,7 @@
           添加
         </el-button>
         <el-table :data="spuListC" style="width: 100%" stripe border max-height="600">
-          <el-table-column prop="id" label="id"/>
+          <el-table-column prop="id" label="id" width="200"/>
           <el-table-column prop="name" label="商品名称" />
           <el-table-column prop="name" label="商品标题" />
           <el-table-column prop="categoryName" label="关联类目"/>
@@ -73,6 +74,17 @@
           <el-table-column label="商品图片" width="130">
             <template #default="scope">
               <el-image :src="scope.row.imageUrl"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="是否上架" width="100">
+            <template #default="scope">
+              <el-tag 
+                :type="mapStatus(scope.row.saleStatus)?.type"
+              >
+                {{ 
+                  mapStatus(scope.row.saleStatus)?.name 
+                }}
+              </el-tag>
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">

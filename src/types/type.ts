@@ -84,7 +84,9 @@ export interface Sku {
 export interface RdcSpu {
   id?: string
   rdcId?: string
+  rdcName?: string
   spuId?: string
+  spuName?: string
   insertTime?: string
   updateTime?: string
 }

@@ -5,6 +5,7 @@
   import 'vue-json-pretty/lib/styles.css';
   import { OPERATION_TYPE } from '@/constant/enums';
   import { useSkuStore } from '@/store/admin/sku';
+  import { mapStatus } from '@/utils';
   import { Sku } from "@/types/type";
   import OperationDialog from './components/OperationDialog.vue';
 
@@ -108,10 +109,10 @@
           <el-table-column label="是否有效" width="100">
             <template #default="scope">
               <el-tag 
-                :type="scope.row.enable === 1 ? 'success' : 'danger'"
+                :type="mapStatus(scope.row.enable)?.type"
               >
                 {{ 
-                  scope.row.enable === 1 ? '有效' : '无效' 
+                  mapStatus(scope.row.enable)?.name
                 }}
               </el-tag>
             </template>

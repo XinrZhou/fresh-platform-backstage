@@ -87,3 +87,24 @@ export const parseAttributeValues = (attributes) => {
     }
   })
 }
+
+/**
+ * 状态映射
+ * @param status 
+ * @returns 
+ */
+export const mapStatus = (status: number) => {
+  const statusMap = [
+    {
+      value: 0,
+      type: 'danger',
+      name: '  否  '
+    },
+    {
+      value: 1,
+      type: 'success',
+      name: '  是  '
+    }
+  ]
+  return _.find(statusMap, ['value', status]) || {};
+}
