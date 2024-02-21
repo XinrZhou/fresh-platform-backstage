@@ -3,7 +3,7 @@ import { useCategoryStore } from "@/store/admin/category";
 import TheDynamicTag from "@/components/TheDynamicTag.vue";
 
 const categoryStore = useCategoryStore();
-categoryStore.getCategories();
+categoryStore.getCategoriesOptions();
 const categoryTreeOptionsC = computed(() => categoryStore.categoryTreeOptions);
 
 watch(() => categoryStore.categoryTreeOptions, () => {

@@ -20,7 +20,7 @@ watch(() => categoryStore.categoryTreeOptions, () => {
 
 export const BRAND_SCHEMA = {
     type: 'object',
-    required: ['name', 'categoryId', 'status'],
+    required: ['name', 'categoryId'],
     properties: {
         name: {
             title: '品牌名称',
@@ -33,10 +33,6 @@ export const BRAND_SCHEMA = {
                 type: 'string'
             }
         },
-        status: {
-            title: '是否使用',
-            type: 'number'
-        }
     }
 };
 
@@ -45,13 +41,6 @@ export const BRAND_UI_SCHEMA = {
         'ui:widget': 'el-cascader',
         'ui:options': {
             options: [],
-        }
-    },
-    status: {
-        'ui:widget': 'el-switch',
-        'ui:options': {
-            activeValue: 1,
-            inactiveValue: 0
         }
     },
 };

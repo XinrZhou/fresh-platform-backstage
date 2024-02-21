@@ -10,6 +10,21 @@ export const SUPPLIER_SIDEBAR_LIST = [
     icon: 'Picture',
   },
   {
+    name: '品牌管理',
+    path: 'brand',
+    icon: 'Postcard',
+  },
+  {
+    name: 'SPU管理',
+    path: 'spu',
+    icon: 'Goods',
+  },
+  {
+    name: 'SKU管理',
+    path: 'sku',
+    icon: 'PriceTag',
+  },
+  {
     name: '商品管理',
     path: 'product',
     icon: 'Goods',

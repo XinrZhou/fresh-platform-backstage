@@ -24,7 +24,7 @@
     checkStrictly: true,
   }
 
-  const onDialogOpen = () => categoryStore.getCategories();
+  const onDialogOpen = () => categoryStore.getCategoriesOptions();
 
   const onCancel = () => emits('onDialogClose');
 

@@ -84,7 +84,6 @@
     } else {
       categoryStore.getCategories(page, pageSize);
     }
-    
   }
 
   const resetCategoryData = () => {

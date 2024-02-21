@@ -29,6 +29,18 @@ export default [{
       component: () => import('@/pages/supplier/products/ProductManagement.vue'),
     },
     {
+      path: 'spu',
+      component: () => import('@/pages/commonPages/spu/SpuManagement.vue')
+    },
+    {
+      path: 'sku',
+      component: () => import('@/pages/commonPages/sku/SkuManagement.vue')
+    },
+    {
+      path: 'brand',
+      component: () => import('@/pages/supplier/brands/BrandManagement.vue')
+    },
+    {
       path: 'promotion',
       component: () => import('@/pages/supplier/promotions/PromotionManagement.vue'),
     }

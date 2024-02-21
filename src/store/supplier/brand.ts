@@ -21,11 +21,12 @@ export const useBrandStore = defineStore('brand', {
   },
   actions: {
     // 添加品牌
-    async addBrand(brand: Brand) {
+    async addBrand(brand: Brand, userId: string) {
       const len = brand.categoryId?.length;
       const categoryId = Array.isArray(brand.categoryId) ? brand.categoryId[len - 1] :brand.categoryId;
       const brandData = {
         ...brand,
+        userId,
         categoryId,
       }
       const res = await addBrand(brandData);

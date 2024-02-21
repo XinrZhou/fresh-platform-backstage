@@ -18,6 +18,13 @@ export function getCategories(page: number, pageSize: number) {
   })
 }
 
+export function getCategoriesOptions() {
+  return request({
+    url: '/category/categories/tree',
+    method: 'get',
+  })
+}
+
 export function getCategoriesTree() {
   return request({
     url: '/category/categories/tree',
@@ -191,9 +198,9 @@ export function deleteRdcSpu(rid: string) {
 }
 
 // 供应商管理
-export function getSuppliers() {
+export function getSuppliers(page: number, pageSize: number) {
   return request({
-    url: '/supplier/suppliers',
+    url: `/supplier/suppliers/${page}/${pageSize}`,
     method: 'get',
   })
 }

@@ -9,6 +9,7 @@ import {
   getParentLevelOptions,
   getCategories,
   getCategoriesTree,
+  getCategoriesOptions,
   uploadImage, 
   deleteCategory,
 } from "@/api/admin";
@@ -44,14 +45,20 @@ export const useCategoryStore = defineStore('category', {
       const res = await getCategories(page, pageSize);
       const categories = res.data.data.categories;
       this.total = res.data.data.total;
-      this.categoryTreeOptions = categories;
       this.categoryList = flatMapCategories(categories);
+    },
+
+    // 获取类目选项
+    async getCategoriesOptions() {
+      const res = await getCategoriesOptions();
+      this.categoryTreeOptions = res.data.data.categories;
     },
 
     // 获取类目树
     async getCategoriesTree() {
       const res = await getCategoriesTree();
       const categories = res.data.data.categories;
+
       this.categoryTreeList = formatToAddRoot(categories);
     },
 

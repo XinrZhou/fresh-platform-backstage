@@ -1,4 +1,5 @@
 import _, { update } from 'lodash';
+import moment from 'moment';
 
 /**
  * 省市区数据格式转换
@@ -108,4 +109,13 @@ export const mapStatus = (status: number) => {
     }
   ]
   return _.find(statusMap, ['value', status]) || {};
+}
+
+/**
+ * 时间戳格式转换
+ * @param time 
+ * @returns 
+ */
+export const formatTime = (time: string) => {
+  return moment(time).format('YYYY-MM-DD HH:mm:ss')
 }

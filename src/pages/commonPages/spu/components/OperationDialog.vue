@@ -5,6 +5,7 @@
   import { useOssStore } from '@/store/user/oss';
   import { useSpuStore } from '@/store/admin/spu';
   import { ElMessage, ElMessageBox } from 'element-plus';
+  import router from '@/router';
   import { Spu } from '@/types/type';
   import { OPERATION_TYPE, CATEGORY_OPTIONS, CATEGORY_LEVEL } from '@/constant/enums';
   import BaseUpload from '@/components/BaseUpload.vue';
@@ -68,6 +69,10 @@
       emits('onDialogClose');
     });
   }
+
+  const addBrand = () => {
+    router.push("/supplier/brand");
+  }
 </script>
 
 <template>
@@ -97,16 +102,29 @@
         />
       </el-form-item>
       <el-form-item label="关联品牌" required >
-        <el-select
-          v-model="spuR.brandId"
-        >
-          <el-option
-            v-for="item in brandListOptionsC"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          />
-        </el-select>
+        <el-row style="width: 100%;">
+          <el-col :span="16">
+            <el-select
+              v-model="spuR.brandId"
+            >
+              <el-option
+                v-for="item in brandListOptionsC"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            <el-button
+              @click="addBrand" 
+              type="primary" 
+              link
+            >
+              +申请新品牌
+            </el-button>
+          </el-col>
+        </el-row>
       </el-form-item>
       <el-form-item label="是否上架" required >
         <el-switch 

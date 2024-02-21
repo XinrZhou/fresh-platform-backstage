@@ -4,13 +4,17 @@
   import { User } from '@/types/type';
   import { OPERATION_TYPE, SHOP_STATUS } from '@/constant/enums';
   import { useSupplierStore } from '@/store/admin/supplier';
-  import BaseDialog from '@/components/BaseDialog.vue';
   import { SUPPLIER_SCHEMA, SUPPLIER_UI_SCHEMA } from './schema';
   import { formatSupplierData } from '@/utils/index';
+  import BaseDialog from '@/components/BaseDialog.vue';
+  import BasePagination from '@/components/BasePagination.vue';
+
+  const defaultPage = 1;
+  const defaultPageSize = 20;
 
   const supplierStore = useSupplierStore();
-  supplierStore.getSuppliers();
-
+  supplierStore.getSuppliers(defaultPage, defaultPageSize);
+  const totalC = computed(() => supplierStore.total);
   const supplierList = computed(() => supplierStore.supplierList);
 
   let dialogVisibleR = ref<Boolean>(false);
@@ -66,6 +70,10 @@
         handleClose();
       });
   }
+
+  const handleUpdate = (page: number, pageSize: number) => {
+    supplierStore.getSuppliers(page, pageSize);
+  }
 </script>
 
 <template>
@@ -108,6 +116,10 @@
               </template>
             </el-table-column>
           </el-table>
+          <BasePagination
+            :total="totalC"
+            @onPageChange="handlePageChange"
+          />
         </el-card>
       </el-col>
     </el-row>

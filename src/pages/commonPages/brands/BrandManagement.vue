@@ -32,6 +32,11 @@
     brandDataR.value = data;
   }
 
+  const handleApprove = (data: brand) => {
+    approvalDialogVisibleR.value = true;
+    brandDataR.value = data;
+  }
+
   const handleAdd = () => {
     dialogVisibleR.value = true;
     operationTypeR.value = OPERATION_TYPE.ADD;
