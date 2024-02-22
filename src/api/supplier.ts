@@ -1,29 +1,32 @@
+import { request } from '@/api/http';
+import { Brand } from '@/types/type';
+
 // 品牌管理
 export function addBrand(data: Brand) {
   return request({
-    url: '/snapshot/brands',
+    url: '/brand/snapshots',
     method: 'post',
     data
   })
 }
 
-export function getBrandList() {
+export function getBrandList(page: number, pageSize: number, uid: string) {
   return request({
-    url: '/snapshot/brands',
+    url: `/brand/snapshots/${uid}/${page}/${pageSize}`,
     method: 'get',
   })
 }
 
 export function getBrandListByCategoryId(cid: string) {
   return request({
-    url: `/snapshot/brands/${cid}`,
+    url: `/brand/snapshots/${cid}`,
     method: 'get',
   })
 }
 
 export function deleteBrand(bid: string) {
   return request({
-    url: `/snapshot/brands/${id}`,
+    url: `/brand/snapshots/${bid}`,
     method: 'delete',
   })
 }

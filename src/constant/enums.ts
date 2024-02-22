@@ -33,9 +33,9 @@ export const SHOP_STATUS = [
 ]
 
 export const APPROVAL_STATUS = {
-  REJECT: 0,
+  REJECT: 2,
   PASS: 1,
-  PENDING: 2,
+  PENDING: 0,
 }
 
 export const APPROVAL_STATUS_LIST = [

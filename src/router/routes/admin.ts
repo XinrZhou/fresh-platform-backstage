@@ -34,7 +34,17 @@ export default [{
     },
     {
       path: 'brand',
-      component: () => import('@/pages/admin/brands/BrandManagement.vue'),
+      component: () => import('@/pages/admin/brands/index.vue'),
+      children: [
+        {
+          path: '',
+          component: () => import('@/pages/admin/brands/BrandManagement.vue'),
+        },
+        {
+          path: 'list',
+          component: () => import('@/pages/admin/brands/BrandApprovalList.vue'),
+        }
+      ]
     },
     {
       path: 'spu',

@@ -47,8 +47,10 @@ export interface Attribute {
 export interface Brand {
   id?: string
   name?: string
+  userId?: string
   categoryId?: string
-  imageUrl?: string
+  status?: number
+  reason?: string
   insertTime?: string
   updateTime?: string
 };

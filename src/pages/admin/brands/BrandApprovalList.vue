@@ -1,12 +1,13 @@
 <script setup lang='ts'>
   import { ref, computed, toRaw, watch } from 'vue';
   import { Brand } from '@/types/type';
+  import _ from 'lodash';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { OPERATION_TYPE } from '@/constant/enums';
-  import { formatTime, mapApprovalStatus } from '@/utils'
-  import { useUserStore } from '@/store/user/user';
+  import { OPERATION_TYPE, APPROVAL_STATUS } from '@/constant/enums';
+  import { formatTime, mapApprovalStatus } from '@/utils';
+  import { useBrandStore } from '@/store/admin/brand';
   import { useBrandSnapshotStore } from '@/store/user/brandSnapshot';
-  import { BRAND_SCHEMA, BRAND_UI_SCHEMA } from './schema';
+  import { BRANDSNAPSHOT_SCHEMA, BRANDSNAPSHOT_UI_SCHEMA } from './schema1';
   import BaseDialog from '@/components/BaseDialog.vue';
   import BasePagination from '@/components/BasePagination.vue';
 
@@ -16,17 +17,12 @@
   const defaultPage = 1;
   const defaultPageSize = 20;
 
-  const userStore = useUserStore();
-  let userId;
-  const userInfoC = computed(() => userStore.userInfo);
+  const brandStore = useBrandStore();
 
-  const brandStore = useBrandSnapshotStore();
-  watch(() => userStore.userInfo, (newValue, oldValue) => {
-    userId = userInfoC.value.id;
-    brandStore.getBrandSnapshots(defaultPage, defaultPageSize, userId);
-  })
-  const totalC = computed(() => brandStore.total);
-  const brandListC = computed(() => brandStore.brandList);
+  const brandSnapshotStore = useBrandSnapshotStore();
+  brandSnapshotStore.getBrandSnapshots(defaultPage, defaultPageSize);
+  const totalC = computed(() => brandSnapshotStore.total);
+  const brandListC = computed(() => brandSnapshotStore.brandList);
 
   const handleAdd = () => {
     dialogVisibleR.value = true;
@@ -39,43 +35,23 @@
   }
 
   const handleSubmit = (brandData: Brand) => {
-    brandStore.addBrandSnapshot(toRaw(brandData), userId)
+    brandSnapshotStore.addBrandSnapshot(toRaw(brandData))
     .then(() => {
-      brandStore.getBrandSnapshots(defaultPage, defaultPageSize, userId);
-      ElMessage.success(`${operationTypeR.value.title}成功！`);
+      brandStore.addBrand(_.omit(toRaw(brandData), ['id', 'createTime', 'updateTime', 'status']));
+      brandSnapshotStore.getBrandSnapshots(defaultPage, defaultPageSize);
+      ElMessage.success(`审核成功！`);
       handleClose();
     });
   }
 
-  const handleEdit = (data: brand) => {
+  const handleApproval = (data: brand) => {
     dialogVisibleR.value = true;
     operationTypeR.value = OPERATION_TYPE.EDIT;
     brandDataR.value = data;
   }
 
-  const handleDelete = (brand: Brand) => {
-    ElMessageBox.confirm(
-      `是否确认撤销deleteBrandSnapshot<span style="color:red">${brand.name}</span>品牌申请？`, 
-      'Tips', 
-      {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning',
-        dangerouslyUseHTMLString: true
-      }
-    )
-    .then(() => {
-      brandStore.deleteBrandSnapshot(brand.id);
-    })
-    .then(() => {
-      handleClose();
-      brandStore.getBrandSnapshots(defaultPage, defaultPageSize, userId);
-      ElMessage.success('撤销成功！');
-    });
-  }
-
   const handlePageChange = (page, pageSize) => {
-    brandStore.getBrandSnapshots(defaultPage, defaultPageSize, userId);
+    brandSnapshotStore.getBrandSnapshots(defaultPage, defaultPageSize);
   }
 
 </script>
@@ -85,28 +61,10 @@
     <el-col :span="24">
       <el-card>
         <h3 class="table-title">申请列表</h3>
-        <el-row  align="middle" class="header-wrapper">
-          <el-col :span="23">
-            <div class="tips-wrapper">
-              <el-icon><StarFilled /></el-icon>
-              <el-text class="tips-text" type="primary">
-                若品牌库中没有您想要的品牌，可在此处申请，审核通过后即可使用！
-              </el-text>
-            </div>
-          </el-col>
-          <el-col :span="1">
-            <el-button 
-              type="primary" 
-              class="tips-button"
-              @click="handleAdd"
-            >
-              申请
-            </el-button>
-          </el-col>
-        </el-row>
         <el-table :data="brandListC" style="width: 100%" stripe border max-height="600">
           <el-table-column prop="id" label="id" width="200"/>
-          <el-table-column prop="name" label="品牌名称" width="100"/>
+          <el-table-column prop="name" label="品牌名称" width="120"/>
+          <el-table-column prop="userName" label="申请人" width="120"/>
           <el-table-column prop="categoryName" label="关联类目" width="100"/>
           <el-table-column label="审核状态" width="100">
             <template #default="scope">
@@ -117,7 +75,7 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="驳回原因">
+          <el-table-column label="驳回原因" width="180">
             <template #default="scope">
               {{
                 scope.row.reason || '--'
@@ -140,14 +98,15 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">
             <template #default="scope">
-              <template v-if="!scope.row.status">
-                <el-button link type="primary" size="small" @click="handleEdit(scope.row)" >
-                  编辑
-                </el-button>
-                <el-button link type="primary" size="small" @click="handleDelete(scope.row)" >
-                  撤销
-                </el-button>
-              </template>
+              <el-button
+                v-if="scope.row.status === APPROVAL_STATUS.PENDING" 
+                link 
+                type="primary" 
+                size="small" 
+                @click="handleApproval(scope.row)"
+              >
+                审核
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -159,8 +118,8 @@
     </el-col>
   </el-row>
   <BaseDialog
-    :schema='BRAND_SCHEMA'
-    :ui-schema="BRAND_UI_SCHEMA"
+    :schema='BRANDSNAPSHOT_SCHEMA'
+    :ui-schema="BRANDSNAPSHOT_UI_SCHEMA"
     :operation-type="operationTypeR" 
     :dialog-visible="dialogVisibleR" 
     :form-data="brandDataR"
@@ -178,13 +137,15 @@
     align-items: center;
   }
   .el-icon {
-    color: #409eff;
+    color: #41B58E;
   }
   .tips-text {
+    color: #41B58E;
     margin-left: 6px;
   }
   .tips-button {
     float: right;
+    background-color: #41B58E;
   }
   .table-title {
     margin-bottom: 10px;

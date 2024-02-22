@@ -24,7 +24,7 @@ interface State {
 export const useCategoryStore = defineStore('category', {
   state: (): State => {
     return {
-      total: 100,
+      total: 1,
       categoryList: [],
       categoryTreeList: [],
       categoryTreeOptions: [],

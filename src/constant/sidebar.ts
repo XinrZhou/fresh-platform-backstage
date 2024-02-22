@@ -80,7 +80,19 @@ export const ADMIN_SIDEBAR_LIST = [
   {
     name: '品牌管理',
     path: 'brand',
-    icon: 'Postcard',
+    icon: 'Guide',
+    children: [
+      {
+        name: '品牌列表',
+        path: '',
+        icon: 'Postcard',
+      },
+      {
+        name: '品牌审核',
+        path: 'list',
+        icon: 'Bell',
+      }
+    ]
   },
   {
     name: 'SPU管理',

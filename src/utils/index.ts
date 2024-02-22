@@ -111,6 +111,27 @@ export const mapStatus = (status: number) => {
   return _.find(statusMap, ['value', status]) || {};
 }
 
+export const mapApprovalStatus = (status: number) => {
+  const approvalStatusMap = [
+    {
+      label: '审核中',
+      value: 0,
+      renderType: 'primary',
+    },
+    {
+      label: '审核通过',
+      value: 1,
+      renderType: 'success',
+    },
+    {
+      label: '审核驳回',
+      value: 2,
+      renderType: 'error',
+    }
+  ]
+  return _.find(approvalStatusMap, ['value', status]) || {};
+}
+
 /**
  * 时间戳格式转换
  * @param time 
