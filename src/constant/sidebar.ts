@@ -8,6 +8,23 @@ export const SUPPLIER_SIDEBAR_LIST = [
     name: '素材管理',
     path: 'material',
     icon: 'Picture',
+    children: [
+      {
+        name: '素材库',
+        path: '',
+        icon: 'Picture',
+      },
+      {
+        name: 'AI绘画',
+        path: 'painting',
+        icon: 'Picture',
+      },
+      {
+        name: 'AI写作',
+        path: 'writing',
+        icon: 'Bell',
+      }
+    ]
   },
   {
     name: '品牌管理',

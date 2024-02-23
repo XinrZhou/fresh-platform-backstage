@@ -18,7 +18,21 @@ export default [{
     },
     {
       path: 'material',
-      component: () => import('@/pages/supplier/materials/MaterialManagement.vue'),
+      component: () => import('@/pages/common/materials/index.vue'),
+      children: [
+        {
+          path: '',
+          component: () => import('@/pages/common/materials/MaterialManagement.vue'),
+        },
+        {
+          path: 'painting',
+          component: () => import('@/pages/common/materials/AiPainting.vue'),
+        },
+        {
+          path: 'writing',
+          component: () => import('@/pages/common/materials/AiWriting.vue'),
+        }
+      ]
     },
     {
       path: 'order',

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { request } from '@/api/http';
 import { User, Brand } from '@/types/type';
+import { method } from 'lodash';
 
 // 登录
 export function login(data: User) {
@@ -39,5 +40,14 @@ export function deleteBrandSnapshot(bid: string) {
   return request({
     url: `/brand/snapshots/${bid}`,
     method: 'delete',
+  })
+}
+
+// 素材管理
+export function getAiPicture(data) {
+  return request({
+    url: '/ai/picture',
+    method: 'post',
+    data
   })
 }

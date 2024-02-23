@@ -93,3 +93,10 @@ export interface RdcSpu {
   updateTime?: string
 }
 
+export interface TextToImage {
+  prompt?: string
+  negativePrompt? : string
+  styles?: string[]
+  logoAdd?: string
+  rspImgType?: string
+}

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <h3>素材管理</h3>
+  Ai写作
 </template>
 
 <style scoped>
