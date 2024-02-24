@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getAiPicture } from "@/api/user";
+import { getAiImages } from "@/api/user";
 import { TextToImage } from "@/types/type";
 
 interface State {
@@ -13,9 +13,9 @@ export const useMaterialStore = defineStore('material', {
   },
   actions: {
     // 上传图片
-    async getAiPicture(data: TextToImage) {
+    async getAiImages(data: TextToImage) {
       console.log('data', data);
-      const res = await getAiPicture(data);
+      // const res = await getAiImages(data);
     },
   }
 })

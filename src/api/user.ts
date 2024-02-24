@@ -44,7 +44,7 @@ export function deleteBrandSnapshot(bid: string) {
 }
 
 // 素材管理
-export function getAiPicture(data) {
+export function getAiImages(data) {
   return request({
     url: '/ai/picture',
     method: 'post',

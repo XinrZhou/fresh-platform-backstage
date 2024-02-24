@@ -140,3 +140,28 @@ export const mapApprovalStatus = (status: number) => {
 export const formatTime = (time: string) => {
   return moment(time).format('YYYY-MM-DD HH:mm:ss')
 }
+
+/**
+ * base64转file
+ * @param base64 
+ * @param fileName 
+ */
+export const base64ToFile = (base64Str: string, fileName) => {
+  const bstr = atob(base64Str);
+  const type = 'image/jpeg';
+  let len = bstr.length;
+  const u8arr = new Uint8Array(len);
+  while (len--) {
+      u8arr[len] = bstr.charCodeAt(len);
+  }
+  const blob = new Blob([u8arr], { type });
+  const newFile = blobToFile(blob, fileName);
+  const lastModified = new Date().getTime()
+  return new File([newFile], fileName, {lastModified: lastModified, type});
+} 
+
+const blobToFile = (theBlob: Blob, fileName: string) => {
+  theBlob.lastModifiedDate = new Date();
+  theBlob.name = fileName;
+  return theBlob;
+}
