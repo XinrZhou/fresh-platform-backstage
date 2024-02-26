@@ -93,10 +93,25 @@ export interface RdcSpu {
   updateTime?: string
 }
 
+interface ResultConfig {
+  Resolution?: string
+}
+
 export interface TextToImage {
   prompt?: string
   negativePrompt? : string
+  resultConfig?: ResultConfig
   styles?: string[]
   logoAdd?: string
   rspImgType?: string
+}
+
+export interface Image {
+  id?: string
+  userId?: string
+  prompt?: string
+  resolution?: string
+  imageUrl?: string
+  insertTime?: string
+  updateTime?: string
 }

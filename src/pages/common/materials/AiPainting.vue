@@ -1,29 +1,56 @@
 <script setup lang='ts'>
-  import { ref } from 'vue';
+  import { ref, toRaw, computed } from 'vue';
+  import { ElMessage } from 'element-plus';
   import type { FormInstance } from 'element-plus';
   import { base64ToFile } from "@/utils";
   import { STYLE_LIST, RESOLUTION_LIST } from '@/constant/common'
   import { useOssStore } from '@/store/user/oss';
+  import { useUserStore } from '@/store/user/user';
   import { useMaterialStore } from '@/store/user/material';
   
-  const ossStore = useOssStore();
   const materialStore = useMaterialStore();
+  const imageBase64C = computed(() => materialStore.imageBase64); 
+  const loadingC = computed(() => materialStore.loading);
+
+  const ossStore = useOssStore();
+  const imageUrlC = computed(() => ossStore.imageUrl);
+
+  const userStore = useUserStore();
+  const userInfoC = computed(() => userStore.userInfo);
 
   const formDataR = ref({})
-  const loading = ref(false)
   const ruleFormRef = ref<FormInstance>(null);
+  const showCollectBtn = ref<Boolean>(true);
   
   const generateImages = () => {
     ruleFormRef.value?.validate((valid, fields) => {
       if (valid) {
-        console.log('generateImage', formDataR.value)
+        materialStore.generateImages(toRaw(formDataR.value));
+        showCollectBtn.value = true;
       }
     }) 
+  }
+
+  const collectImage = () => {
+    const imageFile = base64ToFile(imageBase64C.value, "file")
+    ossStore.uploadImage(imageFile).then(() => {
+      const userId = userInfoC.value.id;
+      materialStore.collectImage({
+        userId,
+        imageUrl: imageUrlC.value,
+        prompt: formDataR.value.prompt,
+      }).then(() => {
+        ElMessage.success("收藏成功!");
+        showCollectBtn.value = false;
+      })
+    }).catch(() => {
+      ElMessage.error("收藏失败，请稍后重试!")
+    });
   }
 </script>
 
 <template>
-  <el-card>
+  <el-card class="container-wrapper" v-loading="loadingC">
     <h3>智能文生图</h3>
     <el-form 
       :model="formDataR" 
@@ -89,13 +116,34 @@
         </el-text>
       </el-col>
     </el-row>
-    <div class="picture-container" v-loading="loading">
-      <image  />
-    </div>
+    <template v-if="imageBase64C">
+      <div class="picture-container"> 
+        <img  
+          :src="`data:image/jpeg;base64,${imageBase64C}`" 
+          class="image-wrapper"
+          alt="图片生成失败，请重试..."
+        />
+      </div>
+      <el-button 
+        type="primary" 
+        class="collect-btn" 
+        @click="collectImage"
+        v-show="showCollectBtn"
+      >
+        收藏
+      </el-button>
+    </template>
   </el-card>
 </template>
 
 <style scoped>
+  .container-wrapper {
+    height: auto;
+  }
+  .el-card__body {
+    height: auto;
+    margin-bottom: 10px;
+  }
   .form-container {
     margin-top: 16px;
   }
@@ -121,6 +169,22 @@
   }
   .submit-btn {
     margin-top: -6px;
+    margin-left: 16px;
+    margin-right: 6px;
+  }
+  .picture-container {
+    margin-top: 16px;
+    width: 100%;
+    height: 460px;
+    position: relative;
+  }
+  .image-wrapper {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .collect-btn {
+    margin-top: 2px;
     margin-left: 16px;
     margin-right: 6px;
   }

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  Ai写作
+  AI写作
 </template>
 
 <style scoped>

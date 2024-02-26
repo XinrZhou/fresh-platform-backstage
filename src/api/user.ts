@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { request } from '@/api/http';
-import { User, Brand } from '@/types/type';
+import { User, Brand, Image, TextToImage } from '@/types/type';
 import { method } from 'lodash';
 
 // 登录
@@ -44,10 +44,32 @@ export function deleteBrandSnapshot(bid: string) {
 }
 
 // 素材管理
-export function getAiImages(data) {
+export function generateImages(data: TextToImage) {
   return request({
-    url: '/ai/picture',
+    url: '/ai/images',
     method: 'post',
     data
+  })
+}
+
+export function collectImage(data: Image) {
+  return request({
+    url: '/image/images',
+    method: 'post',
+    data
+  })
+}
+
+export function getImages(page: number, pageSize: number) {
+  return request({
+    url: `/image/images/${page}/${pageSize}`,
+    method: 'get',
+  })
+}
+
+export function deleteImage(id: string) {
+  return request({
+    url: `/image/images/${id}`,
+    method: 'delete',
   })
 }

@@ -43,7 +43,7 @@ export const RESOLUTION_LIST = [
     value: "768:1024",
   },
   {
-    label: '4:6 (1024x768)',
+    label: '4:3 (1024x768)',
     value: "1024:768",
   },
   {

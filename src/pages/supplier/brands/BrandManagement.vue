@@ -55,7 +55,7 @@
 
   const handleDelete = (brand: Brand) => {
     ElMessageBox.confirm(
-      `是否确认撤销deleteBrandSnapshot<span style="color:red">${brand.name}</span>品牌申请？`, 
+      `是否确认撤销<span style="color:red">${brand.name}</span>品牌申请？`, 
       'Tips', 
       {
         confirmButtonText: 'OK',
@@ -75,7 +75,7 @@
   }
 
   const handlePageChange = (page, pageSize) => {
-    brandStore.getBrandSnapshots(defaultPage, defaultPageSize, userId);
+    brandStore.getBrandSnapshots(page, pageSize, userId);
   }
 
 </script>
