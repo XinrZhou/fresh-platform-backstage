@@ -6,7 +6,7 @@ export const request = (options: any) => {
     axios.defaults.baseURL = '/api';
 
     const service = axios.create({
-      timeout: 20000
+      timeout: 40000
     });
 
     // request interceptor

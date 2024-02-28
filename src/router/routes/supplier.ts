@@ -39,10 +39,6 @@ export default [{
       component: () => import('@/pages/supplier/orders/OrderManagement.vue'),
     },
     {
-      path: 'product',
-      component: () => import('@/pages/supplier/products/ProductManagement.vue'),
-    },
-    {
       path: 'spu',
       component: () => import('@/pages/supplier/spu/SpuManagement.vue')
     },

@@ -42,11 +42,6 @@ export const SUPPLIER_SIDEBAR_LIST = [
     icon: 'PriceTag',
   },
   {
-    name: '商品管理',
-    path: 'product',
-    icon: 'Goods',
-  },
-  {
     name: '订单管理',
     path: 'order',
     icon: 'Tickets',
@@ -73,6 +68,23 @@ export const ADMIN_SIDEBAR_LIST = [
     name: '素材管理',
     path: 'material',
     icon: 'Picture',
+    children: [
+      {
+        name: '素材库',
+        path: '',
+        icon: 'Picture',
+      },
+      {
+        name: 'AI绘画',
+        path: 'painting',
+        icon: 'Picture',
+      },
+      {
+        name: 'AI写作',
+        path: 'writing',
+        icon: 'Bell',
+      }
+    ]
   },
   {
     name: '内容管理',
