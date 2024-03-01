@@ -60,6 +60,7 @@
     }).then(() => {
       categoryStore.deleteCategory(category.id, category.parentId);
       ElMessage.success('删除成功！');
+      categoryStore.getCategories(defaultPage, defaultPageSize);
     });
   }
 

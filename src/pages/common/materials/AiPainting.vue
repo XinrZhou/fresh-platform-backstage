@@ -32,7 +32,7 @@
   }
 
   const collectImage = () => {
-    const imageFile = base64ToFile(imageBase64C.value, "file")
+    const imageFile = base64ToFile(imageBase64C.value, "file");
     ossStore.uploadImage(imageFile).then(() => {
       const userId = userInfoC.value.id;
       materialStore.collectImage({

@@ -1,13 +1,12 @@
 import { defineStore } from "pinia";
 import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { TextToImage, Image } from "@/types/type";
 import { 
   generateImages, 
   collectImage, 
   getImages,
-  deletImage,
-  getChatText, 
+  deleteImage,
 } from "@/api/user";
-import { TextToImage, Image } from "@/types/type";
 
 interface State {
   imageBase64: string,
@@ -62,26 +61,5 @@ export const useMaterialStore = defineStore('material', {
     async deleteImage(id: string) {
       const res = await deleteImage(id);
     },
-
-    getChatText() {
-      fetchEventSource('/api/ai/text', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Token': sessionStorage.getItem('TOKEN')
-        },
-        body: JSON.stringify({"question": "java是什么?"}),
-        onerror() {
-          this.openWhenHidden = true;
-        },
-        onmessage(event) {
-          // 接收数据
-          console.log(event);
-        },
-        onclose(){
-          // 数据传输完毕后就会关闭流
-        }
-      })
-    }
   }
 })

@@ -17,7 +17,7 @@
     query.value = '';
     let thiz = this;
     const length = historyList.value.length;
-    fetchEventSource('/api/ai/text', {
+    fetchEventSource('/api/ai/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

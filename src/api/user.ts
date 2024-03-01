@@ -60,7 +60,7 @@ export function collectImage(data: Image) {
   })
 }
 
-export function getImages(data) {
+export function getImages(page: number, pageSize: number) {
   return request({
     url: `/image/images/${page}/${pageSize}`,
     method: 'get',
@@ -74,10 +74,10 @@ export function deleteImage(id: string) {
   })
 }
 
-export function getChatText() {
+// 资源管理
+export function getResources() {
   return request({
-    url: '/ai/text',
-    method: 'post',
-    responseType: 'stream'
+    url: '/resource/resources',
+    method: 'get',
   })
 }

@@ -37,7 +37,6 @@ export const useCategoryStore = defineStore('category', {
     // 添加类目
     async addCategory(category: Category) {
       const res = await addCategory(category);
-      this.getCategories();
     },
 
     // 获取所有类目

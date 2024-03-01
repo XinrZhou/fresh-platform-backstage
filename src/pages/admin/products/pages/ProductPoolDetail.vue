@@ -46,11 +46,6 @@
 </script>
 
 <template>
-  <el-row >
-    <el-col :span="24">
-      test
-    </el-col>
-  </el-row>
   <el-card>
     <div class="header-wrapper">
         <h3>商品列表</h3>

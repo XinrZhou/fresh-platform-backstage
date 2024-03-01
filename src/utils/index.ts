@@ -165,3 +165,26 @@ const blobToFile = (theBlob: Blob, fileName: string) => {
   theBlob.name = fileName;
   return theBlob;
 }
+
+/**
+ * 获取接口调用成功/失败数量
+ * @param dataList 
+ */
+export const getInterfaceCount = (dataList) => {
+  const AI_TYPE = {
+    CHAT: "/ai/chat",
+    IMAGE: '/ai/image'
+  };
+
+  let chatCount = 0;
+  let imageCount = 0;
+  dataList.forEach(item => {
+    if (item.path === AI_TYPE.CHAT) {
+      chatCount += 1;
+    } else {
+      imageCount += 1;
+    }
+  });
+  return { chatCount, imageCount };
+};
+

@@ -34,13 +34,11 @@
         type: 'warning',
         dangerouslyUseHTMLString: true
       }
-    )
-    .then(() => {
-      materialStore.deleteImage(id);
-    })
-    .then(() => {
-      ElMessage.success("删除成功！");
-      materialStore.getImages(defaultPage, defaultPageSize);
+    ).then(() => {
+      materialStore.deleteImage(id).then(() => {
+        ElMessage.success("删除成功！");
+        materialStore.getImages(defaultPage, defaultPageSize);
+      });
     });
   }
 </script>

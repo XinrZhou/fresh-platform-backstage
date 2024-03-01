@@ -115,3 +115,9 @@ export interface Image {
   insertTime?: string
   updateTime?: string
 }
+
+export interface Resource {
+  userId?: string
+  path?: string
+  value?: object
+}

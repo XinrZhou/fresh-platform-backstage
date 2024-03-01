@@ -1,7 +1,7 @@
 <script setup lang='ts'>
   import { defineProps, computed,toRaw, ref, defineEmits, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
-  import { useSpuStore } from '@/store/admin/spu';
+  import { useSpuStore } from '@/store/user/spu';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import type { FormInstance} from 'element-plus';
   import { Category } from '@/types/type';
