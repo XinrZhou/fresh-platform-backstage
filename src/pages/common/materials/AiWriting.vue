@@ -8,42 +8,79 @@
 
   const historyList = ref([]);
   const query = ref('');
+  const showIntroduction = ref(true);
 
   function search () {
+    showIntroduction.value && (showIntroduction.value = false);
+    const question = query.value;
     historyList.value.push({
-      question: query.value,
+      question: question,
       answer: ''
     });
     query.value = '';
-    let thiz = this;
-    const length = historyList.value.length;
+    sendRequest(question);
+  } 
+
+  function sendRequest(question) {
+    const token = sessionStorage.getItem('TOKEN');
     fetchEventSource('/api/ai/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Token': sessionStorage.getItem('TOKEN')
+          'Token': token
         },
-        body: JSON.stringify({
-          question: historyList.value[length - 1].question
-        }),
+        body: JSON.stringify({ question }),
         onerror() {
-          this.openWhenHidden = true;
+          ElMessage.error('请求出错');
         },
         onmessage(event) {
-          // 接收数据
+          const length = historyList.value.length;
           historyList.value[length - 1].answer += event.data;
         },
         onclose(){
-          // 数据传输完毕后就会关闭流
           const temp = historyList.value[length - 1];
         }
-      })
-  } 
+    });
+  }
 </script>
 
 <template>
   <el-card class="chat-card">
-    <el-scrollbar class="chat-scrollbar">
+    <div class="introduction-wrapper" v-if="showIntroduction">
+      <img 
+        class="introduction-img"
+        src="https://img.alicdn.com/imgextra/i4/O1CN01c26iB51UyR3MKMFvk_!!6000000002586-2-tps-124-122.png" 
+      />
+      <h2>你好，我是AI写作助手</h2>
+      <el-text type="info">试试这样问我：</el-text>
+    </div>
+    <div class="tips-wrapper" v-if="showIntroduction">
+      <div class="tips-item">
+        <h4>商品评价</h4>
+        <el-text type="info" class="tips-text">
+          你擅长写商品评价：1.真实感受；2.突出产品优点 现在你需要根据以下需求写商品评价：小鲜语牛奶
+        </el-text>
+      </div>
+      <div class="tips-item">
+        <h4>商品评价</h4>
+        <el-text type="info">
+          你擅长写商品评价：1.真实感受；2.突出产品优点 现在你需要根据以下需求写商品评价：小鲜语牛奶
+        </el-text>
+      </div>
+      <div class="tips-item">
+        <h4>商品评价</h4>
+        <el-text type="info">
+          你擅长写商品评价：1.真实感受；2.突出产品优点 现在你需要根据以下需求写商品评价：小鲜语牛奶
+        </el-text>
+      </div>
+      <div class="tips-item">
+        <h4>商品评价</h4>
+        <el-text type="info">
+          你擅长写商品评价：1.真实感受；2.突出产品优点 现在你需要根据以下需求写商品评价：小鲜语牛奶
+        </el-text>
+      </div>
+    </div>
+    <el-scrollbar v-if="!showIntroduction">
       <div class="chat-main">
         <template v-for="(item, index) in historyList" :key="index">
           <el-row justify="space-around" align="middle" class="chat-row">
@@ -62,7 +99,7 @@
             <el-col :span="1">
               <div class="avatar-wrapper">
                 <img 
-                  class="image-wrapper"
+                  class="avatar-image"
                   src="https://img.alicdn.com/imgextra/i4/O1CN01c26iB51UyR3MKMFvk_!!6000000002586-2-tps-124-122.png" 
                 />
               </div>
@@ -101,13 +138,48 @@
     border-radius: 16px;
   }
   .chat-card {
-    position: relative;
-    height: 90vh;
-    background-color: #F7F8FC;
+    height: 80vh;
   }
-
-  .chat-scrollbar {
-    height: 800px;
+  /deep/.el-card__body {
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .introduction-wrapper {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .introduction-img {
+    width: 40px;
+  }
+  .tips-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 800px;
+    gap: 16px;
+  }
+  .tips-item {
+    width: 390px;
+    height: 80px;
+    background: #f7f8fc;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    box-sizing: border-box;
+    cursor: pointer;
+    padding: 16px 24px 10px;
+    position: relative;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    
   }
 
   .chat-main {
@@ -123,11 +195,9 @@
     padding: 12px;
     border-radius: 16px;
   }
-
   .chat-background {
-    background-color: #fff;
+    background-color: #f7f8fc;
   }
-
   .avatar-wrapper {
     width: 28px;
     height: 28px;
@@ -138,22 +208,16 @@
     color: #615ced;
     border-radius: 8px;
   }
-
-  .image-wrapper {
+  .avatar-image {
     width: 20px;
     height: 20px;
   }
-
   .search-box {
-    position: absolute;
-    bottom: 30px;
-    margin: 0 auto;
+    position: relative;
+    width: 800px;
     min-height: 100px;
-    left: 0;
-    right: 0;
-    width: 700px;
+    max-height: 120px;
   }
-
   .chat-button {
     position: absolute;
     right: 10px;
@@ -167,11 +231,9 @@
     border-radius: 10px;
     background: linear-gradient(47deg,#615ced,#3e2fa7 176%);
   }
-
   .chat-button.is-disabled {
     background-color: #dcdcdc;
   }
-
   .el-icon {
     font-size: 20px;
   }
@@ -179,5 +241,4 @@
   /deep/ .el-input__wrapper {
     box-shadow: none;
   }
-
 </style>

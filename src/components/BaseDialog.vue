@@ -3,7 +3,7 @@
   import VueForm from '@lljj/vue3-form-element';
 
   const formProps = {
-    labelWidth: '100px',
+    labelWidth: '120px',
     labelPosition: 'right'
   }
   const formFooter = {

@@ -4,6 +4,7 @@
   import AnalysisPanel from './AnalysisPanel.vue';
   import ResourceList from './ResourceList.vue';
 
+  const activeName = ref('first');
   const tableData = ref([]);
   const resourceStore = useResoureStore();
   const resourcesC = computed(() => resourceStore.resources);
