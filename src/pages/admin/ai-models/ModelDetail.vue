@@ -1,8 +1,9 @@
 <script setup lang='ts'>
   import { ref, computed } from 'vue';
   import { ElMessage } from 'element-plus';
-  import { CHAT_MODEL_SCHEMA, CHAT_MODEL_UI_SCHEMA } from './schema';
+  import { CHAT_MODEL_SCHEMA, CHAT_MODEL_UI_SCHEMA } from './chatSchema';
   import { useModelStore } from '@/store/admin/model';
+  import { PAGE_TYPE } from '@/constant/enums';
   import { Model } from "@/types/type";
   import { formatTime } from '@/utils'
   import BasePagination from '@/components/BasePagination.vue';
@@ -12,21 +13,35 @@
     name: 'settings',
     title: '参数配置'
   }
+  const DESCRIPTION_COLUMNS_CHAT = 3;
+  const DESCRIPTION_COLUMNS_IMAGE = 4;
+
   const defaultPage = 1;
   const defaultPageSize = 20;
 
-  const props = defineProps(['pageType']);
+  const props = defineProps(['pageType', 'schema', 'uiSchema']);
 
   const modelStore = useModelStore();
-  modelStore.getModels(defaultPage, defaultPageSize, props.pageType.value);
   const modelListC = computed(() => modelStore.modelList);
   const latestModelC = computed(() => modelStore.latestModel);
   const totalC = computed(() => modelStore.total);
   const loadingC = computed(() => modelStore.loading);
+  const modelNameC = computed(() => {
+    if (props.pageType.value === PAGE_TYPE.CHAT.value) {
+      return latestModelC?.params ? JSON.parse(latestModelC.params).model : '--';
+    }
+    return '';
+  });
+  const columnC = computed(() => {
+    if ( props.pageType.value === PAGE_TYPE.CHAT.value ) {
+      return DESCRIPTION_COLUMNS_CHAT;
+    } else {
+      return DESCRIPTION_COLUMNS_IMAGE;
+    }
+  });
 
   const dialogVisibleR = ref(false);
   const modelParamsR = ref({});
-  const operationType = DIALOG_TITLE;
 
   const updateModelParams = () => {
     dialogVisibleR.value = true;
@@ -65,19 +80,25 @@
 
 <template>
   <div class="container-wrapper" v-loading="loadingC">
-    <el-descriptions title="基本信息">
+    <el-descriptions 
+      title="基本信息"
+      :column="columnC"
+    >
       <el-descriptions-item label="模型">
-        通义千问
+        {{
+          pageType.modelName
+        }}
       </el-descriptions-item>
       <el-descriptions-item label="上次部署时间">
         {{
           latestModelC ? formatTime(latestModelC.updateTime) : '--'
         }}
       </el-descriptions-item>
-      <el-descriptions-item label="模型名称">
-        {{
-          latestModelC?.params ? JSON.parse(latestModelC.params).model : '--'
-        }}
+      <el-descriptions-item 
+        label="模型名称"
+        v-if="pageType.value === PAGE_TYPE.CHAT.value"
+      >
+        {{ modelNameC }}
       </el-descriptions-item>
       <el-descriptions-item label="部署状态">
         <el-tag size="small" type="success">部署成功</el-tag>
@@ -85,7 +106,7 @@
       <el-descriptions-item label="部署版本">
         <el-tag size="small" type="info">
           {{
-            latestModelC.version || '--'
+            latestModelC?.version || '--'
           }}
         </el-tag>
         <el-button size="small" type="primary" link @click="updateModelParams">
@@ -121,11 +142,11 @@
     </div>
   </div>
   <BaseDialog
-    :schema='CHAT_MODEL_SCHEMA'
-    :ui-schema="CHAT_MODEL_UI_SCHEMA"
-    :operation-type="operationType" 
+    :schema="schema"
+    :ui-schema="uiSchema"
+    :operation-type="DIALOG_TITLE" 
     :dialog-visible="dialogVisibleR" 
-    :form-data="rdcDataR"
+    :form-data="modelParamsR"
     @on-data-submit="handleSubmit"
     @on-dialog-close="handleClose"
   />

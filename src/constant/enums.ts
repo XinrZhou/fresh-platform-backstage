@@ -75,4 +75,17 @@ export const CATEGORY_OPTIONS = [
     label: '三级类目',
     value: 3
   }
-]
+];
+
+export const PAGE_TYPE = {
+  IMAGE: {
+    name: '绘画模型',
+    value: 0,
+    modelName: '腾讯AI绘画模型',
+  },
+  CHAT: {
+    name: '大语言模型', 
+    value: 1,
+    modelName: '通义千问'
+  }
+}
