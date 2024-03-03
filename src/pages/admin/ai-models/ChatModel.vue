@@ -1,40 +1,93 @@
 <script setup lang='ts'>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
+  import { ElMessage } from 'element-plus';
   import { CHAT_MODEL_SCHEMA, CHAT_MODEL_UI_SCHEMA } from './schema';
-  import { OPERATION_TYPE } from '@/constant/enums';
+  import { useModelStore } from '@/store/admin/model';
+  import { Model } from "@/types/type";
+  import { formatTime } from '@/utils'
+  import BasePagination from '@/components/BasePagination.vue';
   import BaseDialog from '@/components/BaseDialog.vue';
 
   const DIALOG_TITLE = {
     name: 'settings',
     title: '参数配置'
   }
+  const defaultPage = 1;
+  const defaultPageSize = 20;
+
+  const props = defineProps(['pageType']);
+
+  const modelStore = useModelStore();
+  modelStore.getModels(defaultPage, defaultPageSize, props.pageType.value);
+  const modelListC = computed(() => modelStore.modelList);
+  const latestModelC = computed(() => modelStore.latestModel);
+  const totalC = computed(() => modelStore.total);
+  const loadingC = computed(() => modelStore.loading);
 
   const dialogVisibleR = ref(false);
   const modelParamsR = ref({});
-  const operationType = DIALOG_TITLE
+  const operationType = DIALOG_TITLE;
 
   const updateModelParams = () => {
     dialogVisibleR.value = true;
   }
+
+  const handleSubmit = (modelParams: Model) => {
+    modelStore.addModel({ ...modelParams, type: props.pageType.value}).then(() => {
+      ElMessage.success('部署成功！');
+      modelStore.getModels(defaultPage, defaultPageSize, props.pageType.value);
+      handleClose();
+    });
+  }
+
+  const handleClose = () => {
+    modelParamsR.value = {};
+    dialogVisibleR.value = false;
+  }
+
+  const handlePageChange = (page, pageSize) => {
+    modelStore.getModels(page, pageSize, props.pageType.value);
+  }
+
+  const handleDownload = ({ version, params }) => {
+    var blob = new Blob([params], {type: "text/plain;charset=utf-8"});
+    var url = window.URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = `v${version}.txt`;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  }
 </script>
 
 <template>
-  <div class="container-wrapper">
+  <div class="container-wrapper" v-loading="loadingC">
     <el-descriptions title="基本信息">
       <el-descriptions-item label="模型">
         通义千问
       </el-descriptions-item>
-      <el-descriptions-item label="更新时间">
-        2024年2月29日
+      <el-descriptions-item label="上次部署时间">
+        {{
+          latestModelC ? formatTime(latestModelC.updateTime) : '--'
+        }}
       </el-descriptions-item>
       <el-descriptions-item label="模型名称">
-        qwen-max
+        {{
+          latestModelC?.params ? JSON.parse(latestModelC.params).model : '--'
+        }}
       </el-descriptions-item>
       <el-descriptions-item label="部署状态">
         <el-tag size="small" type="success">部署成功</el-tag>
       </el-descriptions-item>
       <el-descriptions-item label="部署版本">
-        <el-tag size="small" type="info">1.2.2</el-tag>
+        <el-tag size="small" type="info">
+          {{
+            latestModelC.version || '--'
+          }}
+        </el-tag>
         <el-button size="small" type="primary" link @click="updateModelParams">
           更新
         </el-button>
@@ -42,21 +95,29 @@
     </el-descriptions>
     <div class="table-wrapper">
       <p class="table-title">历史版本</p>
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="date" label="版本号" width="180" />
-        <el-table-column prop="name" label="时间" width="180" />
-        <el-table-column prop="address" label="详细信息" />
+      <el-table :data="modelListC" style="width: 100%">
+        <el-table-column prop="version" label="版本号" width="180" />
+        <el-table-column prop="params" label="模型参数" />
+        <el-table-column prop="address" label="创建时间" width="180">
+          <template #default="scope">
+            <span>
+              {{ formatTime(scope.row.updateTime) }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" label="操作" width="120">
           <template #default="scope">
-            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
-              应用
-            </el-button>
-            <el-button link type="primary" size="small" @click="handleDelete(scope.row)">
-              删除
+            <el-button link type="primary" size="small" @click="handleDownload(scope.row)">
+              <el-icon><Download /></el-icon>
+              下载
             </el-button>
           </template>
         </el-table-column>
       </el-table>
+      <BasePagination
+        :total="totalC"
+        @onPageChange="handlePageChange"
+      />
     </div>
   </div>
   <BaseDialog

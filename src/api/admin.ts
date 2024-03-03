@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { request } from '@/api/http';
-import { Attribute, Brand, Category, Rdc, Sku, Spu, RdcSpu } from '@/types/type';
+import { Attribute, Brand, Category, Rdc, Sku, Spu, RdcSpu, Model } from '@/types/type';
 
 // 类目管理
 export function addCategory(data: Category) {
@@ -240,5 +240,21 @@ export function deleteRdc(rid: string) {
   return request({
     url: `/admin/rdcs/${rid}`,
     method: 'delete',
+  })
+}
+
+// 模型参数管理
+export function getModels(page: number, pageSize: number, type: number) {
+  return request({
+    url: `model/models/${page}/${pageSize}/${type}`,
+    method: 'get'
+  })
+}
+
+export function addModel(data: Model) {
+  return request({
+    url: 'model/models',
+    method: 'post',
+    data
   })
 }

@@ -121,3 +121,13 @@ export interface Resource {
   path?: string
   value?: object
 }
+
+export interface Model {
+  id?: string
+  version?: string
+  type?: number
+  status?: number
+  params?: string
+  insertTime?: string
+  updateTime?: string
+}

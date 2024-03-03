@@ -1,8 +1,11 @@
-import { pcaTextArr } from "element-china-area-data";
 export const CHAT_MODEL_SCHEMA = {
     type: 'object',
-    required: ['model', 'model', 'detail'],
+    required: ['version', 'model'],
     properties: {
+        version: {
+            title: '版本号',
+            type: 'string',
+        },
         model: {
             title: '模型',
             type: 'string',
@@ -25,7 +28,7 @@ export const CHAT_MODEL_SCHEMA = {
             type: 'number'
         },
         enableSearch: {
-            title: '启用搜索',
+            title: '互联网搜索',
             type: 'number'
         }
     }

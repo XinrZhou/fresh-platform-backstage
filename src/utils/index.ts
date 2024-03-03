@@ -111,6 +111,11 @@ export const mapStatus = (status: number) => {
   return _.find(statusMap, ['value', status]) || {};
 }
 
+/**
+ * 审核状态映射
+ * @param status 
+ * @returns 
+ */
 export const mapApprovalStatus = (status: number) => {
   const approvalStatusMap = [
     {

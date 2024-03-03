@@ -60,7 +60,7 @@
   <el-row>
     <el-col :span="24">
       <el-card>
-        <h3 class="table-title">申请列表</h3>
+        <h3 class="table-title">审核列表</h3>
         <el-table :data="brandListC" style="width: 100%" stripe border max-height="600">
           <el-table-column prop="id" label="id" width="200"/>
           <el-table-column prop="name" label="品牌名称" width="120"/>
@@ -69,7 +69,7 @@
           <el-table-column label="审核状态" width="100">
             <template #default="scope">
               <el-tag 
-                :type="mapApprovalStatus(scope.row.status)?.type"
+                :type="mapApprovalStatus(scope.row.status)?.renderType"
               >
                 {{ mapApprovalStatus(scope.row.status)?.label }}
               </el-tag>
