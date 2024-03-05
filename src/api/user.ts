@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { request } from '@/api/http';
-import { User, Brand, Image, TextToImage } from '@/types/type';
+import { User, Brand, Image, TextToImage, Resource } from '@/types/type';
 import { method } from 'lodash';
 
 // 登录
@@ -74,10 +74,10 @@ export function deleteImage(id: string) {
   })
 }
 
-// 资源管理
-export function getResources() {
+export function getModelParams() {
   return request({
-    url: '/resource/resources',
-    method: 'get',
+    url: '/model/models',
+    method: 'get'
   })
 }
+

@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-  import { ref, defineProps } from 'vue';
+  import { ref } from 'vue';
   import { getInterfaceCount } from '@/utils';
 
   const props = defineProps(['resources'])

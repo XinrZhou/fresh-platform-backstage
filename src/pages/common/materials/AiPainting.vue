@@ -9,6 +9,8 @@
   import { useMaterialStore } from '@/store/user/material';
   
   const materialStore = useMaterialStore();
+  materialStore.getModelParams();
+  const modelParamsC = computed(() => materialStore.modelParams);
   const imageBase64C = computed(() => materialStore.imageBase64); 
   const loadingC = computed(() => materialStore.loading);
 
@@ -60,10 +62,10 @@
     >
       <el-form-item label="提示词示例">
         <div class="description-wrapper">
-          盛开的玫瑰花
+          盛开的玫瑰花 | 通用写实风格
         </div>
         <div class="description-wrapper">
-          阳光下新鲜的橙子
+          一幅优美的风景画，风吹麦浪，阳光照射在麦田中 | 插图
         </div>
       </el-form-item>
       <el-form-item label="正向提示词" prop="prompt" required>
@@ -81,7 +83,7 @@
       <el-form-item label="绘画风格" prop="styles" required >
         <el-radio-group v-model="formDataR.styles" size="large">
           <el-radio-button 
-            v-for="item in STYLE_LIST" 
+            v-for="item in modelParamsC.styleList" 
             :key="item.value" 
             :label="item.value" 
           >
@@ -92,7 +94,7 @@
       <el-form-item label="尺寸与分辨率" prop="resultConfig">
         <el-radio-group v-model="formDataR.resultConfig" size="large">
           <el-radio-button
-            v-for="item in RESOLUTION_LIST"
+            v-for="item in modelParamsC.resolutionList"
             :key="item.value"
             :label="item.value"
           >

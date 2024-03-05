@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-  import { defineProps, computed, toRaw, ref, defineEmits, watch } from 'vue';
+  import { computed, toRaw, ref, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
   import { useBrandStore } from '@/store/admin/brand';
   import { useOssStore } from '@/store/user/oss';

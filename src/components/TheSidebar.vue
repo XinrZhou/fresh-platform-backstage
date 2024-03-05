@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-  import { defineProps } from 'vue';
   import router from '@/router';
 
   const props = defineProps(['navList', 'baseUrl']);

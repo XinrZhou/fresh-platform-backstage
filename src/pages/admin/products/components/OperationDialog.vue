@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-  import { defineProps, computed,toRaw, ref, defineEmits, watch } from 'vue';
+  import { computed,toRaw, ref, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
   import { useSpuStore } from '@/store/user/spu';
   import { ElMessage, ElMessageBox } from 'element-plus';

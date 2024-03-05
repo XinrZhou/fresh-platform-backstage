@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-  import { defineProps, computed, toRaw, ref, defineEmits, watch } from 'vue';
+  import { computed, toRaw, ref, watch } from 'vue';
   import { useSpuStore } from '@/store/admin/spu';
   import { useOssStore } from '@/store/user/oss';
   import { useSkuStore } from '@/store/admin/sku';

@@ -1,18 +1,21 @@
 import { defineStore } from "pinia";
 import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { mapModelParams } from "@/utils";
 import { TextToImage, Image } from "@/types/type";
 import { 
   generateImages, 
   collectImage, 
   getImages,
   deleteImage,
+  getModelParams
 } from "@/api/user";
 
 interface State {
   imageBase64: string,
   loading: boolean,
   imageList: Image[],
-  total: number
+  total: number,
+  modelParams: object
 }
 
 export const useMaterialStore = defineStore('material', {
@@ -22,6 +25,7 @@ export const useMaterialStore = defineStore('material', {
       loading: false,
       imageList: [],
       total: 1,
+      modelParams: {}
     }
   },
   actions: {
@@ -61,5 +65,12 @@ export const useMaterialStore = defineStore('material', {
     async deleteImage(id: string) {
       const res = await deleteImage(id);
     },
+
+    // 获取参数列表
+    async getModelParams() {
+      const res = await getModelParams();
+      const model = res.data.data.models;
+      this.modelParams = mapModelParams(model[0]?.params);
+    }
   }
 })

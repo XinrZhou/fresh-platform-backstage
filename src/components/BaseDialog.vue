@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-  import { ref, defineEmits, defineProps, watch, toRaw } from 'vue';
+  import { ref, watch, toRaw } from 'vue';
   import VueForm from '@lljj/vue3-form-element';
 
   const formProps = {

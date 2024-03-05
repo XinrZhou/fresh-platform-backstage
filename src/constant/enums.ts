@@ -77,15 +77,20 @@ export const CATEGORY_OPTIONS = [
   }
 ];
 
-export const PAGE_TYPE = {
-  IMAGE: {
-    name: '绘画模型',
+export const MODEL_TYPE = {
+  IMAGE: 0,
+  CHAT: 1,
+}
+
+export const MODEL_LIST = [
+  {
+    label: '绘画模型',
     value: 0,
     modelName: '腾讯AI绘画模型',
   },
-  CHAT: {
-    name: '大语言模型', 
+  {
+    label: '大语言模型', 
     value: 1,
     modelName: '通义千问'
   }
-}
+]

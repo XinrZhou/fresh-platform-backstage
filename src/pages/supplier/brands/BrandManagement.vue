@@ -84,7 +84,7 @@
   <el-row>
     <el-col :span="24">
       <el-card>
-        <h3 class="table-title">申请列表</h3>
+        <h3 class="table-title">品牌列表</h3>
         <el-row  align="middle" class="header-wrapper">
           <el-col :span="23">
             <div class="tips-wrapper">

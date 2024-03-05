@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-  import { defineProps, defineEmits } from 'vue';
   import { ArrowDown, User, SwitchButton, userFilled } from '@element-plus/icons-vue';
 
   const props = defineProps(['userInfo']);

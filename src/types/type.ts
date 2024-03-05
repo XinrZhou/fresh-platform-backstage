@@ -116,10 +116,22 @@ export interface Image {
   updateTime?: string
 }
 
-export interface Resource {
+export interface ResourceUsage {
   userId?: string
   path?: string
   value?: object
+}
+
+export interface Resource {
+  id?: string
+  name?: string
+  type?: number
+  status?: number
+  description?: string
+  price?: number
+  unit?: string
+  insertTime?: string
+  updateTime?: string
 }
 
 export interface Model {

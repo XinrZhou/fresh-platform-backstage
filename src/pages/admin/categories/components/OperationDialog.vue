@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-  import { defineProps, computed, ref, defineEmits, watch } from 'vue';
+  import { computed, ref, watch } from 'vue';
   import { useCategoryStore } from '@/store/admin/category';
   import { useOssStore } from '@/store/user/oss';
   import { ElMessage } from 'element-plus';

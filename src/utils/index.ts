@@ -1,5 +1,6 @@
 import _, { update } from 'lodash';
 import moment from 'moment';
+import { STYLE_LIST, RESOLUTION_LIST } from '@/constant/common';
 
 /**
  * 省市区数据格式转换
@@ -193,3 +194,20 @@ export const getInterfaceCount = (dataList) => {
   return { chatCount, imageCount };
 };
 
+/**
+ * AI绘画模型状态映射
+ * @param params 
+ * @returns 
+ */
+export const mapModelParams = (params: any) => {
+  if (!params) return {};
+
+  const parsedParams = JSON.parse(params);
+  const styles = parsedParams.styles || [];
+  const resolutions = parsedParams.resolutions || [];
+
+  const styleList = _.filter(STYLE_LIST, ({ value }) => styles.includes(value));
+  const resolutionList = _.filter(RESOLUTION_LIST, ({ value }) => resolutions.includes(value));
+
+  return { styleList, resolutionList };
+}

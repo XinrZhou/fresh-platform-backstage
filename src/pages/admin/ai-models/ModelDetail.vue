@@ -3,7 +3,7 @@
   import { ElMessage } from 'element-plus';
   import { CHAT_MODEL_SCHEMA, CHAT_MODEL_UI_SCHEMA } from './chatSchema';
   import { useModelStore } from '@/store/admin/model';
-  import { PAGE_TYPE } from '@/constant/enums';
+  import { MODEL_TYPE } from '@/constant/enums';
   import { Model } from "@/types/type";
   import { formatTime } from '@/utils'
   import BasePagination from '@/components/BasePagination.vue';
@@ -27,13 +27,13 @@
   const totalC = computed(() => modelStore.total);
   const loadingC = computed(() => modelStore.loading);
   const modelNameC = computed(() => {
-    if (props.pageType.value === PAGE_TYPE.CHAT.value) {
+    if (props.pageType.value === MODEL_TYPE.CHAT.value) {
       return latestModelC?.params ? JSON.parse(latestModelC.params).model : '--';
     }
     return '';
   });
   const columnC = computed(() => {
-    if ( props.pageType.value === PAGE_TYPE.CHAT.value ) {
+    if ( props.pageType.value === MODEL_TYPE.CHAT.value ) {
       return DESCRIPTION_COLUMNS_CHAT;
     } else {
       return DESCRIPTION_COLUMNS_IMAGE;
@@ -96,7 +96,7 @@
       </el-descriptions-item>
       <el-descriptions-item 
         label="模型名称"
-        v-if="pageType.value === PAGE_TYPE.CHAT.value"
+        v-if="pageType.value === MODEL_TYPE.CHAT.value"
       >
         {{ modelNameC }}
       </el-descriptions-item>

@@ -258,3 +258,33 @@ export function addModel(data: Model) {
     data
   })
 }
+
+// 资源管理
+export function getResourceUsage() {
+  return request({
+    url: '/cdp/cdps',
+    method: 'get',
+  })
+}
+
+export function addResource(data: Resource) {
+  return request({
+    url: '/resource/resources',
+    method: 'post',
+    data
+  })
+}
+
+export function getResources(page: number, pageSize: number, type: number) {
+  return request({
+    url: `/resource/resources/${page}/${pageSize}/${type}`,
+    method: 'get',
+  })
+}
+
+export function deleteResource(rid: string) {
+  return request({
+    url: `/resource/resources/${rid}`,
+    method: 'delete'
+  })
+}

@@ -12,8 +12,8 @@
 
   const rdcList = computed(() => rdcStore.rdcList);
   let dialogVisibleR = ref<Boolean>(false);
-  let operationTypeR = ref<string>('');
-  let rdcDataR = ref({});
+  let operationTypeR = ref<Object>({});
+  let rdcDataR = ref<Rdc>({});
 
   const handleClose = () => {
     rdcDataR.value = {};
