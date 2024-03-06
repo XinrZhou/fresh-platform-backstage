@@ -41,6 +41,7 @@ export const useCategoryStore = defineStore('category', {
 
     // 获取所有类目
     async getCategories(page: number, pageSize: number) {
+      console.log('page===', page, pageSize)
       const res = await getCategories(page, pageSize);
       const categories = res.data.data.categories;
       this.total = res.data.data.total;
@@ -77,7 +78,6 @@ export const useCategoryStore = defineStore('category', {
     // 删除类目
     async deleteCategory(cid: string) {
       const res = await deleteCategory(cid);
-      this.getCategories();
     },
 
     // 上传图片

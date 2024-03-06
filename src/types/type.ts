@@ -62,6 +62,7 @@ export interface Spu {
   categoryId?: string
   brandId?: string
   imageUrl?: string
+  detailImageUrl?: string
   saleStatus?: number
   description?: string
   insertTime?: string

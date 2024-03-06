@@ -1,7 +1,7 @@
 <script setup lang='ts'>
   import { ElMessage } from 'element-plus';
 
-  const props = defineProps(['imageUrl'])
+  const props = defineProps(['imageUrl', 'imageType'])
   const emits = defineEmits(['onUpload', 'onRemove'])
 
   const handleRequest = (data) => {
@@ -9,7 +9,7 @@
       if (!isPFX) {
           ElMessage.error("图片只能是 JPG、PNG、JPEG 格式!");
       } else {
-        emits('onUpload', data.file);
+        emits('onUpload', data.file, props.imageType);
       }
   }
 

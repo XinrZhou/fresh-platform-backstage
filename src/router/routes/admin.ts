@@ -62,7 +62,7 @@ export default [{
     },
     {
       path: 'spu',
-      component: () => import('@/pages/admin/spu/SpuManagement.vue'),
+      component: () => import('@/pages/common/spu/SpuManagement.vue'),
     },
     {
       path: 'sku',

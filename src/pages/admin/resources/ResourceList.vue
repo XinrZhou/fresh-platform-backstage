@@ -22,7 +22,6 @@
   const resourceDataR = ref<Resource>({});
   
   const resourceStore = useResoureStore();
-  const loadingC = computed(() => resourceStore.loading);
   const totalC = computed(() => resourceStore.total);
   const resourceListC = computed(() => resourceStore.resourceList);
   resourceStore.getResources(defaultPage, defaultPageSize, selectedModelC.value.value);
@@ -83,7 +82,7 @@
   </script>
   
   <template>
-    <el-card v-loading="loadingC">
+    <el-card>
       <div class="toolbar-wrapper">
         <el-radio-group 
           v-model="resourceTypeR" 

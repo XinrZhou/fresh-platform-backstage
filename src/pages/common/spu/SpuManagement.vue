@@ -1,20 +1,28 @@
 <script setup lang='ts'>
   import { ref, computed, toRaw } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { OPERATION_TYPE } from '@/constant/enums';
-  import { useSpuStore } from '@/store/admin/spu';
+  import {  DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE } from '@/constant/enums';
+  import { useSpuStore } from '@/store/user/spu';
   import { Spu } from "@/types/type";
   import { mapStatus } from '@/utils';
-  import { SPU_SCHEMA, SPU_UI_SCHEMA } from './schema';
+  import BasePagination from '@/components/BasePagination.vue';
   import OperationDialog from './components/OperationDialog.vue';
 
   const spuStore = useSpuStore();
-  spuStore.getSpuList();
+  spuStore.getSpuList(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+  const totalC = computed(() => spuStore.total);
+
+  const defaultPage = 1;
+  const defaultPageSize = 20;
 
   const spuListC = computed(() => spuStore.spuList);
   let dialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<string>('');
   let spuDataR = ref({});
+
+  const handlePageChange = (page, pageSize) => {
+    spuStore.getSpuList(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+  }
 
   const handleClose = () => {
     spuDataR.value = {};
@@ -48,6 +56,7 @@
     })
     .then(() => {
       handleClose();
+      spuStore.getSpuList(DEFAULT_PAGE, DEFAULT_PAGESIZE);
       ElMessage.success('删除成功！');
     });
   }
@@ -71,9 +80,14 @@
           <el-table-column prop="name" label="商品标题" />
           <el-table-column prop="categoryName" label="关联类目"/>
           <el-table-column prop="brandName" label="关联品牌"/>
-          <el-table-column label="商品图片" width="130">
+          <el-table-column label="商品主图" width="130">
             <template #default="scope">
               <el-image :src="scope.row.imageUrl"/>
+            </template>
+          </el-table-column>
+          <el-table-column label="商品详情图" width="130">
+            <template #default="scope">
+              <el-image :src="scope.row.detailImageUrl"/>
             </template>
           </el-table-column>
           <el-table-column label="是否上架" width="100">
@@ -98,6 +112,10 @@
             </template>
           </el-table-column>
         </el-table>
+        <BasePagination
+          :total="totalC"
+          @onPageChange="handlePageChange"
+        />
       </el-card>
     </el-col>
   </el-row>

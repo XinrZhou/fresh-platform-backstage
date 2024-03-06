@@ -9,12 +9,14 @@ import {
 } from "@/api/admin";
 
 interface State {
+  total: number,
   spuList: object[],
 }
 
 export const useSpuStore = defineStore('spu', {
   state: (): State => {
     return {
+      total: 1,
       spuList: [],
       spuOptionsList: [],
     }
@@ -33,9 +35,10 @@ export const useSpuStore = defineStore('spu', {
       this.getSpuList();
     },
     // 获取SPU列表
-    async getSpuList() {
-      const res = await getSpuList();
+    async getSpuList(page: number, pageSize: number) {
+      const res = await getSpuList(page, pageSize);
       this.spuList = res.data.data.spus;
+      this.total = this.spuList.length;
     },
     // 获取当前类目及子类目SPU列表
     async getSpuListByCategoryId(categoryId: string) {

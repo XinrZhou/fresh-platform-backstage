@@ -40,11 +40,11 @@ export default [{
     },
     {
       path: 'spu',
-      component: () => import('@/pages/supplier/spu/SpuManagement.vue')
+      component: () => import('@/pages/common/spu/SpuManagement.vue')
     },
     {
       path: 'sku',
-      component: () => import('@/pages/supplier/sku/SkuManagement.vue')
+      component: () => import('@/pages/common/sku/SkuManagement.vue')
     },
     {
       path: 'brand',

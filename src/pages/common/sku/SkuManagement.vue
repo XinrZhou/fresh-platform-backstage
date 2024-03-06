@@ -4,9 +4,10 @@
   import VueJsonPretty from 'vue-json-pretty';
   import 'vue-json-pretty/lib/styles.css';
   import { OPERATION_TYPE } from '@/constant/enums';
-  import { useSkuStore } from '@/store/admin/sku';
+  import { useSkuStore } from '@/store/user/sku';
   import { mapStatus } from '@/utils';
   import { Sku } from "@/types/type";
+  import BasePagination from '@/components/BasePagination.vue';
   import OperationDialog from './components/OperationDialog.vue';
 
   const skuStore = useSkuStore();

@@ -3,8 +3,9 @@
   import { useCategoryStore } from '@/store/admin/category';
   import { useBrandStore } from '@/store/admin/brand';
   import { useOssStore } from '@/store/user/oss';
-  import { useSpuStore } from '@/store/admin/spu';
+  import { useSpuStore } from '@/store/user/spu';
   import { ElMessage, ElMessageBox } from 'element-plus';
+  import { IMAGE_TYPE } from '@/constant/enums';
   import router from '@/router';
   import { Spu } from '@/types/type';
   import { OPERATION_TYPE, CATEGORY_OPTIONS, CATEGORY_LEVEL } from '@/constant/enums';
@@ -25,7 +26,8 @@
   const ossStore = useOssStore();
   const spuStore = useSpuStore();
 
-  let spuR = ref<Spu>({saleStatus: 1});
+  const spuR = ref<Spu>({saleStatus: 1});
+  const imageTypeR = ref<String>('');
 
   const cascaderProps = {
     label: 'name',
@@ -33,7 +35,12 @@
   }
 
   watch(() => ossStore.imageUrl, () => {
-    spuR.value.imageUrl = toRaw(ossStore.imageUrl);
+    if (imageTypeR.value === IMAGE_TYPE.MAIN) {
+      spuR.value.imageUrl = toRaw(ossStore.imageUrl);
+    } else {
+      spuR.value.detailImageUrl = toRaw(ossStore.imageUrl);
+    }
+    
   })
 
   watch(() => props.spuData, () => {
@@ -55,16 +62,21 @@
     spuR.value = {};
   }
 
-  const handleImageUpload = (file) => {
+  const handleImageUpload = (file, imageType) => {
+    imageTypeR.value = imageType;
     ossStore.uploadImage(file);
   }
 
   const handleImageRemove = () => {
-    spuR.value.imageUrl = '';
+    if (imageTypeR.value === IMAGE_TYPE.MAIN) {
+      spuR.value.imageUrl = ''; 
+    } else {
+      spuR.value.detailImageUrl = ''; 
+    }
   }
 
   const addSpu = () => {
-    spuStore.addSpu(toRaw(spuR)).then(() => {
+    spuStore.addSpu(toRaw(spuR.value)).then(() => {
       ElMessage.success(`${props.operationType.title}成功！`);
       emits('onDialogClose');
     });
@@ -139,9 +151,18 @@
           v-model="spuR.description" 
         />
       </el-form-item>
-      <el-form-item label="商品图片" required>
+      <el-form-item label="商品主图" required>
         <BaseUpload 
           :image-url="spuR.imageUrl" 
+          :image-type="IMAGE_TYPE.MAIN"
+          @on-upload="handleImageUpload"
+          @on-remove="handleImageRemove"
+        />
+      </el-form-item>
+      <el-form-item label="商品详情图" required>
+        <BaseUpload 
+          :image-url="spuR.detailImageUrl" 
+          :image-type="IMAGE_TYPE.DETAIL"
           @on-upload="handleImageUpload"
           @on-remove="handleImageRemove"
         />

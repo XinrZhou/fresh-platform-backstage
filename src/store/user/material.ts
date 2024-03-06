@@ -12,7 +12,6 @@ import {
 
 interface State {
   imageBase64: string,
-  loading: boolean,
   imageList: Image[],
   total: number,
   modelParams: object
@@ -22,7 +21,6 @@ export const useMaterialStore = defineStore('material', {
   state: (): State => {
     return {
       imageBase64: '',
-      loading: false,
       imageList: [],
       total: 1,
       modelParams: {}
@@ -31,7 +29,6 @@ export const useMaterialStore = defineStore('material', {
   actions: {
     // 生成图片
     async generateImages(data: TextToImage) {
-      this.loading = true;
       const params = {
         ...data,
         styles: [data.styles],
@@ -42,10 +39,8 @@ export const useMaterialStore = defineStore('material', {
       }
       try {
         const res = await generateImages(params);
-        this.loading = false;
         this.imageBase64 = res.data.data.images.resultImage;
       } catch (error) {
-        this.loading = false;
       }
     },
 

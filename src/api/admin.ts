@@ -130,9 +130,9 @@ export function addSpu(data: Spu) {
   })
 }
 
-export function getSpuList() {
+export function getSpuList(page: number, pageSize: number) {
   return request({
-    url: '/spu/spus',
+    url: `/spu/spus/${page}/${pageSize}`,
     method: 'get',
   })
 }

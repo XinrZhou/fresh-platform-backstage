@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ElMessage } from 'element-plus';
+import { ElMessage} from 'element-plus';
+import { showLoading, hideLoading } from '@/utils/loading';
 
 export const request = (options: any) => {
   return new Promise((resolve, reject) => {
@@ -11,6 +12,7 @@ export const request = (options: any) => {
 
     // request interceptor
     service.interceptors.request.use((config: any) => {
+      showLoading();
       const token: string | null = sessionStorage.getItem('TOKEN');
       if (token) {
         config.headers['token'] = token;
@@ -22,6 +24,9 @@ export const request = (options: any) => {
 
     // response interceptor
     service.interceptors.response.use((response: any) => {
+      setTimeout(() => {
+        hideLoading();
+      }, 200);
       if (response.data.code === 200) {
         return response;
       } else {
@@ -29,6 +34,9 @@ export const request = (options: any) => {
         return Promise.reject(new Error(response.data.message));
       }
     }, error => {
+      setTimeout(() => {
+        hideLoading();
+      }, 200);
       return Promise.reject(error);
     });
 

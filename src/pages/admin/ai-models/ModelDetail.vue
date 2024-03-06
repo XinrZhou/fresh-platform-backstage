@@ -25,10 +25,9 @@
   const modelListC = computed(() => modelStore.modelList);
   const latestModelC = computed(() => modelStore.latestModel);
   const totalC = computed(() => modelStore.total);
-  const loadingC = computed(() => modelStore.loading);
   const modelNameC = computed(() => {
     if (props.pageType.value === MODEL_TYPE.CHAT.value) {
-      return latestModelC?.params ? JSON.parse(latestModelC.params).model : '--';
+      return latestModelC?.value?.params ? JSON.parse(latestModelC.value.params).model : '--';
     }
     return '';
   });
@@ -79,7 +78,7 @@
 </script>
 
 <template>
-  <div class="container-wrapper" v-loading="loadingC">
+  <div class="container-wrapper">
     <el-descriptions 
       title="基本信息"
       :column="columnC"

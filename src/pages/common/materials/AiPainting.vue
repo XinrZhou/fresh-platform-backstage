@@ -12,7 +12,6 @@
   materialStore.getModelParams();
   const modelParamsC = computed(() => materialStore.modelParams);
   const imageBase64C = computed(() => materialStore.imageBase64); 
-  const loadingC = computed(() => materialStore.loading);
 
   const ossStore = useOssStore();
   const imageUrlC = computed(() => ossStore.imageUrl);
@@ -52,7 +51,7 @@
 </script>
 
 <template>
-  <el-card class="container-wrapper" v-loading="loadingC">
+  <el-card class="container-wrapper">
     <h3>智能文生图</h3>
     <el-form 
       :model="formDataR" 

@@ -1,8 +1,8 @@
 <script setup lang='ts'>
   import { computed, toRaw, ref, watch } from 'vue';
-  import { useSpuStore } from '@/store/admin/spu';
+  import { useSpuStore } from '@/store/user/spu';
   import { useOssStore } from '@/store/user/oss';
-  import { useSkuStore } from '@/store/admin/sku';
+  import { useSkuStore } from '@/store/user/sku';
   import { useAttributeStore } from '@/store/admin/attribute';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import type { FormInstance} from 'element-plus';

@@ -9,7 +9,6 @@ import {
 
 interface State {
   total: number;
-  loading: boolean;
   resourceList: Resource[],
   usageList: ResourceUsage[],
 }
@@ -18,7 +17,6 @@ export const useResoureStore = defineStore('resource', {
   state: (): State => {
     return {
       total: 1,
-      loading: false,
       resourceList: [],
       usageList: []
     }
@@ -34,11 +32,9 @@ export const useResoureStore = defineStore('resource', {
     },
 
     async getResources(page: number, pageSize: number, type: number) {
-      this.loading = true;
       const res = await getResources(page, pageSize, type);
       this.resourceList = res.data.data.resources;
       this.total = res.data.data.total;
-      this.loading = false;
     },
 
     async deleteResource(rid: string) {

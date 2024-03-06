@@ -1,3 +1,6 @@
+export const DEFAULT_PAGE = 1;
+export const DEFAULT_PAGESIZE = 20;
+
 export const ROLE = {
   ADMIN: 'Vo10t',
   SUPPILER: 'cA1KL'
@@ -78,8 +81,16 @@ export const CATEGORY_OPTIONS = [
 ];
 
 export const MODEL_TYPE = {
-  IMAGE: 0,
-  CHAT: 1,
+  IMAGE: {
+    label: '绘画模型',
+    value: 0,
+    modelName: '腾讯AI绘画模型',
+  },
+  CHAT: {
+    label: '大语言模型', 
+    value: 1,
+    modelName: '通义千问'
+  }
 }
 
 export const MODEL_LIST = [
@@ -93,4 +104,9 @@ export const MODEL_LIST = [
     value: 1,
     modelName: '通义千问'
   }
-]
+];
+
+export const IMAGE_TYPE = {
+  MAIN: 'main',
+  DETAIL: 'detail'
+}
