@@ -9,6 +9,7 @@ export function login(data: User) {
     url: '/users/login',
     data,
     method:'post',
+    loading: false,
   })
 }
 
@@ -17,6 +18,7 @@ export function getUserInfo() {
   return request({
     url: '/users/info',
     method:'get',
+    loading: false,
   })
 }
 
@@ -25,7 +27,7 @@ export function addBrandSnapshot(data: Brand) {
   return request({
     url: '/brand/snapshots',
     method: 'post',
-    data
+    data,
   })
 }
 
@@ -48,7 +50,7 @@ export function generateImages(data: TextToImage) {
   return request({
     url: '/ai/images',
     method: 'post',
-    data
+    data,
   })
 }
 
@@ -56,7 +58,8 @@ export function collectImage(data: Image) {
   return request({
     url: '/image/images',
     method: 'post',
-    data
+    data,
+    loading: false,
   })
 }
 
@@ -77,7 +80,68 @@ export function deleteImage(id: string) {
 export function getModelParams() {
   return request({
     url: '/model/models',
-    method: 'get'
+    method: 'get',
   })
 }
 
+// SPU管理
+export function addSpu(data: Spu) {
+  return request({
+    url: '/spu/spus',
+    method: 'post',
+    data,
+  })
+}
+
+export function getSpuOptionsList() {
+  return request({
+    url: '/spu/spus',
+    method: 'get',
+    loading: false,
+  })
+}
+
+export function getSpuList(page: number, pageSize: number) {
+  return request({
+    url: `/spu/spus/${page}/${pageSize}`,
+    method: 'get',
+  })
+}
+
+export function getSpuListByCategoryId(cid: string) {
+  return request({
+    url: `/spu/spus/${cid}`,
+    method: 'get',
+    loading: false,
+  })
+}
+
+export function deleteSpu(sid: string) {
+  return request({
+    url: `/spu/spus/${sid}`,
+    method: 'delete',
+  })
+}
+
+// SKU管理
+export function addSku(data: Sku) {
+  return request({
+    url: '/sku/skus',
+    method: 'post',
+    data
+  })
+}
+
+export function getSkuList(page: number, pageSize: number) {
+  return request({
+    url: `/sku/skus/${page}/${pageSize}`,
+    method: 'get',
+  })
+}
+
+export function deleteSku(sid: string) {
+  return request({
+    url: `/sku/skus/${sid}`,
+    method: 'delete',
+  })
+}

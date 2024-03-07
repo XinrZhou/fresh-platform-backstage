@@ -3,7 +3,7 @@
   import { ElMessage, ElMessageBox } from 'element-plus';
   import VueJsonPretty from 'vue-json-pretty';
   import 'vue-json-pretty/lib/styles.css';
-  import { OPERATION_TYPE } from '@/constant/enums';
+  import { DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE } from '@/constant/enums';
   import { useSkuStore } from '@/store/user/sku';
   import { mapStatus } from '@/utils';
   import { Sku } from "@/types/type";
@@ -11,9 +11,17 @@
   import OperationDialog from './components/OperationDialog.vue';
 
   const skuStore = useSkuStore();
-  skuStore.getSkuList();
-
+  const getDataList = (page, pageSize) => {
+    if (page && pageSize) {
+      skuStore.getSkuList(page, pageSize);
+    } else {
+      skuStore.getSkuList(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+    }
+  }
+  getDataList();
   const skuListC = computed(() => skuStore.skuList);
+  const totalC = computed(() => skuStore.total);
+
   let dialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<string>('');
   let skuDataR = ref({});
@@ -21,6 +29,10 @@
   const getJsonLength = (jsonStr) => {
     const jsonArr = JSON.parse(jsonStr);
     return Object.keys(jsonArr).length;
+  }
+
+  const handlePageChange = (page, pageSize) => {
+    skuStore.getSkuList(page, pageSize);
   }
 
   const handleClose = () => {
@@ -55,6 +67,7 @@
     })
     .then(() => {
       handleClose();
+      getDataList();
       ElMessage.success('删除成功！');
     });
   }
@@ -135,6 +148,10 @@
             </template>
           </el-table-column>
         </el-table>
+        <BasePagination
+          :total="totalC"
+          @onPageChange="handlePageChange"
+        />
       </el-card>
     </el-col>
   </el-row>
@@ -143,6 +160,7 @@
     :dialogVisible="dialogVisibleR" 
     :skuData="skuDataR"
     @on-dialog-close="handleClose"
+    @getDataList="getDataList"
   />
 </template>
 

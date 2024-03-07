@@ -3,6 +3,7 @@
   import { useCategoryStore } from '@/store/admin/category';
   import { useOssStore } from '@/store/user/oss';
   import { ElMessage } from 'element-plus';
+  import { DEFAULT_PAGE, DEFAULT_PAGESIZE } from '@/constant/enums';
   import type { FormInstance } from 'element-plus';
   import { Category } from '@/types/type';
   import { OPERATION_TYPE, CATEGORY_LEVEL, CATEGORY_OPTIONS } from '@/constant/enums';
@@ -13,7 +14,7 @@
   const ossStore = useOssStore();
   
   const props = defineProps(['dialogVisible', 'categoryData', 'operationType']);
-  const emits = defineEmits(['onDialogClose', 'changeExpandedKeys']);
+  const emits = defineEmits(['onDialogClose', 'changeExpandedKeys', 'getDataList']);
   
   const ruleFormRef = ref<FormInstance>(null);
   const categoryR = ref<Category>({});
@@ -50,6 +51,7 @@
     ruleFormRef.value?.validate((valid, fields) => {
       if (valid) {
         categoryStore.addCategory(categoryR.value).then(() => {
+          emits('getDataList');
           emits('changeExpandedKeys', categoryR.value.parentId);
           emits('onDialogClose');
           ElMessage.success(`${props.operationType.title}成功！`);

@@ -29,12 +29,10 @@ export const useSupplierStore = defineStore('supplier', {
 
     async addSupplier(user: User) {
       const res = await addSupplier(user);
-      this.getSuppliers();
     },
 
     async deleteSuppiler(sid: string) {
       const res = await deleteSupplier(sid);
-      this.getSuppliers();
     }
   }
 })

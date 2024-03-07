@@ -2,19 +2,29 @@
   import { ref, computed } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { Category } from '@/types/type';
-  import { OPERATION_TYPE, CATEGORY_LEVEL } from '@/constant/enums';
+  import { DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE, CATEGORY_LEVEL } from '@/constant/enums';
   import { useCategoryStore } from '@/store/admin/category';
   import OperationDialog from './components/OperationDialog.vue';
   import BasePagination from '@/components/BasePagination.vue';
 
-  const defaultCheckedKeys = ["0"];
-  const defaultExpandedKeys = ["0"];
-  const defaultPage = 1;
-  const defaultPageSize = 20;
+  const ROOT_LEVEL = 0;
+  const defaultCheckedKeys = ref(["0"]);
+  const defaultExpandedKeys = ref(["0"]);
+  const currentNode = ref({
+    level: ROOT_LEVEL,
+  });
 
   const categoryStore = useCategoryStore();
-  categoryStore.getCategoriesTree();
-  categoryStore.getCategories(defaultPage, defaultPageSize);
+  const getDataList = () => {
+    if (currentNode.value.level === ROOT_LEVEL) {
+      categoryStore.getCategoriesTree();
+      categoryStore.getCategories(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+    } else {
+      categoryStore.getCategoriesTree();
+      categoryStore.getCategoriesByParentId(currentNode.value.id, DEFAULT_PAGE, DEFAULT_PAGESIZE);
+    }
+  }
+  getDataList();
 
   const totalC = computed(() => categoryStore.total);
   const categoryListC = computed(() => categoryStore.categoryList);
@@ -30,16 +40,19 @@
   });
 
   const handleClose = () => {
-    resetCategoryData();
     dialogVisibleR.value = false;
   }
 
   const handleAdd = () => {
-    categoryDataR.value = {
+    const isNewRoot = currentNode.value.level === ROOT_LEVEL;
+    const newCategoryData = {
       status: 1,
-      level: categoryDataR.value.level + 1,
-      parentId: categoryDataR.value.id
+      name: '',
+      level: isNewRoot ? categoryDataR.value.level + 1 : currentNode.value.level + 1,
+      parentId: isNewRoot ? categoryDataR.value.id : currentNode.value.id
     };
+
+    categoryDataR.value = newCategoryData;
     operationTypeR.value = OPERATION_TYPE.ADD;
     dialogVisibleR.value = true;
   }
@@ -58,17 +71,19 @@
       type: 'warning',
       dangerouslyUseHTMLString: true
     }).then(() => {
-      categoryStore.deleteCategory(category.id, category.parentId);
-      ElMessage.success('删除成功！');
-      categoryStore.getCategories(defaultPage, defaultPageSize);
+      categoryStore.deleteCategory(category.id, category.parentId).then(() => {
+        ElMessage.success('删除成功！');
+        getDataList();
+      })
     });
   }
 
   const handleNodeClick = (data: Category) => {
+    currentNode.value = data;
     if (categoryDataR.value.id !== data.id) {
       categoryDataR.value = data;
       if (data.level && data.level !== CATEGORY_LEVEL.THIRD) {
-        categoryStore.getCategoriesByParentId(data.id, defaultPage, defaultPageSize);
+        categoryStore.getCategoriesByParentId(data.id, DEFAULT_PAGE, DEFAULT_PAGESIZE);
       } else if (data.level === CATEGORY_LEVEL.THIRD) {
         ElMessage.success('三级类目无子类目！');
       }
@@ -81,20 +96,12 @@
 
   const handlePageChange = (page, pageSize) => {
     if (categoryDataR.value.level) {
-        categoryStore.getCategoriesByParentId(categoryDataR.value.id, page, pageSize);
+        categoryStore.getCategoriesByParentId(categoryDataR.value.id, DEFAULT_PAGE, DEFAULT_PAGESIZE);
     } else {
       categoryStore.getCategories(page, pageSize);
     }
   }
 
-  const resetCategoryData = () => {
-    categoryDataR.value = {
-      id: '0',
-      level: 0, 
-      status: 1, 
-      name: '',
-    };
-  }
 </script>
 
 <template>
@@ -120,8 +127,8 @@
           <div class="btn-wrapper">
             <el-button 
               type="primary" 
-              @click="handleEdit(categoryDataR)" 
-              :disabled="!categoryDataR.id"
+              @click="handleEdit(currentNode)" 
+              :disabled="!currentNode.level"
             >
               编辑
             </el-button>
@@ -170,6 +177,7 @@
       :categoryData="categoryDataR"
       @on-dialog-close="handleClose"
       @change-expanded-keys="handleChangeExpandedKeys"
+      @getDataList="getDataList"
     />
   </div>
 </template>

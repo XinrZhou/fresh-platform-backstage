@@ -2,11 +2,11 @@ import { computed, ref, toRaw, watch } from "vue";
 import { useRdcStore } from "@/store/admin/rdc";
 
 const rdcStore = useRdcStore();
-rdcStore.getRdcs();
+rdcStore.getRdcOptionsList();
 
-watch(() => rdcStore.rdcList, () => {
+watch(() => rdcStore.rdcOptionsList, () => {
     Object.assign(SUPPLIER_UI_SCHEMA.rdcId, {
-        'ui:enumOptions': rdcStore.rdcListM
+        'ui:enumOptions': rdcStore.rdcOptionsList
     });
 })
 

@@ -41,7 +41,6 @@ export const useCategoryStore = defineStore('category', {
 
     // 获取所有类目
     async getCategories(page: number, pageSize: number) {
-      console.log('page===', page, pageSize)
       const res = await getCategories(page, pageSize);
       const categories = res.data.data.categories;
       this.total = res.data.data.total;

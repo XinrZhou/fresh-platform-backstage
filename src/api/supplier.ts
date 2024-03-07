@@ -21,6 +21,7 @@ export function getBrandListByCategoryId(cid: string) {
   return request({
     url: `/brand/snapshots/${cid}`,
     method: 'get',
+    loading: false,
   })
 }
 

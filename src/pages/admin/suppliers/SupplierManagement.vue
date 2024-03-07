@@ -2,18 +2,15 @@
   import { ref, computed, toRaw } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { User } from '@/types/type';
-  import { OPERATION_TYPE, SHOP_STATUS } from '@/constant/enums';
+  import { DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE, SHOP_STATUS } from '@/constant/enums';
   import { useSupplierStore } from '@/store/admin/supplier';
   import { SUPPLIER_SCHEMA, SUPPLIER_UI_SCHEMA } from './schema';
   import { formatSupplierData } from '@/utils/index';
   import BaseDialog from '@/components/BaseDialog.vue';
   import BasePagination from '@/components/BasePagination.vue';
 
-  const defaultPage = 1;
-  const defaultPageSize = 20;
-
   const supplierStore = useSupplierStore();
-  supplierStore.getSuppliers(defaultPage, defaultPageSize);
+  supplierStore.getSuppliers(DEFAULT_PAGE, DEFAULT_PAGESIZE);
   const totalC = computed(() => supplierStore.total);
   const supplierList = computed(() => supplierStore.supplierList);
 
@@ -54,11 +51,11 @@
       }
     )
     .then(() => {
-      supplierStore.deleteSuppiler(supplier.id);
-    })
-    .then(() => {
-      handleClose();
+      supplierStore.deleteSuppiler(supplier.id).then(() => {
+        supplierStore.getSuppliers(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+        handleClose();
       ElMessage.success('删除成功！');
+      });
     });
   }
 
@@ -66,6 +63,7 @@
     supplierStore
       .addSupplier(formatSupplierData(supplierData))
       .then(() => {
+        supplierStore.getSuppliers(DEFAULT_PAGE, DEFAULT_PAGESIZE);
         ElMessage.success(`${operationTypeR.value.title}成功！`)
         handleClose();
       });

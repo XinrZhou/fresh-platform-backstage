@@ -1,19 +1,26 @@
 <script setup lang='ts'>
   import { ref, computed } from 'vue';
   import { RDC_SCHEMA, RDC_UI_SCHEMA } from './schema';
-  import { ElMessage, ElMessageBox } from 'element-plus'
+  import { ElMessage, ElMessageBox } from 'element-plus';
+  import { DEFAULT_PAGE, DEFAULT_PAGESIZE } from '@/constant/enums';
   import { OPERATION_TYPE } from '@/constant/enums';
   import { useRdcStore } from '@/store/admin/rdc';
   import { Rdc } from "@/types/type";
+  import BasePagination from '@/components/BasePagination.vue';
   import BaseDialog from '@/components/BaseDialog.vue';
 
   const rdcStore = useRdcStore();
-  rdcStore.getRdcs();
+  rdcStore.getRdcs(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+  const totalC = computed(() => rdcStore.total);
 
   const rdcList = computed(() => rdcStore.rdcList);
   let dialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<Object>({});
   let rdcDataR = ref<Rdc>({});
+    
+  const handlePageChange = (page, pageSize) => {
+    rdcStore.getRdcs(page, pageSize);
+  }
 
   const handleClose = () => {
     rdcDataR.value = {};
@@ -48,12 +55,14 @@
     .then(() => {
       handleClose();
       ElMessage.success('删除成功！');
+      rdcStore.getRdcs(DEFAULT_PAGE, DEFAULT_PAGESIZE);
     });
   }
 
   const handleSubmit = (rdcData: Rdc) => {
     rdcStore.addRdc(rdcData).then(() => {
       ElMessage.success(`${operationTypeR.value.title}成功！`);
+      rdcStore.getRdcs(DEFAULT_PAGE, DEFAULT_PAGESIZE);
       handleClose();
     });
   }
@@ -89,6 +98,10 @@
             </template>
           </el-table-column>
         </el-table>
+        <BasePagination
+          :total="totalC"
+          @onPageChange="handlePageChange"
+        />
       </el-card>
     </el-col>
   </el-row>

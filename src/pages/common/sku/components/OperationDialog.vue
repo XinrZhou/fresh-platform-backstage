@@ -13,7 +13,7 @@
   const props = defineProps([
     'dialogVisible', 'skuData', 'operationType'
   ]);
-  const emits = defineEmits(['onDialogClose',]);
+  const emits = defineEmits(['onDialogClose', 'getDataList']);
 
   const STEP_LIST = {
     FIRST: 1,
@@ -36,8 +36,8 @@
   })
 
   const spuStore = useSpuStore();
-  spuStore.getSpuList();
-  const spuListC = computed(() => spuStore.spuList);
+  spuStore.getSpuOptionsList();
+  const spuOptionsListC = computed(() => spuStore.spuOptionsList);
   
   const attributeStore = useAttributeStore();
   const attributeFormItemListC = computed(() => attributeStore.attributeFormItemList);
@@ -75,12 +75,14 @@
     const objectKey = attrItem.name;
     genericSpecObj[objectKey] = attrValue
   }
+  // 添加属性项
   const handleAddAttributeItem = () => {
     specialSpecList.value.push({
       name: '',
       value: ''
     })
   }
+  // 删除属性项
   const handeleDeleteAttributeItem = (index) => {
     specialSpecList.value.splice(index, 1);
   }
@@ -93,6 +95,7 @@
       toRaw(skuR.value), genericSpecObj, toRaw(specialSpecList.value)
     ).then(() => {
      ElMessage.success(`${props.operationType.title}成功！`);
+      emits('getDataList');
       emits('onDialogClose'); 
     });
   }
@@ -124,7 +127,7 @@
             @change="handleSelectSpu"
           >
             <el-option
-              v-for="item in spuListC"
+              v-for="item in spuOptionsListC"
               :key="item.id"
               :label="item.name"
               :value="item.id"

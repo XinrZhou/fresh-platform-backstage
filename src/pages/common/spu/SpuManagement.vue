@@ -9,11 +9,15 @@
   import OperationDialog from './components/OperationDialog.vue';
 
   const spuStore = useSpuStore();
-  spuStore.getSpuList(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+  const getDataList = (page, pageSize) => {
+    if (page && pageSize) {
+      spuStore.getSpuList(page, pageSize);
+    } else {
+      spuStore.getSpuList(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+    }
+  }
+  getDataList();
   const totalC = computed(() => spuStore.total);
-
-  const defaultPage = 1;
-  const defaultPageSize = 20;
 
   const spuListC = computed(() => spuStore.spuList);
   let dialogVisibleR = ref<Boolean>(false);
@@ -21,7 +25,7 @@
   let spuDataR = ref({});
 
   const handlePageChange = (page, pageSize) => {
-    spuStore.getSpuList(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+    getDataList(page, pageSize);
   }
 
   const handleClose = () => {
@@ -124,6 +128,7 @@
     :dialogVisible="dialogVisibleR" 
     :spuData="spuDataR"
     @on-dialog-close="handleClose"
+    @getDataList="getDataList"
   />
 </template>
 

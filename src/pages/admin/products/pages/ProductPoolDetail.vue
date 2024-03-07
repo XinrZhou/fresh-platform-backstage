@@ -4,24 +4,32 @@
   import { useRouter } from 'vue-router'
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { useRdcSpuStore } from '@/store/admin/rdcSpu';
+  import { DEFAULT_PAGE, DEFAULT_PAGESIZE } from '@/constant/enums';
   import { mapStatus } from '@/utils';
+  import BasePagination from '@/components/BasePagination.vue';
   import OperationDialog from '../components/OperationDialog.vue';
 
   const router = useRouter();
+  const rdcId = router.currentRoute.value.query.rdcId;
 
   const rdcSpuStore = useRdcSpuStore();
-  rdcSpuStore.getRdcSpus();
+  rdcSpuStore.getRdcSpus(DEFAULT_PAGE, DEFAULT_PAGESIZE, rdcId);
+  const totalC = computed(() => rdcSpuStore.total);
   const rdcSpuListC = computed(() => rdcSpuStore.rdcSpuList);
 
-  let dialogVisibleR = ref(false);
+  const dialogVisibleR = ref(false);
+
+  const handlePageChange = (page, pageSize) => {
+    rdcSpuStore.getRdcSpus(page, pageSize, rdcId);
+  }
 
   const handleSubmit = (formData) => {
-    const rdcId = router.currentRoute.value.query.rdcId;
     const rdcSpuList = formData.spuIds.map(spuId => {
       return { rdcId, spuId }
     })
     rdcSpuStore.addRdcSpus(rdcSpuList).then(() => {
       ElMessage.success('添加成功');
+      rdcSpuStore.getRdcSpus(DEFAULT_PAGE, DEFAULT_PAGESIZE, rdcId);
       dialogVisibleR.value = false;
     });
   }
@@ -38,6 +46,7 @@
     .then(() => {
       handleClose();
       ElMessage.success('删除成功！');
+      rdcSpuStore.getRdcSpus(DEFAULT_PAGE, DEFAULT_PAGESIZE, rdcId);
     });
   }
 
@@ -89,6 +98,10 @@
         </template>
       </el-table-column>
     </el-table>
+    <BasePagination
+      :total="totalC"
+      @onPageChange="handlePageChange"
+    />
   </el-card>
   <OperationDialog
     :dialogVisible="dialogVisibleR" 

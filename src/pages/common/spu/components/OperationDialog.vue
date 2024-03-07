@@ -1,12 +1,12 @@
 <script setup lang='ts'>
   import { computed, toRaw, ref, watch } from 'vue';
+  import router from '@/router';
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import { useCategoryStore } from '@/store/admin/category';
   import { useBrandStore } from '@/store/admin/brand';
   import { useOssStore } from '@/store/user/oss';
   import { useSpuStore } from '@/store/user/spu';
-  import { ElMessage, ElMessageBox } from 'element-plus';
   import { IMAGE_TYPE } from '@/constant/enums';
-  import router from '@/router';
   import { Spu } from '@/types/type';
   import { OPERATION_TYPE, CATEGORY_OPTIONS, CATEGORY_LEVEL } from '@/constant/enums';
   import BaseUpload from '@/components/BaseUpload.vue';
@@ -14,7 +14,7 @@
   const props = defineProps([
     'dialogVisible', 'spuData', 'operationType'
   ]);
-  const emits = defineEmits(['onDialogClose',]);
+  const emits = defineEmits(['onDialogClose', 'getDataList']);
 
   const categoryStore = useCategoryStore();
   categoryStore.getCategoriesOptions();
@@ -79,6 +79,7 @@
     spuStore.addSpu(toRaw(spuR.value)).then(() => {
       ElMessage.success(`${props.operationType.title}成功！`);
       emits('onDialogClose');
+      emits('getDataList');
     });
   }
 

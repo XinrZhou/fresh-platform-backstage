@@ -12,7 +12,8 @@ export const request = (options: any) => {
 
     // request interceptor
     service.interceptors.request.use((config: any) => {
-      showLoading();
+      const { loading = true } = config;
+      loading && showLoading();
       const token: string | null = sessionStorage.getItem('TOKEN');
       if (token) {
         config.headers['token'] = token;
@@ -24,9 +25,7 @@ export const request = (options: any) => {
 
     // response interceptor
     service.interceptors.response.use((response: any) => {
-      setTimeout(() => {
-        hideLoading();
-      }, 200);
+      hideLoading();
       if (response.data.code === 200) {
         return response;
       } else {
@@ -34,9 +33,8 @@ export const request = (options: any) => {
         return Promise.reject(new Error(response.data.message));
       }
     }, error => {
-      setTimeout(() => {
-        hideLoading();
-      }, 200);
+      hideLoading();
+      ElMessage.error(error.message);
       return Promise.reject(error);
     });
 

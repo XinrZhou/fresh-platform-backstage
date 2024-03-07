@@ -1,13 +1,20 @@
 <script setup lang='ts'>
   import { ref, computed } from 'vue';
   import { useRdcStore } from '@/store/admin/rdc';
+  import { DEFAULT_PAGE, DEFAULT_PAGESIZE } from '@/constant/enums';
   import { Rdc } from "@/types/type";
   import router from '@/router';
+  import BasePagination from '@/components/BasePagination.vue';
 
   const rdcStore = useRdcStore();
-  rdcStore.getRdcs();
+  rdcStore.getRdcs(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+  const totalC = computed(() => rdcStore.total);
 
   const rdcListC = computed(() => rdcStore.rdcList);
+
+  const handlePageChange = (page, pageSize) => {
+    rdcStore.getRdcs(page, pageSize);
+  }
 
   const goDeatilPage = (rowData) => {
     router.push({
@@ -51,6 +58,10 @@
             </template>
           </el-table-column>
         </el-table>
+        <BasePagination
+          :total="totalC"
+          @onPageChange="handlePageChange"
+        />
       </el-card>
     </el-col>
   </el-row>

@@ -22,6 +22,7 @@ export function getCategoriesOptions() {
   return request({
     url: '/category/categories/tree',
     method: 'get',
+    loading: false,
   })
 }
 
@@ -42,7 +43,8 @@ export function getCategoriesByParentId(pid: string, page: number, pageSize: num
 export function getParentLevelOptions(level: number) {
   return request({
     url: `/category/categories/${level}`,
-    method: 'get'
+    method: 'get',
+    loading: false,
   })
 }
 
@@ -50,7 +52,8 @@ export function uploadImage(data: FormData) {
   return request({
     url: '/oss/upload',
     method: 'post',
-    data
+    data,
+    loading: false,
   })
 }
 
@@ -81,6 +84,7 @@ export function getAttributeListBySpuId(sid: string) {
   return request({
     url: `/attribute/attributes/${sid}`,
     method: 'get',
+    loading: false,
   })
 }
 
@@ -111,65 +115,13 @@ export function getBrandListByCategoryId(cid: string) {
   return request({
     url: `/brand/brands/${cid}`,
     method: 'get',
+    loading: false,
   })
 }
 
 export function deleteBrand(bid: string) {
   return request({
     url: `/brand/brands/${bid}`,
-    method: 'delete',
-  })
-}
-
-// SPU管理
-export function addSpu(data: Spu) {
-  return request({
-    url: '/spu/spus',
-    method: 'post',
-    data
-  })
-}
-
-export function getSpuList(page: number, pageSize: number) {
-  return request({
-    url: `/spu/spus/${page}/${pageSize}`,
-    method: 'get',
-  })
-}
-
-export function getSpuListByCategoryId(cid: string) {
-  return request({
-    url: `/spu/spus/${cid}`,
-    method: 'get',
-  })
-}
-
-export function deleteSpu(sid: string) {
-  return request({
-    url: `/spu/spus/${sid}`,
-    method: 'delete',
-  })
-}
-
-// SKU管理
-export function addSku(data: Sku) {
-  return request({
-    url: '/sku/skus',
-    method: 'post',
-    data
-  })
-}
-
-export function getSkuList() {
-  return request({
-    url: '/sku/skus',
-    method: 'get',
-  })
-}
-
-export function deleteSku(sid: string) {
-  return request({
-    url: `/sku/skus/${sid}`,
     method: 'delete',
   })
 }
@@ -183,9 +135,9 @@ export function addRdcSpus(data:  RdcSpu[]) {
   })
 }
 
-export function getRdcSpuList() {
+export function getRdcSpuList(page: number, pageSize: number, rid: string) {
   return request({
-    url: '/rdc_spu/rdc_spus',
+    url: `/rdc_spu/rdc_spus/${rid}/${page}/${pageSize}`,
     method: 'get',
   })
 }
@@ -229,7 +181,14 @@ export function addRdc(data: Rdc) {
   })
 }
 
-export function getRdcs() {
+export function getRdcs(page: number, pageSize: number) {
+  return request({
+    url: `rdc/rdcs/${page}/${pageSize}`,
+    method: 'get'
+  })
+}
+
+export function getRdcOptionsList() {
   return request({
     url: 'rdc/rdcs',
     method: 'get'
@@ -264,6 +223,7 @@ export function getResourceUsage() {
   return request({
     url: '/cdp/cdps',
     method: 'get',
+    loading: false
   })
 }
 

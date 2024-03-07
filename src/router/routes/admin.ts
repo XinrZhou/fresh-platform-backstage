@@ -66,7 +66,7 @@ export default [{
     },
     {
       path: 'sku',
-      component: () => import('@/pages/admin/sku/SkuManagement.vue'),
+      component: () => import('@/pages/common/sku/SkuManagement.vue'),
     },
     {
       path: 'rdc',

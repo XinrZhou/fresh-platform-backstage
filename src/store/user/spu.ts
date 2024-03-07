@@ -4,13 +4,15 @@ import { ElMessage } from 'element-plus';
 import { 
   addSpu, 
   getSpuList, 
+  getSpuOptionsList,
   getSpuListByCategoryId, 
-  deleteSpu 
-} from "@/api/admin";
+  deleteSpu, 
+} from "@/api/user";
 
 interface State {
   total: number,
   spuList: object[],
+  spuOptionsList: object[]
 }
 
 export const useSpuStore = defineStore('spu', {
@@ -35,6 +37,11 @@ export const useSpuStore = defineStore('spu', {
       this.getSpuList();
     },
     // 获取SPU列表
+    async getSpuOptionsList() {
+      const res = await getSpuOptionsList();
+      this.spuOptionsList = res.data.data.spus;
+    },
+    // 获取SPU列表 -- 分页
     async getSpuList(page: number, pageSize: number) {
       const res = await getSpuList(page, pageSize);
       this.spuList = res.data.data.spus;
