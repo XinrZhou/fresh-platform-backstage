@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { Attribute, AttributeValue } from "@/types/type";
 import { ElMessage } from 'element-plus';
+import _ from 'lodash';
 import { 
   addAttribute,
   getAttributeList,
@@ -9,6 +10,7 @@ import {
 } from "@/api/admin";
 
 interface State {
+  total: number,
   attributeList: Attribute[],
   attributeFormItemList: Attribute[],
 }
@@ -16,6 +18,7 @@ interface State {
 export const useAttributeStore = defineStore('attribute', {
   state: (): State => {
     return {
+      total: 1,
       attributeList: [],
       attributeFormItemList: [],
     }
@@ -23,18 +26,18 @@ export const useAttributeStore = defineStore('attribute', {
   actions: {
     // 添加属性
     async addAttribute(attribute: Attribute) {
-      const len = attribute.categoryId.length;
-      const attributeData = {
-        ...attribute,
-        categoryId: attribute.categoryId[len - 1],
-        value: JSON.stringify(attribute.value),
-      }
-      const res = await addAttribute(attributeData);
-      this.getAttributes();
+      const categoryIds = attribute?.categoryId.map(item => item.at(-1));
+      const { categoryId, ...attributeParams } = attribute;
+      const res = await addAttribute({
+        ...attributeParams,
+        categoryIds: JSON.stringify(categoryIds),
+        value: JSON.stringify(attribute.value)
+      });
     },
     // 获取属性列表
-    async getAttributes() {
-      const res = await getAttributeList();
+    async getAttributes(page: number, pageSize: number) {
+      const res = await getAttributeList(page, pageSize);
+      this.total = res.data.data.total;
       const attributes = res.data.data.attributes;
       this.attributeList = attributes.map((item: Attribute) => {
         return {
@@ -57,7 +60,6 @@ export const useAttributeStore = defineStore('attribute', {
     // 删除属性
     async deleteAttribute(aid: string) {
       const res = await deleteAttribute(aid);
-      this.getAttributes();
     }
   }
 })

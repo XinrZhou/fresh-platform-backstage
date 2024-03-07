@@ -9,12 +9,14 @@ import {
 } from "@/api/admin";
 
 interface State {
+  total: number,
   brandList: Brand[],
 }
 
 export const useBrandStore = defineStore('brand', {
   state: (): State => {
     return {
+      total: 1,
       brandList: [],
       brandListOptions: [],
     }
@@ -29,12 +31,12 @@ export const useBrandStore = defineStore('brand', {
         categoryId,
       }
       const res = await addBrand(brandData);
-      this.getBrands();
     },
     // 获取品牌列表
-    async getBrands() {
-      const res = await getBrandList();
+    async getBrands(page: number, pageSize: number) {
+      const res = await getBrandList(page, pageSize);
       this.brandList = res.data.data.brands;
+      this.total = res.data.data.total;
     },
     // 通过类目id获取品牌列表
     async getBrandsByCategoryId(cid: string) {
@@ -44,7 +46,6 @@ export const useBrandStore = defineStore('brand', {
     // 删除品牌
     async deleteBrand(bid: string) {
       const res = await deleteBrand(bid);
-      this.getBrands();
     }
   }
 })

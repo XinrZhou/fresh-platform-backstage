@@ -1,22 +1,37 @@
 <script setup lang='ts'>
   import { ref, computed } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { OPERATION_TYPE } from '@/constant/enums';
+  import { DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE } from '@/constant/enums';
   import { useAttributeStore } from '@/store/admin/attribute';
   import { Attribute } from "@/types/type";
   import { ATTRIBUTE_SCHEMA, ATTRIBUTE_UI_SCHEMA } from './schema';
   import BaseDialog from '@/components/BaseDialog.vue';
+  import BasePagination from '@/components/BasePagination.vue';
 
   const attributeStore = useAttributeStore();
-  attributeStore.getAttributes();
-
+  const getDataList = async (page = DEFAULT_PAGE, pageSize = DEFAULT_PAGESIZE) => {
+    await attributeStore.getAttributes(page, pageSize);
+  };
+  getDataList();
+  const totalC = computed(() => attributeStore.total);
   const attributeListC = computed(() => attributeStore.attributeList);
-  let dialogVisibleR = ref<Boolean>(false);
-  let operationTypeR = ref<string>('');
-  let attributeDataR = ref({});
+
+  const dialogVisibleR = ref<Boolean>(false);
+  const operationTypeR = ref<string>('');
+  const attributeDataR = ref({
+    name: '',
+    isNumeric: 0,
+    isGeneric: 1,
+    categoryId: []
+  });
 
   const handleClose = () => {
-    attributeDataR.value = {};
+    attributeDataR.value = {
+      name: '',
+      isNumeric: 0,
+      isGeneric: 1,
+      categoryId: []
+    };
     dialogVisibleR.value = false;
   }
 
@@ -38,19 +53,24 @@
       type: 'warning',
     })
     .then(() => {
-      attributeStore.deleteAttribute(attribute.id);
-    })
-    .then(() => {
-      handleClose();
-      ElMessage.success('删除成功！');
+      attributeStore.deleteAttribute(attribute.id).then(() => {
+        handleClose();
+        getDataList();
+        ElMessage.success('删除成功！');
+      });
     });
   }
 
   const handleSubmit = (attributeData: Attribute) => {
     attributeStore.addAttribute(attributeData).then(() => {
       ElMessage.success(`${operationTypeR.value.title}成功！`);
+      getDataList();
       handleClose();
     });
+  }
+
+  const handlePageChange = (page, pageSize) => {
+    getDataList(defaultPage, defaultPageSize);
   }
 </script>
 
@@ -94,7 +114,7 @@
           <el-table-column label="属性值">
             <template #default="scope">
               <el-tag
-                v-if="scope.row.value" 
+                v-if="scope.row.value.length" 
                 v-for="(item, index) in scope.row.value" 
                 :key="index"
               >
@@ -114,6 +134,10 @@
             </template>
           </el-table-column>
         </el-table>
+        <BasePagination
+          :total="totalC"
+          @onPageChange="handlePageChange"
+        />
       </el-card>
     </el-col>
   </el-row>

@@ -73,9 +73,9 @@ export function addAttribute(data: Attribute) {
   })
 }
 
-export function getAttributeList() {
+export function getAttributeList(page: number, pageSize: number) {
   return request({
-    url: '/attribute/attributes',
+    url: `/attribute/attributes/${page}/${pageSize}`,
     method: 'get',
   })
 }
@@ -104,9 +104,9 @@ export function addBrand(data: Brand) {
   })
 }
 
-export function getBrandList() {
+export function getBrandList(page: number, pageSize: number) {
   return request({
-    url: '/brand/brands',
+    url: `/brand/brands/${page}/${pageSize}`,
     method: 'get',
   })
 }

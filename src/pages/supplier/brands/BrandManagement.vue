@@ -2,7 +2,7 @@
   import { ref, computed, toRaw, watch } from 'vue';
   import { Brand } from '@/types/type';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { OPERATION_TYPE } from '@/constant/enums';
+  import { DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE } from '@/constant/enums';
   import { formatTime, mapApprovalStatus } from '@/utils'
   import { useUserStore } from '@/store/user/user';
   import { useBrandSnapshotStore } from '@/store/user/brandSnapshot';
@@ -12,9 +12,7 @@
 
   const brandDataR = ref<Brand>({});
   const dialogVisibleR = ref<Boolean>(false);
-  let operationTypeR = ref<string>('');
-  const defaultPage = 1;
-  const defaultPageSize = 20;
+  const operationTypeR = ref<string>('');
 
   const userStore = useUserStore();
   let userId;
@@ -23,7 +21,7 @@
   const brandStore = useBrandSnapshotStore();
   watch(() => userStore.userInfo, (newValue, oldValue) => {
     userId = userInfoC.value.id;
-    brandStore.getBrandSnapshots(defaultPage, defaultPageSize, userId);
+    brandStore.getBrandSnapshots(DEFAULT_PAGE, DEFAULT_PAGESIZE, userId);
   })
   const totalC = computed(() => brandStore.total);
   const brandListC = computed(() => brandStore.brandList);
@@ -41,7 +39,7 @@
   const handleSubmit = (brandData: Brand) => {
     brandStore.addBrandSnapshot(toRaw(brandData), userId)
     .then(() => {
-      brandStore.getBrandSnapshots(defaultPage, defaultPageSize, userId);
+      brandStore.getBrandSnapshots(DEFAULT_PAGE, DEFAULT_PAGESIZE, userId);
       ElMessage.success(`${operationTypeR.value.title}成功！`);
       handleClose();
     });

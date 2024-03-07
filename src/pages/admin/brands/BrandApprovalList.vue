@@ -3,7 +3,7 @@
   import { Brand } from '@/types/type';
   import _ from 'lodash';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { OPERATION_TYPE, APPROVAL_STATUS } from '@/constant/enums';
+  import { DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE, APPROVAL_STATUS } from '@/constant/enums';
   import { formatTime, mapApprovalStatus } from '@/utils';
   import { useBrandStore } from '@/store/admin/brand';
   import { useBrandSnapshotStore } from '@/store/user/brandSnapshot';
@@ -14,13 +14,11 @@
   const brandDataR = ref<Brand>({});
   const dialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<string>('');
-  const defaultPage = 1;
-  const defaultPageSize = 20;
 
   const brandStore = useBrandStore();
 
   const brandSnapshotStore = useBrandSnapshotStore();
-  brandSnapshotStore.getBrandSnapshots(defaultPage, defaultPageSize);
+  brandSnapshotStore.getBrandSnapshots(DEFAULT_PAGE, DEFAULT_PAGESIZE);
   const totalC = computed(() => brandSnapshotStore.total);
   const brandListC = computed(() => brandSnapshotStore.brandList);
 
@@ -37,10 +35,12 @@
   const handleSubmit = (brandData: Brand) => {
     brandSnapshotStore.addBrandSnapshot(toRaw(brandData))
     .then(() => {
-      brandStore.addBrand(_.omit(toRaw(brandData), ['id', 'createTime', 'updateTime', 'status']));
-      brandSnapshotStore.getBrandSnapshots(defaultPage, defaultPageSize);
-      ElMessage.success(`审核成功！`);
-      handleClose();
+      const brandData = _.omit(toRaw(brandData), ['id', 'createTime', 'updateTime', 'status']);
+      brandStore.addBrand(brandData).then(() => {
+        brandSnapshotStore.getBrandSnapshots(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+        ElMessage.success(`审核成功！`);
+        handleClose();
+      })
     });
   }
 
@@ -51,7 +51,7 @@
   }
 
   const handlePageChange = (page, pageSize) => {
-    brandSnapshotStore.getBrandSnapshots(defaultPage, defaultPageSize);
+    brandSnapshotStore.getBrandSnapshots(page, pageSize);
   }
 
 </script>

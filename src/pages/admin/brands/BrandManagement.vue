@@ -1,17 +1,25 @@
 <script setup lang='ts'>
   import { ref, computed, toRaw } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { OPERATION_TYPE, APPROVAL_STATUS, APPROVAL_STATUS_LIST } from '@/constant/enums';
+  import { 
+    DEFAULT_PAGE,
+    DEFAULT_PAGESIZE,
+    OPERATION_TYPE, 
+    APPROVAL_STATUS, 
+    APPROVAL_STATUS_LIST 
+  } from '@/constant/enums';
   import { useBrandStore } from '@/store/admin/brand';
   import { Brand } from "@/types/type";
   import { mapStatus, formatTime } from '@/utils';
   import { BRAND_SCHEMA, BRAND_UI_SCHEMA } from './schema';
   import BaseDialog from '@/components/BaseDialog.vue';
+  import BasePagination from '@/components/BasePagination.vue';
 
   const brandStore = useBrandStore();
-  brandStore.getBrands();
-
+  brandStore.getBrands(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+  const totalC = computed(() => brandStore.total);
   const brandListC = computed(() => brandStore.brandList);
+
   let dialogVisibleR = ref<Boolean>(false);
   let approvalDialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<string>('');
@@ -62,6 +70,10 @@
       ElMessage.success(`${operationTypeR.value.title}成功！`);
       handleClose();
     });
+  }
+
+  const handlePageChange = (page, pageSize) => {
+    brandStore.getBrands(page, pageSize);
   }
 
 </script>
@@ -116,6 +128,10 @@
             </template>
           </el-table-column>
         </el-table>
+        <BasePagination
+          :total="totalC"
+          @onPageChange="handlePageChange"
+        />
       </el-card>
     </el-col>
   </el-row>

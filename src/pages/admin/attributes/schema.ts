@@ -12,8 +12,12 @@ watch(() => categoryStore.categoryTreeOptions, () => {
             props: {
                 label: 'name',
                 value: 'id', 
-                checkStrictly: true
+                multiple: true,
+                checkStrictly: true,
             },
+            clearable: true,
+            collapseTags: true,
+            collapseTagsTooltip: true,
             options: categoryTreeOptionsC.value
         }
     });

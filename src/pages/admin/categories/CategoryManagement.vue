@@ -128,7 +128,7 @@
             <el-button 
               type="primary" 
               @click="handleEdit(currentNode)" 
-              :disabled="!currentNode.level"
+              v-show="currentNode.level"
             >
               编辑
             </el-button>
@@ -138,7 +138,7 @@
             <el-button 
               type="danger" 
               @click="handleDelete(categoryDataR)" 
-              :disabled="!categoryDataR.id"
+              v-show="categoryListC.length === 0"
             >
               删除
             </el-button>
