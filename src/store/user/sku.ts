@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { Sku } from "@/types/type";
+import _ from "lodash";
 import { ElMessage } from 'element-plus';
 import { addSku, getSkuList, deleteSku } from "@/api/user";
 
@@ -17,17 +18,10 @@ export const useSkuStore = defineStore('sku', {
   },
   actions: {
     // 添加Sku
-    async addSku(sku, genericSpecObj, specialSpecList) {
-      const specialSpecObj = {};
-      specialSpecList.forEach(item => {
-        specialSpecObj[item.name] = item.value.split(',');
-      })
-      const skuData = {
-        ...sku,
-        genericSpec: JSON.stringify(genericSpecObj),
-        specialSpec: JSON.stringify(specialSpecObj),
-      }
-      const res = await addSku(skuData);
+    async addSku(sku: Sku) {
+      const res = await addSku({
+        ..._.omit(sku, ['categoryId']),
+      });
     },
     // 获取Sku列表
     async getSkuList(page: number, pageSize: number) {

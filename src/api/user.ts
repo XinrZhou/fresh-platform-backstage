@@ -93,9 +93,9 @@ export function addSpu(data: Spu) {
   })
 }
 
-export function getSpuOptionsList() {
+export function getSpuOptionsList(cid: string) {
   return request({
-    url: '/spu/spus',
+    url: `/spu/spu/${cid}`,
     method: 'get',
     loading: false,
   })

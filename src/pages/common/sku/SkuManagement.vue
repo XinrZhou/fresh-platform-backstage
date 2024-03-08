@@ -1,8 +1,6 @@
 <script setup lang='ts'>
   import { ref, computed, toRaw } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import VueJsonPretty from 'vue-json-pretty';
-  import 'vue-json-pretty/lib/styles.css';
   import { DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE } from '@/constant/enums';
   import { useSkuStore } from '@/store/user/sku';
   import { mapStatus } from '@/utils';
@@ -22,21 +20,23 @@
   const skuListC = computed(() => skuStore.skuList);
   const totalC = computed(() => skuStore.total);
 
-  let dialogVisibleR = ref<Boolean>(false);
-  let operationTypeR = ref<string>('');
-  let skuDataR = ref({});
+  const dialogVisibleR = ref<Boolean>(false);
+  const operationTypeR = ref<string>('');
+  const skuDataR = ref({ 
+    enable: 1, 
+    name: '',
+  });
 
-  const getJsonLength = (jsonStr) => {
-    const jsonArr = JSON.parse(jsonStr);
-    return Object.keys(jsonArr).length;
-  }
 
   const handlePageChange = (page, pageSize) => {
     skuStore.getSkuList(page, pageSize);
   }
 
   const handleClose = () => {
-    skuDataR.value = {};
+    skuDataR.value = { 
+      enable: 1, 
+      name: '',
+    };
     dialogVisibleR.value = false;
   }
 
@@ -85,41 +85,13 @@
         >
           添加
         </el-button>
-        <el-table :data="skuListC" stripe border max-height="600">
+        <el-table :data="skuListC" stripe border max-height="800">
           <el-table-column prop="id" label="id" width="200" />
           <el-table-column prop="name" label="sku名称" width="120"/>
-          <el-table-column prop="spuName" label="关联spu" width="120"/>
+          <el-table-column prop="spuName" label="关联spu" width="180"/>
           <el-table-column prop="stock" label="库存" width="100"/>
           <el-table-column prop="originPrice" label="原价" width="100"/>
           <el-table-column prop="discountPrice" label="折扣价" width="100"/>
-          <el-table-column label="通用属性" width="200">
-            <template #default="scope">
-              <span v-if="!getJsonLength(scope.row.genericSpec)">
-                ---
-              </span>
-              <el-scrollbar height="100px" v-else>
-                <vue-json-pretty 
-                  :deep="1"
-                  :data="JSON.parse(scope.row.genericSpec)" 
-              />
-              </el-scrollbar>
-             
-            </template>
-          </el-table-column>
-          <el-table-column label="特殊属性" width="200">
-            <template #default="scope">
-              <span v-if="!getJsonLength(scope.row.specialSpec)">
-                ---
-              </span>
-              <el-scrollbar height="100px" v-else>
-                <vue-json-pretty 
-                  :deep="1"
-                  :data="JSON.parse(scope.row.specialSpec)" 
-              />
-              </el-scrollbar>
-             
-            </template>
-          </el-table-column>
           <el-table-column label="是否有效" width="100">
             <template #default="scope">
               <el-tag 

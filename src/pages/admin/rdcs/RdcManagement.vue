@@ -50,12 +50,11 @@
       }
     )
     .then(() => {
-      rdcStore.deleteRdc(rdc.id);
-    })
-    .then(() => {
-      handleClose();
-      ElMessage.success('删除成功！');
-      rdcStore.getRdcs(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+      rdcStore.deleteRdc(rdc.id).then(() => {
+        handleClose();
+        ElMessage.success('删除成功！');
+        rdcStore.getRdcs(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+      });
     });
   }
 

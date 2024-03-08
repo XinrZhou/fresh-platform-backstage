@@ -47,13 +47,10 @@
             </template>
           </el-table-column>
           <el-table-column prop="productCount" label="商品数量" width="120" />
-          <el-table-column fixed="right" label="操作" width="100">
+          <el-table-column fixed="right" label="操作" width="80">
             <template #default="scope">
               <el-button link type="primary" size="small" @click="goDeatilPage(scope.row)">
                 详情
-              </el-button>
-              <el-button link type="primary" size="small" @click="handleDelete(scope.row)">
-                配置
               </el-button>
             </template>
           </el-table-column>

@@ -1,6 +1,8 @@
 <script setup lang='ts'>
   import { ref, computed, toRaw } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus'
+  import VueJsonPretty from 'vue-json-pretty';
+  import 'vue-json-pretty/lib/styles.css';
   import {  DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE } from '@/constant/enums';
   import { useSpuStore } from '@/store/user/spu';
   import { Spu } from "@/types/type";
@@ -20,9 +22,14 @@
   const totalC = computed(() => spuStore.total);
 
   const spuListC = computed(() => spuStore.spuList);
-  let dialogVisibleR = ref<Boolean>(false);
-  let operationTypeR = ref<string>('');
-  let spuDataR = ref({});
+  const dialogVisibleR = ref<Boolean>(false);
+  const operationTypeR = ref<string>('');
+  const spuDataR = ref({});
+
+  const getJsonLength = (jsonStr) => {
+    const jsonObj = jsonStr ? JSON.parse(jsonStr) : {};
+    return Object.keys(jsonObj).length;
+  }
 
   const handlePageChange = (page, pageSize) => {
     getDataList(page, pageSize);
@@ -78,12 +85,17 @@
         >
           添加
         </el-button>
-        <el-table :data="spuListC" style="width: 100%" stripe border max-height="600">
+        <el-table :data="spuListC" style="width: 100%" stripe border max-height="800">
           <el-table-column prop="id" label="id" width="200"/>
-          <el-table-column prop="name" label="商品名称" />
-          <el-table-column prop="name" label="商品标题" />
-          <el-table-column prop="categoryName" label="关联类目"/>
-          <el-table-column prop="brandName" label="关联品牌"/>
+          <el-table-column prop="name" label="商品标题" width="200"/>
+          <el-table-column prop="categoryName" label="关联类目" width="120"/>
+          <el-table-column label="关联品牌" width="160">
+            <template #default="scope">
+              {{
+                scope.row.brandName ?  scope.row.brandName : '---'
+              }}
+            </template>
+          </el-table-column>
           <el-table-column label="商品主图" width="130">
             <template #default="scope">
               <el-image :src="scope.row.imageUrl"/>
@@ -91,7 +103,35 @@
           </el-table-column>
           <el-table-column label="商品详情图" width="130">
             <template #default="scope">
-              <el-image :src="scope.row.detailImageUrl"/>
+              <el-scrollbar height="200px">
+                <el-image :src="scope.row.detailImageUrl"/>
+              </el-scrollbar>
+            </template>
+          </el-table-column>
+          <el-table-column label="通用属性" width="180">
+            <template #default="scope">
+              <span v-if="!getJsonLength(scope.row.genericSpec)">
+                ---
+              </span>
+              <el-scrollbar height="100px" v-else>
+                <vue-json-pretty 
+                  :deep="1"
+                  :data="JSON.parse(scope.row.genericSpec)" 
+              />
+              </el-scrollbar>
+            </template>
+          </el-table-column>
+          <el-table-column label="特殊属性" width="180">
+            <template #default="scope">
+              <span v-if="!getJsonLength(scope.row.specialSpec)">
+                ---
+              </span>
+              <el-scrollbar height="100px" v-else>
+                <vue-json-pretty 
+                  :deep="1"
+                  :data="JSON.parse(scope.row.specialSpec)" 
+              />
+              </el-scrollbar>
             </template>
           </el-table-column>
           <el-table-column label="是否上架" width="100">

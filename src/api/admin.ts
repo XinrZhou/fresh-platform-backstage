@@ -88,6 +88,14 @@ export function getAttributeListBySpuId(sid: string) {
   })
 }
 
+export function getAttributeListByCategoryId(cid: string) {
+  return request({
+    url: `/attribute/attributes/${cid}`,
+    method: 'get',
+    loading: false,
+  })
+}
+
 export function deleteAttribute(aid: string) {
   return request({
     url: `/attribute/attributes/${aid}`,
@@ -197,7 +205,7 @@ export function getRdcOptionsList() {
 
 export function deleteRdc(rid: string) {
   return request({
-    url: `/admin/rdcs/${rid}`,
+    url: `/rdc/rdcs/${rid}`,
     method: 'delete',
   })
 }

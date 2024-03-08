@@ -6,6 +6,7 @@ import {
   addAttribute,
   getAttributeList,
   getAttributeListBySpuId, 
+  getAttributeListByCategoryId,
   deleteAttribute,
 } from "@/api/admin";
 
@@ -49,6 +50,17 @@ export const useAttributeStore = defineStore('attribute', {
     // 根据SPU获取属性列表
     async getAttributeListBySpuId(sid: string) {
       const res = await getAttributeListBySpuId(sid);
+      const attributes = res.data.data.attributes;
+      this.attributeFormItemList = attributes.map((item: Attribute) => {
+        return {
+          ...item,
+          value: item.value && JSON.parse(item.value) || null
+        }
+      })
+    },
+    // 根据类目id获取属性列表
+    async getAttributeListByCategoryId(cid: string) {
+      const res = await getAttributeListByCategoryId(cid);
       const attributes = res.data.data.attributes;
       this.attributeFormItemList = attributes.map((item: Attribute) => {
         return {

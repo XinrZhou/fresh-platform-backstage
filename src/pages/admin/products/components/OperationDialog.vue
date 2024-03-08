@@ -31,7 +31,6 @@
   const onConfirm = () => {
     ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
-        console.log('submit!');
         emits('onSubmit', toRaw(formDataR.value));
       } else {
         Elmessage.error('请填写必要表单项！');

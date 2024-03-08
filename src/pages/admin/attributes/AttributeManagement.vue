@@ -70,7 +70,7 @@
   }
 
   const handlePageChange = (page, pageSize) => {
-    getDataList(defaultPage, defaultPageSize);
+    getDataList(page, pageSize);
   }
 </script>
 

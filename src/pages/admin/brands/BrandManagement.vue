@@ -57,16 +57,17 @@
       }
     )
     .then(() => {
-      brandStore.deleteBrand(brand.id);
-    })
-    .then(() => {
-      handleClose();
-      ElMessage.success('删除成功！');
+      brandStore.deleteBrand(brand.id).then(() => {
+        brandStore.getBrands(DEFAULT_PAGE, DEFAULT_PAGESIZE);
+        handleClose();
+        ElMessage.success('删除成功！');
+      });
     });
   }
 
   const handleSubmit = (brandData: Brand) => {
     brandStore.addBrand(toRaw(brandData)).then(() => {
+      brandStore.getBrands(DEFAULT_PAGE, DEFAULT_PAGESIZE);
       ElMessage.success(`${operationTypeR.value.title}成功！`);
       handleClose();
     });
