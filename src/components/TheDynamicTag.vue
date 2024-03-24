@@ -11,6 +11,9 @@ const InputRef = ref<InstanceType<typeof ElInput>>();
 
 watch(() => props.modelValue, () => {
   dynamicTags.value = props.modelValue;
+}, {
+  deep: true,
+  immediate: true
 })
 
 const handleClose = (tag: string) => {

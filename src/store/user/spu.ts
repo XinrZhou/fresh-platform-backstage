@@ -3,6 +3,7 @@ import { Spu } from "@/types/type";
 import { ElMessage } from 'element-plus';
 import { 
   addSpu, 
+  getSpuInfo,
   getSpuList, 
   getSpuOptionsList,
   getSpuListByCategoryId, 
@@ -12,7 +13,8 @@ import {
 interface State {
   total: number,
   spuList: object[],
-  spuOptionsList: object[]
+  spuOptionsList: object[],
+  spuInfo: Spu
 }
 
 export const useSpuStore = defineStore('spu', {
@@ -21,6 +23,7 @@ export const useSpuStore = defineStore('spu', {
       total: 1,
       spuList: [],
       spuOptionsList: [],
+      spuInfo: {},
     }
   },
   actions: {
@@ -36,10 +39,17 @@ export const useSpuStore = defineStore('spu', {
       const spuData = {
         ...spu, 
         categoryId,
+        tags: JSON.stringify(spu.tags),
         genericSpec: JSON.stringify(genericSpecObj),
         specialSpec: JSON.stringify(specialSpecObj),
       }
       const res = await addSpu(spuData);
+    },
+
+    // 获取SPU详情
+    async getSpuInfo(sid: string) {
+      const res = await getSpuInfo(sid);
+      this.spuInfo = res.data.data.spus;
     },
 
     // 根据类目id获取SPU列表
@@ -51,7 +61,13 @@ export const useSpuStore = defineStore('spu', {
     // 获取SPU列表 -- 分页
     async getSpuList(page: number, pageSize: number) {
       const res = await getSpuList(page, pageSize);
-      this.spuList = res.data.data.spus;
+      const spus = res.data.data.spus
+      this.spuList = spus.map((item: Spu) => {
+        return {
+          ...item,
+          tags: item.tags && JSON.parse(item.tags) || null
+        }
+      })
       this.total = this.spuList.length;
     },
 

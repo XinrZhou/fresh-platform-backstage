@@ -5,13 +5,15 @@ import { ROLE } from "@/constant/enums";
 import { login, getUserInfo } from "@/api/user";
 
 interface State {
-  userInfo: User;
+  userInfo: User,
+  role: string,
 }
 
 export const useUserStore = defineStore('user', {
   state: (): State => {
     return {
       userInfo: {},
+      role: '',
     }
   },
   actions: {
@@ -34,6 +36,7 @@ export const useUserStore = defineStore('user', {
 
     async getUserInfo() {
       const res = await getUserInfo();
+      this.role = sessionStorage.getItem('ROLE') as string;
       this.userInfo = res.data.data.user;
     }
   }

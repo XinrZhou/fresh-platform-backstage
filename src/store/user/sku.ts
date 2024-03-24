@@ -24,8 +24,8 @@ export const useSkuStore = defineStore('sku', {
       });
     },
     // 获取Sku列表
-    async getSkuList(page: number, pageSize: number) {
-      const res = await getSkuList(page, pageSize);
+    async getSkuList(page: number, pageSize: number, spuId: string) {
+      const res = await getSkuList(page, pageSize, spuId);
       this.skuList = res.data.data.skus;
       this.total = this.skuList.length;
     },

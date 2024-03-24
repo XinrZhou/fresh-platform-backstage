@@ -62,7 +62,7 @@ export interface Spu {
   categoryId?: string
   brandId?: string
   imageUrl?: string
-  detailImageUrl?: string
+  // detailImageUrl?: string
   saleStatus?: number
   description?: string
   insertTime?: string
@@ -74,12 +74,13 @@ export interface Sku {
   name?: string
   spuId?: string
   imageUrl?: string
+  detailImageUrl?: string
   stock?: number
   originPrice?: number
   discountPrice?: number
+  unit?: string
+  isDefault?: number
   enable?: number
-  genericSpec?: string
-  specialSpec?: string
   insertTime?: string
   updateTime?: string
 };

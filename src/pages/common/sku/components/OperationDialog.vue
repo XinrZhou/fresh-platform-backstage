@@ -7,7 +7,7 @@
   import { ElMessage } from 'element-plus';
   import type { FormInstance} from 'element-plus';
   import { Sku } from '@/types/type';
-  import { OPERATION_TYPE, CATEGORY_OPTIONS, CATEGORY_LEVEL } from '@/constant/enums';
+  import { OPERATION_TYPE, CATEGORY_OPTIONS, CATEGORY_LEVEL, IMAGE_TYPE, } from '@/constant/enums';
   import BaseUpload from '@/components/BaseUpload.vue';
 
   const props = defineProps([
@@ -17,9 +17,12 @@
   
   const skuStore = useSkuStore();
   const skuR = ref<Sku>({ 
+      isDeault: 1,
       enable: 1, 
       name: '',
+      unit: '',
     });
+  const imageTypeR = ref<String>('');
 
   watch(() => props.skuData, () => {
     skuR.value = props.skuData;
@@ -33,14 +36,19 @@
   const categoryTreeOptionsC = computed(() => categoryStore.categoryTreeOptions);
 
   const ossStore = useOssStore();
-  const handleImageUpload = (file) => {
+  const handleImageUpload = (file, imageType) => {
+    imageTypeR.value = imageType;
     ossStore.uploadImage(file);
   }
   const handleImageRemove = () => {
     skuR.value.imageUrl = '';
   }
   watch(() => ossStore.imageUrl, () => {
-    skuR.value.imageUrl = toRaw(ossStore.imageUrl);
+    if (imageTypeR.value === IMAGE_TYPE.MAIN) {
+      skuR.value.imageUrl = toRaw(ossStore.imageUrl);
+    } else {
+      skuR.value.detailImageUrl = toRaw(ossStore.imageUrl);
+    }
   })
 
   const ruleFormRef = ref<FormInstance>(null);
@@ -72,7 +80,6 @@
       }
     });
   }
-
 </script>
 
 <template>
@@ -84,17 +91,12 @@
     @open="onDialogOpen"
   >
     <el-form label-width="100" ref="ruleFormRef" :model="skuR">
-      <el-form-item label="SKU名称" prop="name" required >
-        <el-input v-model="skuR.name" />
-      </el-form-item>
-      <el-form-item label="是否有效" prop="enable" required >
-        <el-switch 
-          v-model="skuR.enable"
-          :active-value="1"
-          :inactive-value="0"
-        />
-      </el-form-item>
-      <el-form-item label="关联类目" prop="categoryId" required >
+      <el-form-item 
+        label="关联类目" 
+        prop="categoryId" 
+        required 
+        v-if="operationType.title === OPERATION_TYPE.ADD.title"
+      >
         <el-cascader
           v-model="skuR.categoryId"
           :options="categoryTreeOptionsC"
@@ -102,7 +104,12 @@
           @change="handleCascaderChange"
         />
       </el-form-item>
-      <el-form-item label="关联SPU" prop="spuId" required >
+      <el-form-item 
+        label="关联SPU" 
+        prop="spuId" 
+        required 
+        v-if="operationType.title === OPERATION_TYPE.ADD.title"
+      >
         <el-select
           v-model="skuR.spuId"
           :disabled="!skuR.categoryId"
@@ -115,6 +122,22 @@
             :value="item.id"
           />
         </el-select>
+      </el-form-item>
+      <el-form-item label="SKU名称" prop="name" required >
+        <el-input v-model="skuR.name" />
+      </el-form-item>
+      <el-form-item label="是否有效" prop="enable" required >
+        <el-switch 
+          v-model="skuR.enable"
+          :active-value="1"
+          :inactive-value="0"
+        />
+      </el-form-item>
+      <el-form-item label="商品描述" prop="description">
+        <el-input
+          type="textarea" 
+          v-model="skuR.description" 
+        />
       </el-form-item>
       <el-form-item label="库存" prop="stock" required >
         <el-input-number 
@@ -139,9 +162,21 @@
           :max="999999" 
         />
       </el-form-item>
-      <el-form-item label="SKU图片" prop="imageUrl" >
+      <el-form-item label="单位" prop="unit" required >
+        <el-input v-model="skuR.unit" />
+      </el-form-item>
+      <el-form-item label="商品主图" prop="imageUrl" required>
         <BaseUpload 
           :image-url="skuR.imageUrl" 
+          :image-type="IMAGE_TYPE.MAIN"
+          @on-upload="handleImageUpload"
+          @on-remove="handleImageRemove"
+        />
+      </el-form-item>
+      <el-form-item label="商品详情图" prop="detailImageUrl" required>
+        <BaseUpload 
+          :image-url="skuR.detailImageUrl" 
+          :image-type="IMAGE_TYPE.DETAIL"
           @on-upload="handleImageUpload"
           @on-remove="handleImageRemove"
         />

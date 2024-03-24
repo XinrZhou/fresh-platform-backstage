@@ -37,11 +37,6 @@ export const SUPPLIER_SIDEBAR_LIST = [
     icon: 'Goods',
   },
   {
-    name: 'SKU管理',
-    path: 'sku',
-    icon: 'PriceTag',
-  },
-  {
     name: '订单管理',
     path: 'order',
     icon: 'Tickets',
@@ -127,11 +122,6 @@ export const ADMIN_SIDEBAR_LIST = [
     name: 'SPU管理',
     path: 'spu',
     icon: 'Goods',
-  },
-  {
-    name: 'SKU管理',
-    path: 'sku',
-    icon: 'PriceTag',
   },
   {
     name: 'RDC管理',

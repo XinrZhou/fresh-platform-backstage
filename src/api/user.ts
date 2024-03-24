@@ -93,6 +93,13 @@ export function addSpu(data: Spu) {
   })
 }
 
+export function getSpuInfo(sid: string) {
+  return request({
+    url: `/spu/info/${sid}`,
+    method: 'get',
+  })
+}
+
 export function getSpuOptionsList(cid: string) {
   return request({
     url: `/spu/spu/${cid}`,
@@ -132,9 +139,9 @@ export function addSku(data: Sku) {
   })
 }
 
-export function getSkuList(page: number, pageSize: number) {
+export function getSkuList(page: number, pageSize: number, spuId: string) {
   return request({
-    url: `/sku/skus/${page}/${pageSize}`,
+    url: `/sku/skus/${spuId}/${page}/${pageSize}`,
     method: 'get',
   })
 }

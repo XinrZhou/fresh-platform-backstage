@@ -1,6 +1,7 @@
 <script setup lang='ts'>
   import { computed, toRaw, ref, watch } from 'vue';
   import router from '@/router';
+  import { useUserStore } from '@/store/user/user';
   import { useSpuStore } from '@/store/user/spu';
   import { useOssStore } from '@/store/user/oss';
   import { useBrandStore } from '@/store/admin/brand';
@@ -9,12 +10,9 @@
   import { ElMessage, ElMessageBox } from 'element-plus';
   import type { FormInstance} from 'element-plus';
   import { Spu } from '@/types/type';
-  import { 
-    IMAGE_TYPE, 
-    OPERATION_TYPE, 
-    CATEGORY_OPTIONS, 
-    CATEGORY_LEVEL 
-  } from '@/constant/enums';
+  import { ROLE } from '@/constant/enums';
+  import { IMAGE_TYPE, OPERATION_TYPE } from '@/constant/enums'; 
+  import BaseDynamicTag from '@/components/BaseDynamicTag.vue';
   import BaseUpload from '@/components/BaseUpload.vue';
 
   const props = defineProps([
@@ -37,6 +35,8 @@
 
   const ossStore = useOssStore();
   const spuStore = useSpuStore();
+  const userStore = useUserStore();
+  const roleC = computed(() => userStore.role);
 
   const attributeStore = useAttributeStore();
   const attributeFormItemListC = computed(() => attributeStore.attributeFormItemList);
@@ -54,12 +54,7 @@
   }
 
   watch(() => ossStore.imageUrl, () => {
-    if (imageTypeR.value === IMAGE_TYPE.MAIN) {
-      spuR.value.imageUrl = toRaw(ossStore.imageUrl);
-    } else {
-      spuR.value.detailImageUrl = toRaw(ossStore.imageUrl);
-    }
-    
+    spuR.value.imageUrl = toRaw(ossStore.imageUrl);
   })
 
   watch(() => props.spuData, () => {
@@ -118,28 +113,25 @@
     genericSpecObj = {};
   }
 
-  const onConfirm = () => {
+  const handleSubmit = () => {
     ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
-        addSpu();
+        spuStore.addSpu(
+          toRaw(spuR.value), genericSpecObj, toRaw(specialSpecList.value)
+        ).then(() => {
+          currentStep.value = STEP_LIST.FIRST;
+          spuR.value = {};
+          ElMessage.success(`${props.operationType.title}成功！`);
+          emits('getDataList');
+          emits('onDialogClose'); 
+        });
       } else {
         Elmessage.error('请填写必要表单项！');
       }
     });
   }
-  const handleSubmit = () => {
-    spuStore.addSpu(
-      toRaw(spuR.value), genericSpecObj, toRaw(specialSpecList.value)
-    ).then(() => {
-      currentStep.value = STEP_LIST.FIRST;
-      ElMessage.success(`${props.operationType.title}成功！`);
-      emits('getDataList');
-      emits('onDialogClose'); 
-    });
-  }
 
-  const handleImageUpload = (file, imageType) => {
-    imageTypeR.value = imageType;
+  const handleImageUpload = (file) => {
     ossStore.uploadImage(file);
   }
 
@@ -149,6 +141,10 @@
     } else {
       spuR.value.detailImageUrl = ''; 
     }
+  }
+
+  const handleTagsInput = (tagValues) => {
+    spuR.value.tags = tagValues;
   }
 
   const addBrand = () => {
@@ -166,7 +162,7 @@
   >
     <el-form label-width="100" ref="ruleFormRef" :model="spuR">
       <template v-if="currentStep === STEP_LIST.FIRST">
-        <el-form-item label="商品标题" prop="name" required >
+        <el-form-item label="SPU名称" prop="name" required >
           <el-input type="textarea" v-model="spuR.name" />
         </el-form-item>
         <el-form-item label="关联类目" prop="categoryId" required >
@@ -191,7 +187,9 @@
                 />
               </el-select>
             </el-col>
-            <el-col :span="6">
+            <el-col 
+              :span="6" 
+              v-if="roleC !== ROLE.ADMIN">
               <el-button
                 @click="addBrand" 
                 type="primary" 
@@ -209,24 +207,15 @@
             :inactive-value="0"
           />
         </el-form-item>
-        <el-form-item label="商品描述" prop="description">
-          <el-input
-            type="textarea" 
-            v-model="spuR.description" 
+        <el-form-item label="商品标签" prop="tags">
+          <BaseDynamicTag
+            :tags-value="spuR.tags"
+            @on-input="handleTagsInput" 
           />
         </el-form-item>
-        <el-form-item label="商品主图" prop="imageUrl" required>
+        <el-form-item label="SPU图片" prop="imageUrl">
           <BaseUpload 
             :image-url="spuR.imageUrl" 
-            :image-type="IMAGE_TYPE.MAIN"
-            @on-upload="handleImageUpload"
-            @on-remove="handleImageRemove"
-          />
-        </el-form-item>
-        <el-form-item label="商品详情图" prop="detailImageUrl" required>
-          <BaseUpload 
-            :image-url="spuR.detailImageUrl" 
-            :image-type="IMAGE_TYPE.DETAIL"
             @on-upload="handleImageUpload"
             @on-remove="handleImageRemove"
           />
