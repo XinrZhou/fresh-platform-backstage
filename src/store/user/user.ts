@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import router from '@/router';
 import { User } from '@/types/type';
 import { ROLE } from "@/constant/enums";
-import { login, getUserInfo, updateUserInfo } from "@/api/user";
+import { login, getUserInfo, updateUserInfo, updatePassword } from "@/api/user";
 
 interface State {
   userInfo: User,
@@ -46,6 +46,10 @@ export const useUserStore = defineStore('user', {
         name: user.name,
         avatar: user.avatar
       });
+    },
+
+    async updatePassword(pwd: string) {
+      const res = await updatePassword(pwd);
     }
   }
 })

@@ -4,13 +4,16 @@
   import { User, Phone } from '@element-plus/icons-vue';
   import { useOssStore } from '@/store/user/oss';
   import { useUserStore } from '@/store/user/user';
-  import { ElMessage } from 'element-plus';
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import type { FormInstance} from 'element-plus';
+  import ResetDialog from './components/ResetDialog.vue';
   import BaseUpload from '@/components/BaseUpload.vue';
 
   const userStore = useUserStore();
   const userInfoC = computed(() => userStore.userInfo);
   const userR = ref({});
+
+  const dialogVisibleR = ref<Boolean>(false);
   
   watch(() => userInfoC.value, () => {
     userR.value = _.cloneDeep(userInfoC.value);
@@ -22,6 +25,27 @@
   })
 
   const ruleFormRef = ref<FormInstance>(null);
+
+  const onDialogClose = () => dialogVisibleR.value = false;
+
+  const onPwdReset = (pwd: String) => {
+    ElMessageBox.confirm(
+      '确认重置您的密码？', 
+      'Tips', 
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }
+    )
+    .then(() => {
+      userStore.updatePassword(pwd).then(() => {
+        onDialogClose();
+        ElMessage.success('重置成功！');
+      });
+    })
+  }
 
   const handleImageUpload = (file) => {
     ossStore.uploadImage(file);
@@ -89,12 +113,19 @@
             >
               保存
             </el-button>
-            <el-button @click="onCancel">取消</el-button>
+            <el-button @click="dialogVisibleR = true" type="text" size="small">
+              重置密码
+            </el-button>
           </el-form-item>
         </el-form>
       </el-card>
     </el-col>
   </el-row>
+  <ResetDialog
+    :dialog-visible="dialogVisibleR" 
+    @on-dialog-close="onDialogClose"
+    @on-pwd-reset="onPwdReset"
+  />
 </template>
 
 <style scoped>

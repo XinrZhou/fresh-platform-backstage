@@ -25,10 +25,18 @@ export function getUserInfo() {
 // 更新用户信息
 export function updateUserInfo(data: User) {
   return request({
-    url: '/users/user',
+    url: '/users/info',
     method: 'post',
+    data,
   })
 } 
+
+export function updatePassword(pwd: string) {
+  return request({
+    url: `/users/password/${pwd}`,
+    method: 'put'
+  })
+}
 
 // 品牌管理
 export function addBrandSnapshot(data: Brand) {
