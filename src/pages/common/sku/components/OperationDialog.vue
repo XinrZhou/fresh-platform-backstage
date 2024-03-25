@@ -11,7 +11,7 @@
   import BaseUpload from '@/components/BaseUpload.vue';
 
   const props = defineProps([
-    'dialogVisible', 'skuData', 'operationType'
+    'dialogVisible', 'skuData', 'operationType', 'spuInfo'
   ]);
   const emits = defineEmits(['onDialogClose', 'getDataList']);
   
@@ -58,19 +58,10 @@
     skuR.value = {};
   }
 
-  const cascaderProps = {
-    label: 'name',
-    value: 'id',
-  }
-  const handleCascaderChange = (cids: string[]) => {
-    const cid = cids[cids.length - 1];
-    spuStore.getSpuOptionsList(cid);
-  }
-
   const handleSubmit = () => {
     ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
-        skuStore.addSku(toRaw(skuR.value)).then(() => {
+        skuStore.addSku({...toRaw(skuR.value), spuId: props.spuInfo.id}).then(() => {
           ElMessage.success(`${props.operationType.title}成功！`);
           emits('getDataList');
           emits('onDialogClose'); 
@@ -91,38 +82,6 @@
     @open="onDialogOpen"
   >
     <el-form label-width="100" ref="ruleFormRef" :model="skuR">
-      <el-form-item 
-        label="关联类目" 
-        prop="categoryId" 
-        required 
-        v-if="operationType.title === OPERATION_TYPE.ADD.title"
-      >
-        <el-cascader
-          v-model="skuR.categoryId"
-          :options="categoryTreeOptionsC"
-          :props="cascaderProps"
-          @change="handleCascaderChange"
-        />
-      </el-form-item>
-      <el-form-item 
-        label="关联SPU" 
-        prop="spuId" 
-        required 
-        v-if="operationType.title === OPERATION_TYPE.ADD.title"
-      >
-        <el-select
-          v-model="skuR.spuId"
-          :disabled="!skuR.categoryId"
-          @change="handleSelectSpu"
-        >
-          <el-option
-            v-for="item in spuOptionsListC"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item label="SKU名称" prop="name" required >
         <el-input v-model="skuR.name" />
       </el-form-item>

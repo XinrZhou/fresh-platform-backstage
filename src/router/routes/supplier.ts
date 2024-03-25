@@ -53,6 +53,10 @@ export default [{
     {
       path: 'promotion',
       component: () => import('@/pages/supplier/promotions/PromotionManagement.vue'),
-    }
+    },
+    {
+      path: 'userCenter',
+      component: () => import('@/pages/common/user-center/UserCenter.vue'),
+    },
   ]
 }]

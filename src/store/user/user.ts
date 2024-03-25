@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import router from '@/router';
 import { User } from '@/types/type';
 import { ROLE } from "@/constant/enums";
-import { login, getUserInfo } from "@/api/user";
+import { login, getUserInfo, updateUserInfo } from "@/api/user";
 
 interface State {
   userInfo: User,
@@ -38,6 +38,14 @@ export const useUserStore = defineStore('user', {
       const res = await getUserInfo();
       this.role = sessionStorage.getItem('ROLE') as string;
       this.userInfo = res.data.data.user;
+    },
+
+    async updateUserInfo(user: User) {
+      const res = await updateUserInfo({
+        ...this.userInfo,
+        name: user.name,
+        avatar: user.avatar
+      });
     }
   }
 })

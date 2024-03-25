@@ -22,6 +22,14 @@ export function getUserInfo() {
   })
 }
 
+// 更新用户信息
+export function updateUserInfo(data: User) {
+  return request({
+    url: '/users/user',
+    method: 'post',
+  })
+} 
+
 // 品牌管理
 export function addBrandSnapshot(data: Brand) {
   return request({

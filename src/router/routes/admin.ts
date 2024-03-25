@@ -98,5 +98,9 @@ export default [{
       path: 'resource',
       component: () => import('@/pages/admin/resources/ResourceManagement.vue'),
     },
+    {
+      path: 'userCenter',
+      component: () => import('@/pages/common/user-center/UserCenter.vue'),
+    },
   ]
 }]

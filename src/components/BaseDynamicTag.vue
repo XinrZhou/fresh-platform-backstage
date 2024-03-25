@@ -10,7 +10,7 @@
   const InputRef = ref<InstanceType<typeof ElInput>>();
   
   watch(() => props.tagsValue, () => {
-    dynamicTags.value = props.tagsValue;
+    dynamicTags.value = props.tagsValue || [];
   }, {
     deep: true,
     immediate: true

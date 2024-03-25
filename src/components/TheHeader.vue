@@ -1,10 +1,18 @@
 <script setup lang='ts'>
+  import { useRouter } from 'vue-router';
   import { ArrowDown, User, SwitchButton, userFilled } from '@element-plus/icons-vue';
+
+  const router = useRouter();
 
   const props = defineProps(['userInfo']);
   const emits = defineEmits(['logout']);
   const defaultAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
 
+  const goUserCenter = () => {
+    const baseUrl = router.currentRoute.value.path.split('/')[1];
+    router.push(`/${baseUrl}/userCenter`);
+  }
+  
   const goLogout = () => emits('logout');
 </script>
 
@@ -24,7 +32,7 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>
+          <el-dropdown-item @click="goUserCenter">
             <el-icon class="el-icon-arrow-left">
               <user />
             </el-icon>

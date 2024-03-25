@@ -179,6 +179,7 @@
     :operationType="operationTypeR" 
     :dialogVisible="dialogVisibleR" 
     :skuData="skuDataR"
+    :spuInfo="spuInfoC"
     @on-dialog-close="handleClose"
     @getDataList="getDataList"
   />

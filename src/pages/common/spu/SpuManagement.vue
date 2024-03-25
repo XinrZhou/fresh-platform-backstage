@@ -55,8 +55,9 @@
   }
 
   const goSkuPage = (spuId: number) => {
+    const baseUrl = router.currentRoute.value.path.split('/')[1];
     router.push({
-      path: '/admin/sku',
+      path: `/${baseUrl}/sku`,
       query: { 
         spuId,
       },
