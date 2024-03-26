@@ -1,6 +1,7 @@
 <script setup lang='ts'>
   import { ref } from 'vue';
   import { ElMessage } from 'element-plus';
+  import { CHAT_TIPS_LIST } from '@/constant/common';
   import { fetchEventSource } from '@microsoft/fetch-event-source';
   import { useMaterialStore } from '@/store/user/material';
   
@@ -55,28 +56,15 @@
       <el-text type="info">试试这样问我：</el-text>
     </div>
     <div class="tips-wrapper" v-if="showIntroduction">
-      <div class="tips-item">
-        <h4>商品评价</h4>
+      <div 
+        class="tips-item" 
+        v-for="(item, index) in CHAT_TIPS_LIST" 
+        :key="index"
+        @click="query = item.content"
+      >
+        <h4>{{item.title}}</h4>
         <el-text type="info" class="tips-text">
-          你擅长写商品评价：1.真实感受；2.突出产品优点 现在你需要根据以下需求写商品评价：小鲜语牛奶
-        </el-text>
-      </div>
-      <div class="tips-item">
-        <h4>商品评价</h4>
-        <el-text type="info">
-          你擅长写商品评价：1.真实感受；2.突出产品优点 现在你需要根据以下需求写商品评价：小鲜语牛奶
-        </el-text>
-      </div>
-      <div class="tips-item">
-        <h4>商品评价</h4>
-        <el-text type="info">
-          你擅长写商品评价：1.真实感受；2.突出产品优点 现在你需要根据以下需求写商品评价：小鲜语牛奶
-        </el-text>
-      </div>
-      <div class="tips-item">
-        <h4>商品评价</h4>
-        <el-text type="info">
-          你擅长写商品评价：1.真实感受；2.突出产品优点 现在你需要根据以下需求写商品评价：小鲜语牛奶
+          {{item.content}}
         </el-text>
       </div>
     </div>
@@ -140,7 +128,7 @@
   .chat-card {
     height: 80vh;
   }
-  /deep/.el-card__body {
+  :deep(.el-card__body) {
     height: 90%;
     display: flex;
     flex-direction: column;
@@ -179,7 +167,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    
+  }
+  .tips-item:hover {
+    border: 1px solid #615ced;
   }
 
   .chat-main {
@@ -237,8 +227,7 @@
   .el-icon {
     font-size: 20px;
   }
-
-  /deep/ .el-input__wrapper {
+  :deep(.el-input__wrapper) {
     box-shadow: none;
   }
 </style>

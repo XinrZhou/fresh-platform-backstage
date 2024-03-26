@@ -53,18 +53,4 @@
     width: 16px;
     margin-right: 4px;
   }
-
-  /* .is-active {
-    background-color: #ECF8F3;
-  }
-
-  .el-menu-item:hover {
-    color: #41B58E;
-    background-color: #ECF8F3;
-  }
-
-  .el-sub-menu .el-sub-menu__title:hover {
-    color: #41B58E;
-    background-color: #ECF8F3;
-  } */
 </style>
