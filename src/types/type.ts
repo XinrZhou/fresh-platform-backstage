@@ -62,7 +62,6 @@ export interface Spu {
   categoryId?: string
   brandId?: string
   imageUrl?: string
-  // detailImageUrl?: string
   saleStatus?: number
   description?: string
   insertTime?: string
@@ -142,6 +141,14 @@ export interface Model {
   type?: number
   status?: number
   params?: string
+  insertTime?: string
+  updateTime?: string
+}
+
+export interface page {
+  id?: string
+  name?: string
+  settings?: string
   insertTime?: string
   updateTime?: string
 }

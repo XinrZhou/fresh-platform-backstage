@@ -19,6 +19,8 @@ export const useOssStore = defineStore('oss', {
       const res = await uploadImage(data);
 
       this.imageUrl = res.data.data.url;
+      data.delete('file');
+      return { url: res.data.data.url };
     },
   }
 })

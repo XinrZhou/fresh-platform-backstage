@@ -256,3 +256,12 @@ export function deleteResource(rid: string) {
     method: 'delete'
   })
 }
+
+// 内容管理
+export function addPageSettings(data) {
+  return request({
+    url: '/page/pages',
+    method: 'post',
+    data
+  })
+}

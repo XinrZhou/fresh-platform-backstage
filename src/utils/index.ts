@@ -182,17 +182,14 @@ export const getInterfaceCount = (dataList) => {
     IMAGE: '/ai/image'
   };
 
-  let chatCount = 0;
-  let imageCount = 0;
-  dataList.forEach(item => {
-    if (item.path === AI_TYPE.CHAT) {
-      chatCount += 1;
-    } else {
-      imageCount += 1;
-    }
-  });
-  return { chatCount, imageCount };
+  return dataList.reduce((counts, item) => {
+    const { path, values } = item;
+    const countKey = path === AI_TYPE.CHAT ? 'chatCount' : 'imageCount';
+    counts[countKey] += parseInt(values?.success) || 0;
+    return counts;
+  }, { chatCount: 0, imageCount: 0 });
 };
+
 
 /**
  * AI绘画模型状态映射
