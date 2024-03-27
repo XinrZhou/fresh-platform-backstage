@@ -265,3 +265,10 @@ export function addPageSettings(data) {
     data
   })
 }
+
+export function getPage(name: string) {
+  return request({
+    url: `/page/pages/${name}`,
+    method: 'get',
+  })
+}

@@ -1,8 +1,28 @@
 <script setup lang='ts'>
+  import { ref, watch } from 'vue';
+  import type { UploadProps, UploadUserFile } from 'element-plus';
   import { ElMessage } from 'element-plus';
 
   const props = defineProps(['imageUrl', 'imageType'])
   const emits = defineEmits(['onUpload', 'onRemove'])
+
+  const imageList = ref<UploadUserFile[]>([]);
+  const hideUpload = ref<Boolean>(false);
+
+  watch(() => props.imageUrl, (newValue) => {
+    if (newValue) {
+      imageList.value = [{ url: newValue }];
+    } else {
+      imageList.value = [];
+    }
+  });
+  
+  const dialogImageUrl = ref('');
+  const dialogVisible = ref(false);
+
+  const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
+    hideUpload.value = uploadFiles.length > 0;
+  }
 
   const handleRequest = (data) => {
       const isPFX = data.file.type === 'image/jpeg' || data.file.type === 'image/jpg' || data.file.type === 'image/png';
@@ -13,46 +33,36 @@
       }
   }
 
-  const handleRemove = () => emits('onRemove');
+  const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
+    dialogImageUrl.value = uploadFile.url!
+    dialogVisible.value = true
+  }
+
+  const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => emits('onRemove');
 </script>
 
 <template>
   <el-upload
-    class="avatar-uploader" 
+    :file-list="imageList"
     action=""
-    :show-file-list="false"
-    :http-request="handleRequest" 
+    :limit="1"
+    :http-request="handleRequest"
+    :on-change="handleChange"
+    list-type="picture-card"
+    :on-preview="handlePictureCardPreview"
     :on-remove="handleRemove"
+    :class="{ 'hidden':hideUpload }"
   >
-    <img v-if="props.imageUrl" :src="props.imageUrl" class="avatar" />
-    <component v-else is="Plus" class="icon-wrapper" />
+    <el-icon> <Plus /></el-icon>
   </el-upload>
+  <el-dialog v-model="dialogVisible">
+    <img w-full :src="dialogImageUrl" alt="Preview Image" />
+  </el-dialog>
 </template>
 
 
-<style scoped>
-  .avatar-uploader .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
-
-  .avatar-uploader {
-    position: relative;
-    overflow: hidden;
-    width: 128px;
-    height: 128px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px dashed var(--el-border-color);
-    border-radius: 6px;
-    transition: var(--el-transition-duration-fast);
-    cursor: pointer;
-  }
-
-  .icon-wrapper {
-    width: 28px;
-    color: #8c939d;
+<style>
+  .hidden .el-upload--picture-card {
+    display: none;
   }
 </style>

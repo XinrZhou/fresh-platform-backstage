@@ -38,7 +38,6 @@
     action=""
     :http-request="handleRequest"
     list-type="picture-card"
-    :on-change="handleChange"
     :on-preview="handlePictureCardPreview"
     :on-remove="handleRemove"
     class="upload-list"

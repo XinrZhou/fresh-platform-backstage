@@ -145,7 +145,7 @@ export interface Model {
   updateTime?: string
 }
 
-export interface page {
+export interface Page {
   id?: string
   name?: string
   settings?: string
