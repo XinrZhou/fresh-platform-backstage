@@ -3,6 +3,7 @@ import App from './App.vue';
 import * as Icons from '@element-plus/icons-vue';
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
+import * as echarts from 'echarts';
 import { createPinia } from 'pinia';
 // vue json schema form 
 import VueForm from '@lljj/vue3-form-element';

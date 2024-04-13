@@ -208,3 +208,21 @@ export const mapModelParams = (params: any) => {
 
   return { styleList, resolutionList };
 }
+
+export const getCurrentDate = () => {
+  const dateCount = 15;
+  const dateArr = [];
+
+  for (let i = 0; i < dateCount; i++) {
+    dateArr.push(moment().subtract(i, 'days').format('YYYY/MM/DD'));
+  }
+  return dateArr.reverse();
+}
+
+export const getRandomCount = (number, start, end) => {
+  const numberArr = [];
+  for (let i = 0; i < number; i++) {
+    numberArr.push(Math.floor(Math.random() * (end - start + 1) + start));
+  }
+  return numberArr;
+}
