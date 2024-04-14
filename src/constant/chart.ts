@@ -3,19 +3,36 @@ import { getCurrentDate, getRandomCount } from "@/utils";
 export const headerCarts = [
   {
     title: '访问量',
-    span: 12,
+    span: 8,
     option: {
       tooltip: {
         trigger: 'axis',
         axisPointer: { type: 'cross' }
       },
-      xAxis: {
-        data: getCurrentDate(),
+      grid: {
+        left: 48,
+        top: 20,
+        right: 16,
+        bottom: 40
       },
-      yAxis: {},
+      xAxis: {
+        data: getCurrentDate(14),
+        axisLabel: {
+          interval: 0, 
+          rotate: 20 
+        }
+      },
+      yAxis: {
+        axisLabel: {
+          interval: 0,
+        },
+        min: 0,
+        minInterval: 50, 
+        splitNumber: 10
+      },
       series: [
         {
-          data: getRandomCount(15, 200, 1000),
+          data: getRandomCount(14, 200, 1000),
           type: 'line',
           smooth: true
         }
@@ -23,138 +40,211 @@ export const headerCarts = [
     }
   },
   {
-    title: '测试量',
-    span: 6,
+    title: '类目总成交额（近15日）',
+    span: 8,
+    option: {
+      tooltip: {
+        trigger: 'item',
+        formatter: '{b} : {c} ({d}%)'
+      },
+      series: [
+        {
+          type: 'pie',
+          radius: '80%',
+          center: ['50%', '50%'],
+          roseType: 'area',
+          itemStyle: {
+            borderRadius: 5
+          },
+          data: [
+            { value: 11, name: '果蔬鲜花' },
+            { value: 5, name: '海鲜水产' },
+            { value: 6, name: '粮油调味' },
+            { value: 6, name: '肉禽蛋品' },
+            { value: 6, name: '乳品烘焙' },
+            { value: 5, name: '休闲零食' },
+            { value: 7, name: '餐饮熟食' },
+            { value: 10, name: '酒水饮料' },
+            { value: 5, name: '预制菜面点' }
+          ]
+        }
+      ]
+    }
+  },
+]
+
+export const middleCharts = [
+  {
+    title: '全国RDC数量分布',
+    span: 14,
+    isMap: true,
     option:   {
+      tooltip: {
+        trigger: 'item',
+        formatter: '{b} : {c}'
+      },
+      toolbox: {
+        show: true,
+        orient: "vertical",
+        left: "right",
+        top: "center",
+        feature: {
+          dataView: { readOnly: false },
+          restore: {},
+          saveAsImage: {},
+        },
+      },
+      visualMap: {
+        min: 0,
+        max: 10,
+        // text: ['高', '低'],
+        inRange: {
+          color: ['#fff', '#79bbff','#d9ecff', '#337ecc'] // 配置颜色范围
+        },
+      },
+      geo: [
+        {
+          type: 'map',
+          map: 'china', 
+          roam: true, // 开启地图缩放、平移漫游等功能
+          zoom: 1.3, // 地图缩放级别
+          label: {
+            show: true, // 是否显示地图区域名称
+            fontSize: 10, // 地图区域名称字体大小
+            color: '#333' // 地图区域名称字体颜色
+          },
+        },
+      ],
+      series: [
+        {
+          type: 'map',
+          geoIndex: 0,
+          data: [
+            { name: "北京市", value: "8" },
+            { name: "天津市", value: '5' },
+            { name: "上海市", value: '10' },
+            { name: "重庆市", value: '4' },
+            { name: "河北省", value: '1' },
+            { name: "河南省", value: '1' },
+            { name: "云南省", value: '3' },
+            { name: "辽宁省", value: '2' },
+            { name: "黑龙江省", value: '1' },
+            { name: "湖南省", value: '2' },
+            { name: "安徽省", value: '4' },
+            { name: "山东省", value: '1' },
+            { name: "新疆维吾尔自治区", value: '0' },
+            { name: "江苏省", value: '7' },
+            { name: "浙江省", value: '8' },
+            { name: "江西省", value: '1' },
+            { name: "湖北省", value: '2' },
+            { name: "广西壮族自治区", value:'1' },
+            { name: "甘肃省", value: '1' },
+            { name: "山西省", value: '1' },
+            { name: "内蒙古自治区", value: '0' },
+            { name: "陕西省", value: '1' },
+            { name: "吉林省", value: '0' },
+            { name: "福建省", value: '3' },
+            { name: "贵州省", value: '0' },
+            { name: "广东省", value: '3' },
+            { name: "青海省", value: '0' },
+            { name: "西藏自治区", value: '0' },
+            { name: "四川省", value: '2' },
+            { name: "宁夏回族自治区", value: '0' },
+            { name: "海南省", value: '2' },
+            { name: "台湾省", value: '0' },
+            { name: "香港特别行政区", value: '2' },
+            { name: "澳门特别行政区", value: '3' }
+          ] //数据
+        }
+      ]
+    }
+  },
+  {
+    title: '类目库',
+    span: 10,
+    option: {
       tooltip: {
         trigger: 'axis',
         axisPointer: {
-          type: 'shadow',
-          label: {
-            show: true
+          type: 'cross',
+          crossStyle: {
+            color: '#999'
           }
         }
       },
-      grid: {
-        left: '4%',
-        top: '15%',
-        right: '4%',
-        bottom: '10%'
+      toolbox: {
+        feature: {
+          dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ['line', 'bar'] },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
       },
       legend: {
-        data: ['昨日总人数', '今日实时人数'],
-        top: '4%',
-        color: '#1FC3CE',
-        fontSize: 14,
-        selected: { 昨日使用率: false } // 不需要显示的设置为false
+        data: ['商品数', '成交额']
       },
-      xAxis: {
-        data: [
-          '会议室1',
-          '会议室2',
-          '会议室3',
-          '会议室4',
-          '会议室5',
-          '会议室6',
-          '会议室7',
-          '会议室8',
-          '会议室9'
-        ],
-        axisLine: {
-          show: true, //隐藏X轴轴线
-          lineStyle: {
-            color: '#eee',
-            width: 1
+      xAxis: [
+        {
+          type: 'category',
+          data: [
+            '果蔬鲜花', '海鲜水产','粮油调味', '肉禽蛋品', '乳品烘焙', '休闲零食', '餐饮熟食', '酒水饮料', '预制菜面点'
+          ],
+          axisPointer: {
+            type: 'shadow'
+          },
+          axisLabel: {
+            interval: 0, 
+            rotate: 20 
           }
-        },
-        axisTick: {
-          show: true, //隐藏X轴刻度
-          alignWithLabel: true
-        },
-        axisLabel: {
-          show: true,
-          color: '#333', //X轴文字颜色
-          fontSize: 14
         }
-      },
+      ],
       yAxis: [
         {
           type: 'value',
-          name: '人数',
-          nameTextStyle: {
-            color: '#333',
-            fontSize: 14
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              width: 1,
-              color: '#eee'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLine: {
-            show: false
-          },
+          name: '商品数',
+          min: 0,
+          max: 200,
+          interval: 40,
           axisLabel: {
-            show: true,
-            color: '#333',
-            fontSize: 14
+            formatter: '{value}'
+          }
+        },
+        {
+          type: 'value',
+          name: '成交额',
+          min: 0,
+          max: 10000,
+          interval: 500,
+          axisLabel: {
+            formatter: '{value}'
           }
         }
       ],
       series: [
         {
-          name: '昨日总人数',
+          name: '商品数',
           type: 'bar',
-          barWidth: 18,
-          itemStyle: {
-            color: {
-              type: 'linear',
-              x: 0, // 右
-              y: 1, // 下
-              x2: 0, // 左
-              y2: 0, // 上
-              colorStops: [
-                {
-                  offset: 0,
-                  color: '#F89898' // 0% 处的颜色
-                },
-                {
-                  offset: 1,
-                  color: '#F56C6C' // 100% 处的颜色
-                }
-              ]
+          tooltip: {
+            valueFormatter: function (value) {
+              return value + '件';
             }
           },
-          data: [24, 45, 43, 35, 76, 154, 86, 42, 68]
+          data: [
+            188, 164, 120, 136, 144, 65, 109, 43, 57
+          ]
         },
         {
-          name: '今日实时人数',
-          type: 'bar',
-          barWidth: 18,
-          itemStyle: {
-            color: {
-              type: 'linear',
-              x: 0, // 右
-              y: 1, // 下
-              x2: 0, // 左
-              y2: 0, // 上
-              colorStops: [
-                {
-                  offset: 0,
-                  color: '#52A7FF' // 0% 处的颜色
-                },
-                {
-                  offset: 1,
-                  color: '#409EFF' // 100% 处的颜色
-                }
-              ]
+          name: '成交额',
+          type: 'line',
+          yAxisIndex: 1,
+          tooltip: {
+            valueFormatter: function (value) {
+              return value + '元';
             }
           },
-          data: [133, 23, 114, 67, 89, 35, 67, 96, 90]
+          data: [
+            9736.8, 8200, 5500.3, 9765.4, 3784.2, 2400, 5932.7, 4253, 4892.1
+          ]
         }
       ]
     }
