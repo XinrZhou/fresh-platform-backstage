@@ -10,7 +10,7 @@ export default [{
   children: [
     {
       path: '',
-      component: () => import('@/pages/supplier/data/DataManagement.vue'),
+      component: () => import('@/pages/supplier/cdp-data/CdpManagement.vue'),
     },
     {
       path: 'comment',

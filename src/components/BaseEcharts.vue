@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ECharts, EChartsOption, init, registerMap } from 'echarts';
   import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
+  import 'echarts-wordcloud';
   import mapJson from '@/json/map.json';
 
   // 定义props

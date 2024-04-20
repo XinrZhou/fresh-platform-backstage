@@ -1,7 +1,7 @@
 <script setup lang='ts'>
   import { ref } from 'vue';
   import BaseEcharts from '@/components/BaseEcharts.vue';
-  import { topCarts, bottomCharts } from '@/constant/admin-chart.ts';
+  import { topCarts, bottomCharts } from '@/constant/supplier-chart.ts';
 
 </script>
 

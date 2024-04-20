@@ -1,6 +1,6 @@
 import { getCurrentDate, getRandomCount } from "@/utils";
 
-export const headerCarts = [
+export const topCarts = [
   {
     title: '访问量',
     span: 8,
@@ -121,7 +121,7 @@ export const headerCarts = [
   },
 ]
 
-export const middleCharts = [
+export const bottomCharts = [
   {
     title: '全国RDC数量分布',
     span: 12,
