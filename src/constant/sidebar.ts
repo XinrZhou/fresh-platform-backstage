@@ -129,11 +129,6 @@ export const ADMIN_SIDEBAR_LIST = [
     icon: 'Location',
   },
   {
-    name: '商品池',
-    path: 'product',
-    icon: 'ShoppingCartFull',
-  },
-  {
     name: '营销管理',
     path: 'marketing',
     icon: 'Coin',

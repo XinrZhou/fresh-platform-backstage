@@ -5,7 +5,7 @@
   import { DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE } from '@/constant/enums';
   import { formatTime, mapApprovalStatus } from '@/utils'
   import { useUserStore } from '@/store/user/user';
-  import { useBrandSnapshotStore } from '@/store/user/brandSnapshot';
+  import { useBrandSnapshotStore } from '@/store/supplier/brandSnapshot';
   import { BRAND_SCHEMA, BRAND_UI_SCHEMA } from './schema';
   import BaseDialog from '@/components/BaseDialog.vue';
   import BasePagination from '@/components/BasePagination.vue';
@@ -18,13 +18,13 @@
   let userId;
   const userInfoC = computed(() => userStore.userInfo);
 
-  const brandStore = useBrandSnapshotStore();
+  const brandSnapshotStore = useBrandSnapshotStore();
   watch(() => userStore.userInfo, (newValue, oldValue) => {
     userId = userInfoC.value.id;
-    brandStore.getBrandSnapshots(DEFAULT_PAGE, DEFAULT_PAGESIZE, userId);
+    brandSnapshotStore.getBrandSnapshots(DEFAULT_PAGE, DEFAULT_PAGESIZE, userId);
   })
-  const totalC = computed(() => brandStore.total);
-  const brandListC = computed(() => brandStore.brandList);
+  const totalC = computed(() => brandSnapshotStore.total);
+  const brandListC = computed(() => brandSnapshotStore.brandList);
 
   const handleAdd = () => {
     dialogVisibleR.value = true;
@@ -37,9 +37,9 @@
   }
 
   const handleSubmit = (brandData: Brand) => {
-    brandStore.addBrandSnapshot(toRaw(brandData), userId)
+    brandSnapshotStore.addBrandSnapshot(toRaw(brandData), userId)
     .then(() => {
-      brandStore.getBrandSnapshots(DEFAULT_PAGE, DEFAULT_PAGESIZE, userId);
+      brandSnapshotStore.getBrandSnapshots(DEFAULT_PAGE, DEFAULT_PAGESIZE, userId);
       ElMessage.success(`${operationTypeR.value.title}成功！`);
       handleClose();
     });
@@ -63,17 +63,17 @@
       }
     )
     .then(() => {
-      brandStore.deleteBrandSnapshot(brand.id);
+      brandSnapshotStore.deleteBrandSnapshot(brand.id);
     })
     .then(() => {
       handleClose();
-      brandStore.getBrandSnapshots(defaultPage, defaultPageSize, userId);
+      brandSnapshotStore.getBrandSnapshots(DEFAULT_PAGE, DEFAULT_PAGESIZE, userId);
       ElMessage.success('撤销成功！');
     });
   }
 
   const handlePageChange = (page, pageSize) => {
-    brandStore.getBrandSnapshots(page, pageSize, userId);
+    brandSnapshotStore.getBrandSnapshots(page, pageSize, userId);
   }
 
 </script>
@@ -104,8 +104,8 @@
         </el-row>
         <el-table :data="brandListC" style="width: 100%" stripe border max-height="600">
           <el-table-column prop="id" label="id" width="200"/>
-          <el-table-column prop="name" label="品牌名称" width="100"/>
-          <el-table-column prop="categoryName" label="关联类目" width="100"/>
+          <el-table-column prop="name" label="品牌名称" width="120"/>
+          <el-table-column prop="categoryName" label="关联类目" width="120"/>
           <el-table-column label="审核状态" width="100">
             <template #default="scope">
               <el-tag 
@@ -115,7 +115,7 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="驳回原因">
+          <el-table-column label="驳回原因" width="240">
             <template #default="scope">
               {{
                 scope.row.reason || '--'
@@ -187,4 +187,4 @@
   .table-title {
     margin-bottom: 10px;
   }
-</style>
+</style>@/store/supplier/brandSnapshot

@@ -6,12 +6,14 @@
   import { DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE, APPROVAL_STATUS } from '@/constant/enums';
   import { formatTime, mapApprovalStatus } from '@/utils';
   import { useBrandStore } from '@/store/admin/brand';
-  import { useBrandSnapshotStore } from '@/store/user/brandSnapshot';
+  import { useBrandSnapshotStore } from '@/store/supplier/brandSnapshot';
   import { BRANDSNAPSHOT_SCHEMA, BRANDSNAPSHOT_UI_SCHEMA } from './schema1';
   import BaseDialog from '@/components/BaseDialog.vue';
   import BasePagination from '@/components/BasePagination.vue';
 
-  const brandDataR = ref<Brand>({});
+  const brandDataR = ref<Brand>({
+    status: 1
+  });
   const dialogVisibleR = ref<Boolean>(false);
   let operationTypeR = ref<string>('');
 
@@ -32,10 +34,10 @@
     dialogVisibleR.value = false;
   }
 
-  const handleSubmit = (brandData: Brand) => {
-    brandSnapshotStore.addBrandSnapshot(toRaw(brandData))
+  const handleSubmit = (data: Brand) => {
+    brandSnapshotStore.addBrandSnapshot(toRaw(data))
     .then(() => {
-      const brandData = _.omit(toRaw(brandData), ['id', 'createTime', 'updateTime', 'status']);
+      const brandData = _.omit(toRaw(data), ['id', 'createTime', 'updateTime', 'status']);
       brandStore.addBrand(brandData).then(() => {
         brandSnapshotStore.getBrandSnapshots(DEFAULT_PAGE, DEFAULT_PAGESIZE);
         ElMessage.success(`审核成功！`);

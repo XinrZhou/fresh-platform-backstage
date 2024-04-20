@@ -71,18 +71,14 @@ export default [{
     {
       path: 'rdc',
       component: () => import('@/pages/admin/rdcs/RdcManagement.vue'),
-    },
-    {
-      path: 'product',
-      component: () => import('@/pages/admin/products/ProductManagement.vue'),
       children: [
         {
           path: '',
-          component: () => import('@/pages/admin/products/pages/ProductPoolTable.vue'),
+          component: () => import('@/pages/admin/rdcs/components/RdcList.vue'),
         },
         {
           path: 'detail',
-          component: () => import('@/pages/admin/products/pages/ProductPoolDetail.vue'),
+          component: () => import('@/pages/admin/rdcs/components/ProductPoolDetail.vue'),
         }
       ]
     },
