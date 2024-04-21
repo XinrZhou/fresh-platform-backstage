@@ -31,3 +31,11 @@ export function deleteBrand(bid: string) {
     method: 'delete',
   })
 }
+
+// 订单管理
+export function getOrderList() {
+  return request({
+    url: '/order/orders',
+    method: 'get',
+  })
+}

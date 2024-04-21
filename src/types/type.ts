@@ -152,3 +152,16 @@ export interface Page {
   insertTime?: string
   updateTime?: string
 }
+
+export interface Order {
+  id?: string
+  userId?: string
+  addressSpec?: string
+  orderSpec?: string
+  type?: number
+  status?: number
+  price?: number
+  remark?: string
+  insertTime?: string
+  updateTime?: string
+}

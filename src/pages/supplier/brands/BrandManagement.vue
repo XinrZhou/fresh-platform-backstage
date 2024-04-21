@@ -109,7 +109,7 @@
           <el-table-column label="审核状态" width="100">
             <template #default="scope">
               <el-tag 
-                :type="mapApprovalStatus(scope.row.status)?.type"
+                :type="mapApprovalStatus(scope.row.status)?.renderType"
               >
                 {{ mapApprovalStatus(scope.row.status)?.label }}
               </el-tag>

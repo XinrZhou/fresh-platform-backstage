@@ -118,6 +118,7 @@ export const mapStatus = (status: number) => {
  * @returns 
  */
 export const mapApprovalStatus = (status: number) => {
+  console.log('status===', status)
   const approvalStatusMap = [
     {
       label: '审核中',
