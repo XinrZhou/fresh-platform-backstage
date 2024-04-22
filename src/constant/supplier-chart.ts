@@ -195,7 +195,7 @@ export const bottomCharts = [
     }
   },
   {
-    title: '营销活动效果气泡图',
+    title: '营销活动效果',
     span: 12,
     option: {
       tooltip: {

@@ -210,11 +210,39 @@ export const mapModelParams = (params: any) => {
   return { styleList, resolutionList };
 }
 
+/**
+ * 获取近期日期
+ * @param dateCount 
+ * @returns 
+ */
 export const getCurrentDate = (dateCount) => {
   return Array.from({ length: dateCount }, (_, i) => moment().subtract(i, 'days').format('MM/DD')).reverse();
 }
 
+/**
+ * 获取随机数
+ * @param number 
+ * @param start 
+ * @param end 
+ * @returns 
+ */
 export const getRandomCount = (number, start, end) => {
   return Array.from({ length: number }, () => Math.floor(Math.random() * (end - start + 1)) + start);
+}
+
+/**
+ * 订单数据格式化
+ * @param orders 
+ * @returns 
+ */
+export const formatOrderPrams = (orders) =>  {
+  const orderList = orders.map(order => {
+    return _.omit({
+      ...order,
+      ...JSON.parse(order.skuSpec),
+      ...JSON.parse(order.addressSpec),
+    }, ['skuSpec', 'addressSpec'])
+  })
+  return orderList;
 }
 

@@ -14,9 +14,9 @@
   const totalC = computed(() => supplierStore.total);
   const supplierList = computed(() => supplierStore.supplierList);
 
-  let dialogVisibleR = ref<Boolean>(false);
-  let operationTypeR = ref<string>('');
-  let supplierDataR = ref({});
+  const dialogVisibleR = ref<Boolean>(false);
+  const operationTypeR = ref<string>('');
+  const supplierDataR = ref({});
 
   // 店铺状态映射
   const renderStatus = (status: number) => {

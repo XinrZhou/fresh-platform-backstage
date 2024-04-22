@@ -34,7 +34,6 @@ export const topCarts = [
         {
           data: getRandomCount(14, 600, 1000),
           type: 'line',
-          smooth: true
         }
       ]
     }
