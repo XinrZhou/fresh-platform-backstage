@@ -165,3 +165,16 @@ export interface Order {
   insertTime?: string
   updateTime?: string
 }
+
+export interface MarketingActivity {
+  id?: string
+  title?: string
+  tag?: string
+  content?: string
+  startTime?: string
+  endTime?: string
+  time?: string[]
+  status?: number
+  insertTime?: string
+  updateTime?: string
+}

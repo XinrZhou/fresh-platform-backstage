@@ -85,6 +85,16 @@ export default [{
     {
       path: 'marketing',
       component: () => import('@/pages/admin/marketing/MarketingManagement.vue'),
+      children: [
+        {
+          path: '',
+          component: () => import('@/pages/admin/marketing/components/MarketingPanel.vue'),
+        },
+        {
+          path: 'activity',
+          component: () => import('@/pages/admin/marketing/components/ActivityList.vue'),
+        }
+      ]
     },
     {
       path: 'model',

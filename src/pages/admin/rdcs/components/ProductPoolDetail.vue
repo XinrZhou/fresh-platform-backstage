@@ -1,7 +1,7 @@
 <script setup lang='ts'>
   import { ref, computed } from 'vue';
   import { RdcSpu} from '@/types/type';
-  import { useRouter } from 'vue-router'
+  import { useRouter } from 'vue-router';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { useRdcSpuStore } from '@/store/admin/rdcSpu';
   import { DEFAULT_PAGE, DEFAULT_PAGESIZE } from '@/constant/enums';
@@ -51,7 +51,6 @@
   }
 
   const handleClose = () => dialogVisibleR.value = false;
-  console.log('router', router)
 </script>
 
 <template>

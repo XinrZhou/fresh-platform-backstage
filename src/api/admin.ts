@@ -1,6 +1,16 @@
 import axios from 'axios';
 import { request } from '@/api/http';
-import { Attribute, Brand, Category, Rdc, Sku, Spu, RdcSpu, Model } from '@/types/type';
+import { 
+  Attribute, 
+  Brand, 
+  Category, 
+  Rdc, 
+  Sku, 
+  Spu, 
+  RdcSpu, 
+  Model, 
+  MarketingActivity 
+} from '@/types/type';
 
 // 类目管理
 export function addCategory(data: Category) {
@@ -270,5 +280,28 @@ export function getPage(name: string) {
   return request({
     url: `/page/pages/${name}`,
     method: 'get',
+  })
+}
+
+// 营销管理
+export function addMarketingActivity(data: MarketingActivity) {
+  return request({
+    url: '/marketing/activities',
+    method: 'post',
+    data
+  })
+}
+
+export function getMarketingActivityList() {
+  return request({
+    url: '/marketing/activities',
+    method: 'get',
+  })
+}
+
+export function deleteMarketingActivity(aid: string) {
+  return request({
+    url: `/marketing/activities/${aid}`,
+    method: 'delete',
   })
 }
