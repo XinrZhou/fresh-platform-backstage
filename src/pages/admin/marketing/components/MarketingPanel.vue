@@ -1,12 +1,16 @@
 <script setup lang='ts'>
-  import { activityList, chartList } from '../marketing';
+  import { ref, computed } from 'vue';
+  import { chartList } from '../marketing';
   import router from '@/router';
   import { useMarketingStore } from '@/store/admin/marketing';
   import BaseEcharts from '@/components/BaseEcharts.vue';
   import ActivityCard from './ActivityCard.vue';
 
-  const marketing = useMarketingStore();
+  const marketingStore = useMarketingStore();
+  marketingStore.getActivities();
+  const activityListC = computed(() => marketingStore.activityList);
 
+  const goActivityListPage = () => router.push('/admin/marketing/activity');
 </script>
 
 <template>
@@ -23,7 +27,7 @@
       <el-col :span="2">
         <el-button 
           type="primary" 
-          @click="() => router.push('/admin/marketing/activity')"
+          @click="goActivityListPage" 
           link
         >
           查看更多
@@ -32,11 +36,14 @@
     </el-row>
     <el-row :gutter="20">
       <el-col 
-        v-for="(item, index) in activityList.slice(0, 3)" 
+        v-for="(item, index) in activityListC.slice(0, 3)" 
         :key="index"
         :span="8" 
       >
-        <ActivityCard :activityInfo="item"/>
+        <ActivityCard 
+          :activityInfo="item"
+          @click="goActivityListPage"
+        />
       </el-col>
     </el-row>
   </el-card>

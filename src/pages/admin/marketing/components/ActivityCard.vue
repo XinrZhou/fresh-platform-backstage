@@ -21,14 +21,15 @@
         </el-text>
       </el-col>
     </el-row>
-    <el-row  justify="space-between">
+    <el-row  justify="space-between" class="info-time">
       <el-col :span="12">
         <el-text class="title" type="info">
-          截止时间
+          <el-icon><Clock /></el-icon>活动时间
         </el-text>
       </el-col>
-      <el-col :span="10">
+      <el-col :span="12">
         <el-text class="title" type="info">
+          {{ activityInfo.startTime }} ~ <br/>
           {{ activityInfo.endTime }}
         </el-text>
       </el-col>
@@ -59,5 +60,8 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+  }
+  .info-time {
+    align-items: center;
   }
 </style>
