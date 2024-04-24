@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <h3>推广管理</h3>
+  <router-view></router-view>
 </template>
 
 <style scoped>

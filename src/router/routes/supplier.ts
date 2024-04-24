@@ -53,6 +53,16 @@ export default [{
     {
       path: 'promotion',
       component: () => import('@/pages/supplier/promotions/PromotionManagement.vue'),
+      children: [
+        {
+          path: '',
+          component: () => import('@/pages/supplier/promotions/components/PromotionPanel.vue'),
+        },
+        {
+          path: 'activity',
+          component: () => import('@/pages/supplier/promotions/components/ActivityList.vue'),
+        }
+      ]
     },
     {
       path: 'userCenter',

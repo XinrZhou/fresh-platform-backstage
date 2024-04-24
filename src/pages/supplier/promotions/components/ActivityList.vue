@@ -69,6 +69,10 @@
         handleClose();
       });
   }
+
+  const handleUpdate = (page: number, pageSize: number) => {
+    supplierStore.getSuppliers(page, pageSize);
+  }
 </script>
 
 <template>
