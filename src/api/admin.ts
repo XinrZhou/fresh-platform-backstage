@@ -9,7 +9,8 @@ import {
   Spu, 
   RdcSpu, 
   Model, 
-  MarketingActivity 
+  MarketingActivity, 
+  MarketingAdvertisement
 } from '@/types/type';
 
 // 类目管理
@@ -286,7 +287,7 @@ export function getPage(name: string) {
 // 营销管理
 export function addMarketingActivity(data: MarketingActivity) {
   return request({
-    url: '/marketing/activities',
+    url: '/activity/activities',
     method: 'post',
     data
   })
@@ -294,14 +295,36 @@ export function addMarketingActivity(data: MarketingActivity) {
 
 export function getMarketingActivityList() {
   return request({
-    url: '/marketing/activities',
+    url: '/activity/activities',
     method: 'get',
   })
 }
 
 export function deleteMarketingActivity(aid: string) {
   return request({
-    url: `/marketing/activities/${aid}`,
+    url: `/activity/activities/${aid}`,
+    method: 'delete',
+  })
+}
+
+export function addMarketingAdvertisement(data: MarketingAdvertisement) {
+  return request({
+    url: '/advertisement/advertisements',
+    method: 'post',
+    data
+  })
+}
+
+export function getMarketingAdvertisementList() {
+  return request({
+    url: '/advertisement/advertisements',
+    method: 'get',
+  })
+}
+
+export function deleteMarketingAdvertisement(aid: string) {
+  return request({
+    url: `/advertisement/advertisements/${aid}`,
     method: 'delete',
   })
 }

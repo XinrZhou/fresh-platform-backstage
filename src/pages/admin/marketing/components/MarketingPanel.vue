@@ -3,12 +3,28 @@
   import { chartList } from '../marketing';
   import router from '@/router';
   import { useMarketingStore } from '@/store/admin/marketing';
+  import { OPERATION_TYPE } from '@/constant/enums';
   import BaseEcharts from '@/components/BaseEcharts.vue';
+  import BaseDialog from '@/components/BaseDialog.vue';
   import ActivityCard from './ActivityCard.vue';
+  import AdvertisementList from './AdvertisementList.vue';
 
   const marketingStore = useMarketingStore();
   marketingStore.getActivities();
   const activityListC = computed(() => marketingStore.activityList);
+  
+  const dialogVisibleR = ref<Boolean>(false);
+  const operationTypeR = ref<string>('');
+
+  const handleClose = () => dialogVisibleR.value = false; 
+  const handleAdd = () => {
+    dialogVisibleR.value = true;
+    operationTypeR.value = OPERATION_TYPE.ADD;
+  }
+  const handleEdit = () => {
+    dialogVisibleR.value = true;
+    operationTypeR.value = OPERATION_TYPE.EDIT;
+  }
 
   const goActivityListPage = () => router.push('/admin/marketing/activity');
 </script>
@@ -18,13 +34,13 @@
     <el-row class="card-header" justify="space-between" >
       <el-col :span="20">
         <h3 class="card-title">
-          <el-icon :size="size" :color="color">
-            <Bell />
+          <el-icon>
+            <Calendar />
           </el-icon>
           活动列表
         </h3>
       </el-col>
-      <el-col :span="2">
+      <el-col :span="1">
         <el-button 
           type="primary" 
           @click="goActivityListPage" 
@@ -63,6 +79,38 @@
       </el-col>
     </el-row>
   </el-card>
+  <el-card shadow="never" class="activity-card">
+    <el-row class="card-header" justify="space-between" >
+      <el-col :span="22">
+        <h3 class="card-title">
+          <el-icon :size="size" :color="color">
+            <Bell />
+          </el-icon>
+          价格列表
+        </h3>
+      </el-col>
+      <el-col :span="1">
+        <el-button 
+          type="primary" 
+          @click="handleAdd" 
+          link
+        >
+          添加
+        </el-button>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20">
+      <AdvertisementList 
+        :operationType="operationTypeR"
+        :dialogVisible="dialogVisibleR"
+        @on-dialog-open="handleAdd" 
+        @on-dialog-close="handleClose"
+        @on-edit="handleEdit"
+      />
+    </el-row>
+  </el-card>
+  <BaseDialog
+  />
 </template>
 
 <style scoped>
@@ -74,5 +122,8 @@
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+  .charts-card {
+    margin-bottom: 20px;
   }
 </style>../marketing

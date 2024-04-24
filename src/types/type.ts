@@ -178,3 +178,13 @@ export interface MarketingActivity {
   insertTime?: string
   updateTime?: string
 }
+
+export interface MarketingAdvertisement {
+  id?: string
+  title?: string
+  price?: number
+  unit?: string
+  description?: string
+  insertTime?: string
+  updateTime?: string
+}

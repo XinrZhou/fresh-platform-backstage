@@ -60,7 +60,7 @@
     });
   }
 
-  const handleSubmit = (marketingData: User) => {
+  const handleSubmit = (marketingData: MarketingActivity) => {
     marketingStore
       .addActivity(marketingData)
       .then(() => {
