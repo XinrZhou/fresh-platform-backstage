@@ -77,7 +77,7 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="驳回原因" width="180">
+          <el-table-column label="驳回原因" >
             <template #default="scope">
               {{
                 scope.row.reason || '--'

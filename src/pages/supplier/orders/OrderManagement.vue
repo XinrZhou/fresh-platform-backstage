@@ -73,7 +73,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="120">
+      <el-table-column fixed="right" label="操作" width="100">
         <template #default="scope">
           <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
             编辑

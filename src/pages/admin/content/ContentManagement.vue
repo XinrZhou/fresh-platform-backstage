@@ -75,7 +75,7 @@
 
 <template>
   <el-row justify="space-evenly">
-    <el-col :span="7">
+    <el-col :span="6">
       <el-card shadow="never" class="page-wrapper">
         <div v-for="(item, index) in HOME_MODULE_LIST" :key="index" 
              :class="'page-item ' + (currentIndex === index ? 'active' : '')"
@@ -84,7 +84,7 @@
         </div>
       </el-card>
     </el-col>
-    <el-col :span="14">
+    <el-col :span="15">
       <el-row justify="space-between" >
         <el-col :span="20">
           <h3 class="header-wrapper">页面配置</h3>
