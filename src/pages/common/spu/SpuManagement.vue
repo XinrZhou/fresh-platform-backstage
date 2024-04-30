@@ -100,7 +100,7 @@
         </el-button>
         <el-table :data="spuListC" style="width: 100%" stripe border max-height="800">
           <el-table-column prop="id" label="id" width="200"/>
-          <el-table-column prop="name" label="SPU名称" width="160"/>
+          <el-table-column prop="name" label="SPU名称" />
           <el-table-column prop="categoryName" label="关联类目" width="100"/>
           <el-table-column label="关联品牌" width="120">
             <template #default="scope">
@@ -125,7 +125,8 @@
           </el-table-column>
           <el-table-column label="商品图片" width="130">
             <template #default="scope">
-              <el-image :src="scope.row.imageUrl"/>
+              <el-image :src="scope.row.imageUrl" v-if="scope.row.imageUrl"/>
+              <el-text v-else>---</el-text>
             </template>
           </el-table-column>
           <el-table-column label="通用属性" width="180">

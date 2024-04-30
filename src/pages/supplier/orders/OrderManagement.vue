@@ -10,17 +10,16 @@
   const orderListC = computed(() => orderStore.orderList);
 
   const dialogVisibleR = ref<Boolean>(false);
-  const orderDataR = ref({});
   const expressDataR = ref({});
 
   const handleClose = () => {
-    orderDataR.value = {};
+    expressDataR.value = {};
     dialogVisibleR.value = false;
   }
 
   const handleEdit = (orderData) => {
     dialogVisibleR.value = true;
-    orderDataR.value = orderData;
+    expressDataR.value = orderData;
   }
 
   const handleSubmit = () => {
@@ -83,14 +82,26 @@
     </el-table>
     <BasePagination :total="10" />
   </el-card>
-  <el-dialog v-model="dialogVisibleR" title="发货清单" width="400">
-    <el-form :model="expressDataR">
+  <el-dialog v-model="dialogVisibleR" title="发货清单" width="500">
+    <el-form :model="expressDataR" label-width="100px">
       <el-form-item label="运单号" required >
         <el-input v-model="expressDataR.expressId" />
       </el-form-item>
+      <el-form-item label="订单编号" required >
+        <el-input v-model="expressDataR.orderId" disabled/>
+      </el-form-item>
+      <el-form-item label="收件人" required >
+        <el-input v-model="expressDataR.name" disabled/>
+      </el-form-item>
+      <el-form-item label="手机号" required >
+        <el-input v-model="expressDataR.phone" disabled/>
+      </el-form-item>
+      <el-form-item label="收件地址" required >
+        <el-input v-model="expressDataR.address" disabled />
+      </el-form-item>
     </el-form>
     <el-form-item>
-      <el-button type="primary" @click="handleSubmit">
+      <el-button type="primary" @click="handleSubmit" class="confirm-btn">
         确定
       </el-button>
     </el-form-item>
@@ -100,5 +111,10 @@
 <style scoped>
   .table-title {
     margin-bottom: 10px;
+  }
+  .confirm-btn {
+    position: absolute; 
+    right: 10px; 
+    margin-top: 10px;
   }
 </style>

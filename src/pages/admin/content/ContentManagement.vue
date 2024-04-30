@@ -113,26 +113,37 @@
               v-model="pageSettings[`themeColor${index + 1}`]" 
             />
           </el-form-item>
+          <el-form-item 
+            v-for="(item, index) in bannerList" 
+            :key="index"
+            :label="`Banner标题${index + 1}`"
+          >
+            <el-input 
+              maxlength="10"
+              show-word-limit
+              v-model="pageSettings[`bannerTitle${index + 1}`]" 
+              placeholder="请输入标题" 
+            />
+          </el-form-item>
+          <el-form-item 
+            v-for="(item, index) in bannerList" 
+            :key="index"
+            :label="`Banner内容${index + 1}`"
+          >
+            <el-input
+              type="textarea" 
+              maxlength="50"
+              show-word-limit
+              v-model="pageSettings[`bannerContent${index + 1}`]" 
+              placeholder="请输入内容" 
+            />
+          </el-form-item>
           <el-form-item label="Banner图片">
             <BaseUploadList 
               :imageList="bannerList" 
               :moduleType="MODULE_TYPE.BANNER"
               @on-upload="handleImageListUpload" 
               @on-remove="handleImageListRemove" 
-            />
-          </el-form-item>
-          <el-form-item 
-            label="胶囊Banner"
-            :class="'content-title ' + (currentIndex === 2 ? 'title-active' : '')" 
-          />
-          <el-form-item label="营销文案">
-            <el-input v-model="pageSettings.marketingText" type="textarea"/>
-          </el-form-item>
-          <el-form-item label="营销背景">
-            <BaseUpload 
-              :imageUrl="pageSettings.marketingBg"
-              @on-upload="handleImageUpload"
-              @on-remove="handleImageRemove"
             />
           </el-form-item>
           <el-form-item 

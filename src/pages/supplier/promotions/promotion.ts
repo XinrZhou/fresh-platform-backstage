@@ -1,6 +1,6 @@
 export const chartList = [
   {
-    title: '评论热词',
+    title: '营销热词',
     span: 8,
     isMap: true,
     option: {

@@ -7,7 +7,7 @@ export const request = (options: any) => {
     axios.defaults.baseURL = '/api';
 
     const service = axios.create({
-      timeout: 40000
+      timeout: 200000
     });
 
     // request interceptor
@@ -26,7 +26,7 @@ export const request = (options: any) => {
     // response interceptor
     service.interceptors.response.use((response: any) => {
       hideLoading();
-      if (response.data.code === 200) {
+      if (response.data.code === 200 || response.data.images) {
         return response;
       } else {
         ElMessage.error(response.data.message);

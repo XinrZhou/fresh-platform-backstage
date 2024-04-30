@@ -1,48 +1,67 @@
 <script setup lang='ts'>
-  import { ref, toRaw, computed } from 'vue';
+  import { ref, computed, watch } from 'vue';
+  import _ from 'lodash';
   import { ElMessage } from 'element-plus';
-  import type { FormInstance } from 'element-plus';
   import { base64ToFile } from "@/utils";
-  import { STYLE_LIST, RESOLUTION_LIST } from '@/constant/common'
+  import { BASE_MODEL, SAMPLER, BASE_PARAMS, LORA_MODEL } from './model';
   import { useOssStore } from '@/store/user/oss';
   import { useUserStore } from '@/store/user/user';
   import { useMaterialStore } from '@/store/user/material';
-  
-  const materialStore = useMaterialStore();
-  materialStore.getModelParams();
-  const modelParamsC = computed(() => materialStore.modelParams);
-  const imageBase64C = computed(() => materialStore.imageBase64); 
+  import BaseUpload from '@/components/BaseUpload.vue';
+  import { request } from '@/api/http';
 
   const ossStore = useOssStore();
   const imageUrlC = computed(() => ossStore.imageUrl);
+  const materialStore = useMaterialStore();
 
   const userStore = useUserStore();
   const userInfoC = computed(() => userStore.userInfo);
 
-  const formDataR = ref({})
-  const ruleFormRef = ref<FormInstance>(null);
+  const text2ImageParamsR = ref({});
+  const controlnetImage = ref('');
+  const imageListR = ref([]);
   const showCollectBtn = ref<Boolean>(true);
+
+  watch(() => ossStore.imageUrl, () => {
+    controlnetImage.value = ossStore.imageUrl;
+  });
+
+  const handleImageUpload = (file: File) => {
+    ossStore.uploadImage(file);
+  };
   
-  const generateImages = () => {
-    ruleFormRef.value?.validate((valid, fields) => {
-      if (valid) {
-        materialStore.generateImages(toRaw(formDataR.value));
-        showCollectBtn.value = true;
-      }
-    }) 
+  const handleImageRemove = () => {
+    text2ImageParamsR.alwayson_scripts.controlnet.args[0].image = '';
+  };
+
+  const handleSubmit = async() => {
+    !showCollectBtn && (showCollectBtn.value = true);
+    const params = {
+      ...BASE_PARAMS,
+      ...text2ImageParamsR.value,
+    }
+    params.override_settings.sd_model_checkpoint = text2ImageParamsR.value.baseModel;
+    // params.alwayson_scripts.controlnet.args[0].image = controlnetImage.value
+    const res = await request({
+      url: `http://sd.fc-stable-diffusion-plus.1579841646926354.cn-hangzhou.fc.devsapp.net/sdapi/v1/txt2img`,
+      method: 'post',
+      data: _.omit(params, ['baseModel', 'lora'])
+    })
+    imageListR.value = res.data.images;
   }
 
-  const collectImage = () => {
-    const imageFile = base64ToFile(imageBase64C.value, "file");
+  const collectImage = (imageBase64: String) => {
+    const imageFile = base64ToFile(imageBase64, "file");
     ossStore.uploadImage(imageFile).then(() => {
       const userId = userInfoC.value.id;
       materialStore.collectImage({
         userId,
         imageUrl: imageUrlC.value,
-        prompt: formDataR.value.prompt,
+        prompt: text2ImageParamsR.value.prompt,
+        negativePrompt: text2ImageParamsR.value.negative_prompt,
+        params: JSON.stringify(text2ImageParamsR.value),
       }).then(() => {
         ElMessage.success("收藏成功!");
-        showCollectBtn.value = false;
       })
     }).catch(() => {
       ElMessage.error("收藏失败，请稍后重试!")
@@ -51,142 +70,209 @@
 </script>
 
 <template>
-  <el-card class="container-wrapper">
-    <h3>智能文生图</h3>
+  <el-card class="container-wrapper" shadow="never">
     <el-form 
-      :model="formDataR" 
-      ref="ruleFormRef"
-      label-width="120" 
-      class="form-container"
+      :model="text2ImageParamsR" 
+      label-width="auto" 
+      label-position="top"
     >
-      <el-form-item label="提示词示例">
-        <div class="description-wrapper">
-          盛开的玫瑰花 | 通用写实风格
-        </div>
-        <div class="description-wrapper">
-          一幅优美的风景画，风吹麦浪，阳光照射在麦田中 | 插图
-        </div>
-      </el-form-item>
-      <el-form-item label="正向提示词" prop="prompt" required>
-        <el-input 
-          v-model="formDataR.prompt" 
-          size="large"
+      <el-row class="flex-wrapper">
+        <el-col :span="5">
+          <el-form-item label="Stable Diffusion模型(ckpt)">
+            <el-select
+              v-model="text2ImageParamsR.baseModel"
+              placeholder="sd_model_checkpoint"
+              style="width: 240px"
+            >
+              <el-option
+                v-for="item in BASE_MODEL"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="3">
+          <el-button 
+            type="primary" 
+            class="form-button"
+            @click="handleSubmit"
+          >
+            生成
+          </el-button>
+        </el-col>
+      </el-row>
+      <el-form-item label="正向提示词">
+        <el-input
+          v-model="text2ImageParamsR.prompt"
+          type="textarea"
+          :maxlength="500"
+          show-word-limit
+          placeholder="Prompt"
         />
       </el-form-item>
-      <el-form-item label="反向提示词" prop="negativePrompt">
-        <el-input 
-          v-model="formDataR.negativePrompt"
-          size="large"
+      <el-form-item label="反向提示词">
+        <el-input
+          v-model="text2ImageParamsR.negative_prompt"
+          type="textarea"
+          maxlength="500"
+          show-word-limit
+          placeholder="Negative Prompt"
         />
       </el-form-item>
-      <el-form-item label="绘画风格" prop="styles" required >
-        <el-radio-group v-model="formDataR.styles" size="large">
-          <el-radio-button 
-            v-for="item in modelParamsC.styleList" 
-            :key="item.value" 
-            :label="item.value" 
-          >
-            {{item.label}}
-          </el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="尺寸与分辨率" prop="resultConfig">
-        <el-radio-group v-model="formDataR.resultConfig" size="large">
-          <el-radio-button
-            v-for="item in modelParamsC.resolutionList"
-            :key="item.value"
-            :label="item.value"
-          >
-            {{ item.label }}
-          </el-radio-button>
-        </el-radio-group>
-      </el-form-item>
+      <el-row class="flex-wrapper">
+        <el-col :span="12">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="采样器">
+                <el-select
+                  v-model="text2ImageParamsR.sampler_name"
+                  placeholder="Sampler"
+                  style="width: 240px"
+                >
+                  <el-option
+                    v-for="item in SAMPLER"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="采样步数">
+                <el-slider
+                  v-model="text2ImageParamsR.steps"
+                  max="150"
+                  show-input
+                  :show-input-controls="false"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row class="flex-wrapper">
+            <el-col :span="12">
+              <el-form-item label="宽度">
+                <el-input-number 
+                  style="width: 240px;"
+                  v-model="text2ImageParamsR.width" 
+                  :min="64" 
+                  :max="2048"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              X
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="高度">
+                <el-input-number 
+                  style="width: 240px;"
+                  v-model="text2ImageParamsR.height" 
+                  :min="64" 
+                  :max="2048"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row class="flex-wrapper">
+            <el-col :span="8">
+              <el-form-item label="ControlNet 线稿">
+                <BaseUpload 
+                  :image-url="text2ImageParamsR.canny" 
+                  @on-upload="handleImageUpload"
+                  @on-remove="handleImageRemove"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="16">
+              <el-form-item label="生成次数">
+                <el-slider
+                  v-model="text2ImageParamsR.batch_size"
+                  :min="1"
+                  :max="50"
+                  show-input
+                  :show-input-controls="false"
+                />
+              </el-form-item>
+              <el-form-item label="每次数量">
+                <el-slider
+                  v-model="text2ImageParamsR.n_iter"
+                  :min="1"
+                  :max="10"
+                  show-input
+                  :show-input-controls="false"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-form-item label="LoRA模型">
+            <el-radio-group 
+              v-model="text2ImageParamsR.lora" 
+            >
+              <el-radio-button
+                v-for="item in LORA_MODEL" 
+                :label="item.label" 
+                :value="item.value" 
+              />
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <div class="image-container">
+            <div
+              class="image-wrapper" 
+              v-if="imageListR.length"
+              v-for="(image, index) in imageListR"
+            >
+              <img  
+                :src="`data:image/jpeg;base64,${image}`" 
+                class="image-item"
+                alt="图片生成失败，请重试..."
+              />
+              <el-button 
+                type="primary" 
+                class="collect-btn" 
+                @click="collectImage(image)"
+              >
+                收藏
+              </el-button>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
     </el-form>
-    <el-row>
-      <el-col :span="24">
-        <el-button 
-          type="primary" 
-          size="large" 
-          class="submit-btn"
-          @click="generateImages"
-        >
-          生成图片
-        </el-button>
-        <el-text type="info">
-          图片由AI随机生成，请及时保存/收藏至素材库
-        </el-text>
-      </el-col>
-    </el-row>
-    <template v-if="imageBase64C">
-      <div class="picture-container"> 
-        <img  
-          :src="`data:image/jpeg;base64,${imageBase64C}`" 
-          class="image-wrapper"
-          alt="图片生成失败，请重试..."
-        />
-      </div>
-      <el-button 
-        type="primary" 
-        class="collect-btn" 
-        @click="collectImage"
-        v-show="showCollectBtn"
-      >
-        收藏
-      </el-button>
-    </template>
   </el-card>
 </template>
 
 <style scoped>
-  .container-wrapper {
-    height: auto;
+  .flex-wrapper {
+    justify-content: space-between;
+    align-items: center;
   }
-  .el-card__body {
-    height: auto;
-    margin-bottom: 10px;
+  .form-button {
+    width: 160px;
+    height: 40px;
   }
-  .form-container {
-    margin-top: 16px;
-  }
-  .description-wrapper {
-    margin-right: 10px;
-    padding-left: 12px;
-    padding-right: 12px;
-    border-radius: 16px;
-    font-size: 12px;
-    background-color: #c6e6e8;
-  }
-  .el-radio-button {
-    margin-right: 16px;
-    margin-bottom: 8px;
-    border: none;
-    border-left: 1px solid #dcdfe6;
-  }
-  .el-radio-button:first-child {
-    border-left: none;
-  }
-  .el-radio-button__original-radio {
-    border: none;
-  }
-  .submit-btn {
-    margin-top: -6px;
-    margin-left: 16px;
-    margin-right: 6px;
-  }
-  .picture-container {
-    margin-top: 16px;
+  .image-container {
     width: 100%;
-    height: 460px;
-    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
   }
   .image-wrapper {
-    width: 100%;
-    height: 100%;
+    margin: 10px;
+  }
+  .image-item {
+    width: 260px;
+    height: 'auto';
     object-fit: contain;
   }
   .collect-btn {
-    margin-top: 2px;
-    margin-left: 16px;
-    margin-right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 10px;
   }
 </style>

@@ -47,7 +47,8 @@
   <el-card>
     <el-table :data="imageListC">
       <el-table-column prop="id" label="id" width="200" />
-      <el-table-column prop="prompt" label="图片描述"/>
+      <el-table-column prop="prompt" label="正向提示词"/>
+      <el-table-column prop="negativePrompt" label="反向提示词" />
       <el-table-column label="图片" width="200">
         <template #default="scope">
           <el-image :src="scope.row.imageUrl" />

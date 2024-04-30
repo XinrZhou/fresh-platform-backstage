@@ -104,15 +104,15 @@ export const topCarts = [
             borderRadius: 5
           },
           data: [
-            { value: 207910, name: '果蔬鲜花', itemStyle: { color: '#779fc6' } },
-            { value: 86797.5, name: '粮油调味', itemStyle: { color: '#7fc6d3' } },
-            { value: 216835.8, name: '海鲜水产', itemStyle: { color: '#aee0e4' } },
-            { value: 103307, name: '乳品烘焙', itemStyle: { color: '#e3f5f6' } },
-            { value: 73289.6, name: '休闲零食', itemStyle: { color: '#fff0dc' } },
-            { value: 120476, name: '餐饮熟食', itemStyle: { color: '#fed297' } },
-            { value: 96794, name: '酒水饮料', itemStyle: { color: '#fcb461' } },
-            { value: 159805.5, name: '肉禽蛋品', itemStyle: { color: '#f7935a' } },
-            { value: 156944.4, name: '预制菜面点', itemStyle: { color: '#e76254' } }
+            { value: 207910, name: '果蔬鲜花', itemStyle: { color: '#ba7fb5' } },
+            { value: 86797.5, name: '粮油调味', itemStyle: { color: '#f7cbdf' } },
+            { value: 216835.8, name: '海鲜水产', itemStyle: { color: '#b3d46b' } },
+            { value: 103307, name: '乳品烘焙', itemStyle: { color: '#f9b063' } },
+            { value: 73289.6, name: '休闲零食', itemStyle: { color: '#80b1d2' } },
+            { value: 120476, name: '餐饮熟食', itemStyle: { color: '#f1807' } },
+            { value: 96794, name: '酒水饮料', itemStyle: { color: '#bcb9d8' } },
+            { value: 159805.5, name: '肉禽蛋品', itemStyle: { color: '#faf5b5' } },
+            { value: 156944.4, name: '预制菜面点', itemStyle: { color: '#8cd0c3' } }
           ]
         }
       ]
@@ -234,7 +234,7 @@ export const bottomCharts = [
           stack: 'total',
           barwidth: '60%',
           name: '果蔬鲜花',
-          color: '#779fc6'
+          color: '#ba7fb5'
         },
         {
           data: [6289.5, 5567, 5455, 7680, 7923, 5045, 6167, 5289.5, 5411, 5533.5, 8655.5, 4778, 4801, 6735.6],
@@ -242,7 +242,7 @@ export const bottomCharts = [
           stack: 'total',
           barwidth: '60%',
           name: '粮油调味',
-          color: '#7fc6d3'
+          color: '#f7cbdf'
         },
         {
           data: [12488, 13488, 14488, 16488, 14988, 13988, 16988, 12988, 14988, 16488, 17488, 13488, 11488, 10488, 14488],
@@ -250,7 +250,7 @@ export const bottomCharts = [
           stack: 'total',
           barwidth: '60%',
           name: '海鲜水产',
-          color: '#aee0e4'
+          color: '#b3d46b'
         },
         {
           data: [7292, 7961, 6293, 8628.6, 7965, 5962, 6960, 7630, 9294, 7959, 5626, 6295, 5237, 6297],
@@ -258,7 +258,7 @@ export const bottomCharts = [
           stack: 'total',
           barwidth: '60%',
           name: '乳品烘焙',
-          color: '#e3f5f6'
+          color: '#f9b063'
         },
         {
           data: [7518.6, 7686.6, 4796, 5241.3, 6964, 5132, 6854.7, 6577.4, 4300.1, 4022.8, 5745.5, 5468.2, 3073.5, 4960],
@@ -266,7 +266,7 @@ export const bottomCharts = [
           stack: 'total',
           barwidth: '60%',
           name: '休闲零食',
-          color: '#fff0dc'
+          color: '#80b1d2'
         },
         {
           data: [8458, 6643, 7230, 6475, 9367, 9542, 7750, 9126, 8071, 6814, 10505, 7038, 9380, 7059],
@@ -274,7 +274,7 @@ export const bottomCharts = [
           stack: 'total',
           barwidth: '60%',
           name: '餐饮熟食',
-          color: '#fed297'
+          color: '#f18072'
         },
         {
           data: [7033, 8725.6, 7504, 8697.5, 6330, 6134, 7143, 5676.5, 8069, 7643.2, 9440, 6504.5, 7147, 1063.5],
@@ -282,7 +282,7 @@ export const bottomCharts = [
           stack: 'total',
           barwidth: '60%',
           name: '酒水饮料',
-          color: '#fcb461'
+          color: '#bcb9d8'
         },
         {
           data: [8414, 9414, 10414, 12414, 13414, 14414, 10514, 12514, 13514, 12414, 10414, 9414, 8414, 11414],
@@ -290,7 +290,7 @@ export const bottomCharts = [
           stack: 'total',
           barwidth: '60%',
           name: '肉禽蛋品',
-          color: '#f7935a'
+          color: '#faf5b5'
         },
         {
           data: [9210, 10210, 12210, 10710, 12710, 11710, 10310, 11310, 12310, 13310, 12210, 11210, 9210, 8210],
@@ -298,7 +298,7 @@ export const bottomCharts = [
           stack: 'total',
           barwidth: '60%',
           name: '预制菜面点',
-          color: '#e76254'
+          color: '#8cd0c3'
         },
       ]
     }

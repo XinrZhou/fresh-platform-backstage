@@ -2,6 +2,7 @@
   import { ref, computed } from 'vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { Category } from '@/types/type';
+  import { formatTime } from '@/utils'
   import { DEFAULT_PAGE, DEFAULT_PAGESIZE, OPERATION_TYPE, CATEGORY_LEVEL } from '@/constant/enums';
   import { useCategoryStore } from '@/store/admin/category';
   import OperationDialog from './components/OperationDialog.vue';
@@ -147,10 +148,24 @@
             <el-table-column prop="id" label="类目id" width="200"/>
             <el-table-column prop="level" label="类目层级" />
             <el-table-column prop="name" label="类目名称" />
-            <el-table-column fixed="right" label="类目图片" width="130">
+            <el-table-column label="类目图片" width="130">
               <template #default="scope">
                 <el-image v-if="scope.row.imageUrl" :src="scope.row.imageUrl" />
                 <span v-else>---</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="创建时间" width="180">
+              <template #default="scope">
+                <span>
+                  {{ formatTime(scope.row.insertTime) }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column label="修改时间" width="180">
+              <template #default="scope">
+                <span>
+                  {{ formatTime(scope.row.updateTime) }}
+                </span>
               </template>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="120">
