@@ -17,7 +17,7 @@
   const userStore = useUserStore();
   const userInfoC = computed(() => userStore.userInfo);
 
-  const text2ImageParamsR = ref({});
+  const text2ImageParamsR = ref(BASE_PARAMS);
   const controlnetImage = ref('');
   const imageListR = ref([]);
   const showCollectBtn = ref<Boolean>(true);
@@ -37,7 +37,6 @@
   const handleSubmit = async() => {
     !showCollectBtn && (showCollectBtn.value = true);
     const params = {
-      ...BASE_PARAMS,
       ...text2ImageParamsR.value,
     }
     params.override_settings.sd_model_checkpoint = text2ImageParamsR.value.baseModel;
@@ -54,12 +53,23 @@
     const imageFile = base64ToFile(imageBase64, "file");
     ossStore.uploadImage(imageFile).then(() => {
       const userId = userInfoC.value.id;
+      const { 
+        prompt, 
+        negative_prompt, 
+        sampler_name,
+        seed,
+        cfg_scale,
+        steps 
+      } = text2ImageParamsR.value;
       materialStore.collectImage({
         userId,
         imageUrl: imageUrlC.value,
-        prompt: text2ImageParamsR.value.prompt,
-        negativePrompt: text2ImageParamsR.value.negative_prompt,
-        params: JSON.stringify(text2ImageParamsR.value),
+        prompt: prompt,
+        negativePrompt: negative_prompt,
+        samplerName: sampler_name,
+        seed: seed,
+        cfgScale: cfg_scale,
+        steps: steps,
       }).then(() => {
         ElMessage.success("收藏成功!");
       })
@@ -152,41 +162,30 @@
             </el-col>
           </el-row>
           <el-row class="flex-wrapper">
-            <el-col :span="12">
+            <el-col :span="10">
               <el-form-item label="宽度">
                 <el-input-number 
                   style="width: 240px;"
                   v-model="text2ImageParamsR.width" 
+                  controls-position="right"
                   :min="64" 
                   :max="2048"
                 />
               </el-form-item>
-            </el-col>
-            <el-col :span="4">
-              X
-            </el-col>
-            <el-col :span="8">
               <el-form-item label="高度">
                 <el-input-number 
                   style="width: 240px;"
-                  v-model="text2ImageParamsR.height" 
+                  v-model="text2ImageParamsR.height"
+                  controls-position="right" 
                   :min="64" 
                   :max="2048"
                 />
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row class="flex-wrapper">
-            <el-col :span="8">
-              <el-form-item label="ControlNet 线稿">
-                <BaseUpload 
-                  :image-url="text2ImageParamsR.canny" 
-                  @on-upload="handleImageUpload"
-                  @on-remove="handleImageRemove"
-                />
-              </el-form-item>
+            <el-col :span="2">
+              <el-divider direction="vertical" />
             </el-col>
-            <el-col :span="16">
+            <el-col :span="12">
               <el-form-item label="生成次数">
                 <el-slider
                   v-model="text2ImageParamsR.batch_size"
@@ -203,6 +202,35 @@
                   :max="10"
                   show-input
                   :show-input-controls="false"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row class="flex-wrapper">
+            <el-col :span="6">
+              <el-form-item label="ControlNet 线稿">
+                <BaseUpload 
+                  :image-url="text2ImageParamsR.canny" 
+                  @on-upload="handleImageUpload"
+                  @on-remove="handleImageRemove"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="18">
+              <el-form-item label="提示词引导系数">
+                <el-slider
+                  v-model="text2ImageParamsR.cfg_scale"
+                  :min="1"
+                  :max="50"
+                  show-input
+                  :show-input-controls="false"
+                />
+              </el-form-item>
+              <el-form-item label="图像生成种子">
+                <el-input-number 
+                  style="width: 100%;"
+                  v-model="text2ImageParamsR.seed"
+                  controls-position="right"
                 />
               </el-form-item>
             </el-col>

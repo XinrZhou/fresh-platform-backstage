@@ -63,11 +63,12 @@ export const chartList = [
             borderRadius: 5
           },
           data: [
-            { value: 65, name: '母亲节' },
-            { value: 46, name: '龙虾节' },
-            { value: 76, name: '鲜果' },
-            { value: 38, name: '冷饮' },
-            { value: 100, name: '五一大促' },
+            { value: 100, name: "超级年货节" },
+            { value: 86, name: "棕情端午" },
+            { value: 60, name: "龙虾节" },
+            { value: 80, name: "鲜果节" },
+            { value: 85, name: "五一大促" },
+            { value: 70, name: "清明雨上" }
           ]
         }
       ]

@@ -140,7 +140,7 @@ export const BASE_PARAMS = {
   sampler_name: "Euler a",
   batch_size: 1,
   n_iter: 1,
-  steps: 50,
+  steps: 20,
   cfg_scale: 7,
   width: 512,
   height: 512,
@@ -156,7 +156,7 @@ export const BASE_PARAMS = {
   s_tmin: 0,
   s_noise: 0,
   override_settings: {
-     sd_model_checkpoint: "chilloutmix_NiPrunedFp16Fix.safetensors"
+     sd_model_checkpoint: "natureMix_natureM20.safetensors"
   },
   override_settings_restore_afterwards: true,
   refiner_checkpoint: "",
@@ -175,32 +175,31 @@ export const BASE_PARAMS = {
   hr_sampler_name: "",
   hr_prompt: "",
   hr_negative_prompt: "",
-  sampler_index: "Euler",
+  sampler_index: "Euler a",
   script_name: "",
   script_args: [],
   send_images: true,
   save_images: false,
   alwayson_scripts: {
-    // controlnet: {
-    //   args: [
-    //     {
-    //       enabled: true,
-    //       model: "ControlNet v1.1.410",
-    //       module: "tile_resample",
-    //       weight: 0.85,
-    //       image: "",
-    //       resize_mode: 0,
-    //       lowvram: true,
-    //       processor_res: 0,
-    //       threshold_a: 0,
-    //       threshold_b: 0,  
-    //       guidance_end: 0.75,
-    //       guidance_start: 0.25,    
-    //       pixel_perfect: false, 
-    //       control_mode: 0
-
-    //     }
-    //   ]
-    // }
+    controlnet: {
+      args: [
+        {
+          enabled: true,
+          model: "ControlNet v1.1.410",
+          module: "tile_resample",
+          weight: 0.85,
+          image: "",
+          resize_mode: 0,
+          lowvram: true,
+          processor_res: 0,
+          threshold_a: 0,
+          threshold_b: 0,  
+          guidance_end: 0.75,
+          guidance_start: 0.25,    
+          pixel_perfect: false, 
+          control_mode: 0
+        }
+      ]
+    }
   }
 }

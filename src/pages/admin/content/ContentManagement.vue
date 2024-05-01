@@ -176,10 +176,10 @@
   }
   .active {
     position: relative;
-    border: 2px solid  #ff4135;
+    border: 2px solid  rgb(157,163,205);
   }
   .page-item:hover {
-    border: 1px solid  #ff4135;
+    border: 1px solid  rgb(157,163,205);
     cursor: pointer;
   }
   :deep(.el-color-picker) {
@@ -203,6 +203,6 @@
     font-size: 16px;
   }
   :deep(.title-active .el-form-item__label) {
-    color: #ff4135;
+    color: rgb(157,163,205);
   }
 </style>

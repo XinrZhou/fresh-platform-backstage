@@ -58,7 +58,7 @@ const handleInputConfirm = () => {
       @blur="handleInputConfirm"
     />
     <el-button v-else class="button-new-tag" size="small" @click="showInput">
-      + 添加属性值
+      + 添加值
     </el-button>
   </div>
 </template>

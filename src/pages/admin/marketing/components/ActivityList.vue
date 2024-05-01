@@ -94,7 +94,7 @@
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="content" label="内容" width="240" />
+            <el-table-column prop="content" label="内容"/>
             <el-table-column prop="startTime" label="开始时间" width="180" />
             <el-table-column prop="endTime" label="结束时间" width="180" />
             <el-table-column label="是否有效" width="100">

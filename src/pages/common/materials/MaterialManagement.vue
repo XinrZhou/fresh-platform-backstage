@@ -49,6 +49,10 @@
       <el-table-column prop="id" label="id" width="200" />
       <el-table-column prop="prompt" label="正向提示词"/>
       <el-table-column prop="negativePrompt" label="反向提示词" />
+      <el-table-column prop="samplerName" label="采样器" width="120" />
+      <el-table-column prop="seed" label="图像生成种子" width="120" />
+      <el-table-column prop="cfgScale" label="提示词引导系数" width="140" />
+      <el-table-column prop="steps" label="步长"width="100" />
       <el-table-column label="图片" width="200">
         <template #default="scope">
           <el-image :src="scope.row.imageUrl" />

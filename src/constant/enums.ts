@@ -84,7 +84,7 @@ export const MODEL_TYPE = {
   IMAGE: {
     label: '绘画模型',
     value: 0,
-    modelName: '腾讯AI绘画模型',
+    modelName: 'Stable Diffusion',
   },
   CHAT: {
     label: '大语言模型', 
@@ -97,7 +97,7 @@ export const MODEL_LIST = [
   {
     label: '绘画模型',
     value: 0,
-    modelName: '腾讯AI绘画模型',
+    modelName: 'Stable Diffusion',
   },
   {
     label: '大语言模型', 

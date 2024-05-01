@@ -23,26 +23,9 @@
     dialogVisibleR.value = false;
   }
 
-  const handleEdit = (data: MarketingActivity) => {
-    dialogVisibleR.value = true;
-    operationTypeR.value = OPERATION_TYPE.EDIT;
-    marketingDataR.value = {
-      ...data,
-      time: [
-        data.startTime,
-        data.endTime
-      ]
-    };
-  }
-
-  const handleAdd = () => {
-    dialogVisibleR.value = true;
-    operationTypeR.value = OPERATION_TYPE.ADD;
-  }
-
-  const handleDelete = (activity: MarketingActivity) => {
+  const handleSubmit = (activity: MarketingActivity) => {
     ElMessageBox.confirm(
-      `是否确认删除<span style="color:red">${activity.title}</span>活动？`, 
+      `是否确认报名<span style="color:red">${activity.title}</span>活动？`, 
       'Tips', 
       {
         confirmButtonText: 'OK',
@@ -51,27 +34,7 @@
         dangerouslyUseHTMLString: true
       }
     )
-    .then(() => {
-      marketingStore.deleteActivity(activity.id).then(() => {
-        marketingStore.getActivities();
-        handleClose();
-      ElMessage.success('删除成功！');
-      });
-    });
-  }
-
-  const handleSubmit = (marketingData: MarketingActivity) => {
-    marketingStore
-      .addActivity(marketingData)
-      .then(() => {
-        marketingStore.getActivities();
-        ElMessage.success(`${operationTypeR.value.title}成功！`)
-        handleClose();
-      });
-  }
-
-  const handleUpdate = (page: number, pageSize: number) => {
-    supplierStore.getSuppliers(page, pageSize);
+    .then(() =>  ElMessage.success('删除成功！'));
   }
 </script>
 
@@ -80,14 +43,6 @@
     <el-row gutter="24">
       <el-col :span="24">
         <el-card>
-          <el-button
-            class="operation-btn"
-            type="primary"
-            :underline="false"
-            @click="handleAdd"
-          >
-            添加
-          </el-button>
           <el-table :data="activityListC" style="width: 100%" stripe border max-height="600">
             <el-table-column prop="id" label="活动id" width="200"/>
             <el-table-column prop="title" label="标题" width="200"/>
@@ -98,25 +53,13 @@
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="content" label="内容" width="240" />
+            <el-table-column prop="content" label="内容"/>
             <el-table-column prop="startTime" label="开始时间" width="180" />
             <el-table-column prop="endTime" label="结束时间" width="180" />
-            <el-table-column label="是否有效" width="100">
+            <el-table-column fixed="right" label="操作" width="80">
               <template #default="scope">
-                <el-tag 
-                  :type="mapStatus(scope.row.status)?.type"
-                >
-                  {{ mapStatus(scope.row.status)?.name }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column fixed="right" label="操作" width="120">
-              <template #default="scope">
-                <el-button link type="primary" size="small" @click="handleEdit(scope.row)">
-                  编辑
-                </el-button>
-                <el-button link type="primary" size="small" @click="handleDelete(scope.row)">
-                  删除
+                <el-button link type="primary" size="small" @click="handleSubmit(scope.row)">
+                  报名
                 </el-button>
               </template>
             </el-table-column>

@@ -19,7 +19,7 @@
   const handleClose = () => dialogVisibleR.value = false; 
   const handleOpen = () => dialogVisibleR.value = true;
 
-  const goActivityListPage = () => router.push('/supplier/marketing/activity');
+  const goActivityListPage = () => router.push('/supplier/promotion/activity');
 </script>
 
 <template>

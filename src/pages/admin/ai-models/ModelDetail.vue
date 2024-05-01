@@ -116,7 +116,7 @@
     <div class="table-wrapper">
       <p class="table-title">历史版本</p>
       <el-table :data="modelListC" style="width: 100%">
-        <el-table-column prop="version" label="版本号" width="180" />
+        <el-table-column prop="version" label="版本号" width="150" />
         <el-table-column prop="params" label="模型参数" />
         <el-table-column prop="address" label="创建时间" width="180">
           <template #default="scope">
