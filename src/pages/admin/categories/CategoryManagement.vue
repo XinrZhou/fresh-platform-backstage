@@ -117,7 +117,7 @@
             :expand-on-click-node="false"
             :default-expanded-keys="defaultExpandedKeys"
             :default-checked-keys="defaultCheckedKeys"
-            accordion
+   
             highlight-current
             @node-click="handleNodeClick"
           />

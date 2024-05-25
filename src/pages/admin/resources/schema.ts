@@ -31,9 +31,9 @@ export const RESOURCE_UI_SCHEMA = {
     type: {
         'ui:widget': 'SelectWidget',
         'ui:enumOptions': MODEL_LIST,
-        'ui:options': {
-            disabled: true
-        }
+        // 'ui:options': {
+        //     disabled: true
+        // }
     },
     description: {
         'ui:widget': 'el-input',

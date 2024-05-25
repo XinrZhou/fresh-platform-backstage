@@ -68,7 +68,7 @@
   const handleSubmit = (resourceData: Resource) => {
     resourceStore.addResource(resourceData).then(() => {
       ElMessage.success(`${OPERATION_TYPE.ADD.title}成功！`);
-      resourceStore.getResources(defaultPage, defaultPageSize, resourceTypeR.value);
+      resourceStore.getResources(defaultPage, defaultPageSize, selectedModelC.value.value);
       handleClose();
     });
   }
@@ -101,7 +101,7 @@
       </div>
       <div class="table-wrapper">
         <el-table :data="resourceListC" style="width: 100%">
-          <el-table-column prop="name" label="资源包名称" width="180" />
+          <el-table-column prop="name" label="资源包名称" width="260" />
           <el-table-column label="资源类型" width="180" >
             <template #default="scope">
               {{ mapResourceType(scope.row.type) }}
@@ -110,12 +110,12 @@
           <el-table-column prop="description" label="描述" />
           <el-table-column label="价格" width="180" >
             <template #default="scope">
-              <el-text :type="mapPrice(scope.row).type">
+              <el-text type="success">
                 {{ mapPrice(scope.row).price }}
               </el-text>
             </template>
           </el-table-column>
-          <el-table-column label="是否有效" width="160" >
+          <el-table-column label="是否有效" width="120" >
             <template #default="scope">
               <el-tag :type="mapStatus(scope.row.status)?.type">
                 {{ mapStatus(scope.row.status)?.name }}

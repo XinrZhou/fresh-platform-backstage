@@ -181,25 +181,25 @@ export const BASE_PARAMS = {
   send_images: true,
   save_images: false,
   alwayson_scripts: {
-    controlnet: {
-      args: [
-        {
-          enabled: true,
-          model: "ControlNet v1.1.410",
-          module: "tile_resample",
-          weight: 0.85,
-          image: "",
-          resize_mode: 0,
-          lowvram: true,
-          processor_res: 0,
-          threshold_a: 0,
-          threshold_b: 0,  
-          guidance_end: 0.75,
-          guidance_start: 0.25,    
-          pixel_perfect: false, 
-          control_mode: 0
-        }
-      ]
-    }
+    // controlnet: {
+    //   args: [
+    //     {
+    //       enabled: true,
+    //       model: "ControlNet v1.1.410",
+    //       module: "tile_resample",
+    //       weight: 0.85,
+    //       image: "",
+    //       resize_mode: 0,
+    //       lowvram: true,
+    //       processor_res: 0,
+    //       threshold_a: 0,
+    //       threshold_b: 0,  
+    //       guidance_end: 0.75,
+    //       guidance_start: 0.25,    
+    //       pixel_perfect: false, 
+    //       control_mode: 0
+    //     }
+    //   ]
+    // }
   }
 }

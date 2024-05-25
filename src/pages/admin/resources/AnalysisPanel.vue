@@ -13,7 +13,7 @@
         <el-text>开通AI服务用户数</el-text><br />
         <div class="item-bottom">
           <el-text class="count-text">
-            4
+            2
           </el-text>
           <el-text>个</el-text>
         </div>
