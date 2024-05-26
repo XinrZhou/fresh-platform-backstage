@@ -186,7 +186,7 @@ export const getInterfaceCount = (dataList) => {
   return dataList.reduce((counts, item) => {
     const { path, values } = item;
     const countKey = path === AI_TYPE.CHAT ? 'chatCount' : 'imageCount';
-    counts[countKey] += parseInt(values?.success) || 0;
+    counts[countKey] += parseInt(values?.success) + parseInt(values?.failure) || 0;
     return counts;
   }, { chatCount: 0, imageCount: 0 });
 };
