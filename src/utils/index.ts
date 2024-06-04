@@ -179,14 +179,16 @@ const blobToFile = (theBlob: Blob, fileName: string) => {
  */
 export const getInterfaceCount = (dataList) => {
   const AI_TYPE = {
-    CHAT: "/ai/chat",
+    CHAT: '/ai/chat',
     IMAGE: '/ai/image'
   };
 
   return dataList.reduce((counts, item) => {
     const { path, values } = item;
     const countKey = path === AI_TYPE.CHAT ? 'chatCount' : 'imageCount';
-    counts[countKey] += parseInt(values?.success) + parseInt(values?.failure) || 0;
+    const successCount = parseInt(values.success || '0', 10);
+    const failureCount = parseInt(values.failure || '0', 10);
+    counts[countKey] = (counts[countKey] || 0) + successCount + failureCount;
     return counts;
   }, { chatCount: 0, imageCount: 0 });
 };
